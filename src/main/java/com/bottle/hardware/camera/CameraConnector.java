@@ -17,14 +17,14 @@ import com.bottle.business.login.ILoginManager;
 import com.bottle.common.AbstractBaseBean;
 import com.bottle.common.constants.IUserConstants;
 import com.bottle.hardware.camera.constants.ICameraConstants;
-import com.bottle.ui.components.VerifyJPanel;
+import com.bottle.ui.components.VerifyPanel;
 import com.bottle.ui.components.VideoPanel;  
 
 @Service
 public class CameraConnector extends AbstractBaseBean implements ICameraConnector {
 	private OpenCVFrameGrabber grabber;
 	private boolean isWorking = false;
-	private VerifyJPanel panel;
+	private VerifyPanel panel;
 
 	@Autowired
 	private ILoginManager loginManager;
@@ -40,7 +40,7 @@ public class CameraConnector extends AbstractBaseBean implements ICameraConnecto
 		grabber = new OpenCVFrameGrabber(0);  
 	}
 
-	public void setPanel(VerifyJPanel panel) {
+	public void setPanel(VerifyPanel panel) {
 		this.panel = panel;
 	}
 

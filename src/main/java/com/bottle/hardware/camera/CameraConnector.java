@@ -13,12 +13,15 @@ import org.bytedeco.javacv.OpenCVFrameGrabber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bottle.business.common.IMessageQueueManager;
+import com.bottle.business.common.vo.MessageVO;
 import com.bottle.business.login.ILoginManager;
 import com.bottle.common.AbstractBaseBean;
+import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.IUserConstants;
 import com.bottle.hardware.camera.constants.ICameraConstants;
-import com.bottle.ui.components.VerifyPanel;
-import com.bottle.ui.components.VideoPanel;  
+import com.bottle.ui.components.verify.VerifyPanel;
+import com.bottle.ui.components.verify.VideoPanel;  
 
 @Service
 public class CameraConnector extends AbstractBaseBean implements ICameraConnector {
@@ -28,6 +31,9 @@ public class CameraConnector extends AbstractBaseBean implements ICameraConnecto
 
 	@Autowired
 	private ILoginManager loginManager;
+	
+	@Autowired
+	private IMessageQueueManager queueManager;
 	
 	@Override
 	public void initialize(){  
@@ -87,8 +93,11 @@ public class CameraConnector extends AbstractBaseBean implements ICameraConnecto
 		try {
 			if (false == isWorking) {
 				grabber.start();
-				grabber.setImageHeight(ICameraConstants._Camera_Image_Height_);
-				grabber.setImageWidth(ICameraConstants._Camera_Image_Width_);
+				VideoPanel videoPanel = panel.getVideoPanel();
+				int height = videoPanel.getHeight();
+				int width = videoPanel.getWidth();
+				grabber.setImageHeight(height);
+				grabber.setImageWidth(width);
 
 				System.out.println("CameraConnector::start: start successfully.");
 				isWorking = true;
@@ -115,12 +124,18 @@ public class CameraConnector extends AbstractBaseBean implements ICameraConnecto
 	public void notifyUI(final BufferedImage image) {
 		long role = loginManager.login(image);
 		VideoPanel videoPanel = panel.getVideoPanel();
+		
 		videoPanel.setImage(image);
 		videoPanel.repaint();
 		
 		if (IUserConstants._Role_None_ != role) {
 			final JLabel messageLabel = panel.getMessageLabel();
 			messageLabel.setText("login ok. " + role);
+			
+			MessageVO vo = new MessageVO();
+			vo.setId(role);
+			vo.setMessageSource(ICommonConstants.MessageSourceEnum._MessageSource_MainFrame_);
+			queueManager.push(vo);
 		}
 	}
 }  

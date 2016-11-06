@@ -1,9 +1,12 @@
 package com.bottle.ui;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Calendar;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.swing.JFrame;
@@ -19,15 +22,17 @@ import org.springframework.stereotype.Component;
 import com.bottle.business.common.IMessageListener;
 import com.bottle.business.common.IMessageQueueManager;
 import com.bottle.business.common.vo.MessageVO;
+import com.bottle.common.IDateConverter;
 import com.bottle.common.ILoggerHelper;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 import com.bottle.common.constants.ILanguageConstants;
-import com.bottle.common.constants.IUserConstants;
 import com.bottle.hardware.camera.ICameraConnector;
 import com.bottle.ui.components.admin.AdminPanel;
+import com.bottle.ui.components.common.FontLabel;
 import com.bottle.ui.components.player.PlayerPanel;
 import com.bottle.ui.components.verify.VerifyPanel;
+import com.bottle.ui.components.welcome.WelcomePanel;
 import com.bottle.ui.constants.IUIConstants;
 
 @Component
@@ -37,8 +42,15 @@ public class MainFrame extends JFrame implements IMessageListener {
 	final Logger logger = Logger.getLogger(this.getClass());
 	
 	private JPanel bossPane;
+	
 	private VerifyPanel veryfyPanel = new VerifyPanel();
-	private PlayerPanel playerPane = new PlayerPanel();
+	
+	@Autowired
+	private WelcomePanel welcomePane;
+	
+	@Autowired
+	private PlayerPanel playerPane;
+	
 	private AdminPanel adminPane = new AdminPanel();
 	
 	
@@ -49,10 +61,18 @@ public class MainFrame extends JFrame implements IMessageListener {
 	private ILoggerHelper loggerHelper;	
 	
 	@Autowired
+	private IDateConverter dateConverter;
+	
+	@Autowired
 	private IMessageQueueManager messageManager;
 	
-	private final JLabel lblServerConnectionStatus = new JLabel("\u670D\u52A1\u5668\u8FDE\u63A5\u72B6\u6001");
-	private final JLabel lblUnconnected = new JLabel();
+	private final JLabel lblServerStatusTitle = new FontLabel("\u670D\u52A1\u5668\u8FDE\u63A5\u72B6\u6001");
+	private final JLabel lblServerStatus = new FontLabel();
+	private final JLabel lblMachineStatusTitle = new FontLabel("\u4E3B\u63A7\u8FDE\u63A5\u72B6\u6001");
+	private final JLabel lblMachineStatus = new FontLabel();
+	private final JLabel lblCurrentDate = new FontLabel();
+	private final JLabel lblSystemInfoLog = new FontLabel();
+	
 	private final JLabel label = new JLabel("");
 	
 	@PostConstruct
@@ -62,10 +82,41 @@ public class MainFrame extends JFrame implements IMessageListener {
 
 		logger.debug(outputMessage);
 		
+		initWelcomePanel();
+		initPlayerPanel();
 		initCamera();
 		initMessage();
 		
-		switchMode(IUIConstants.UIWorkModeEnum._WorkMode_Player_);
+		switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Welcome_);
+		updateStatusLable(lblServerStatus, ICommonConstants._ConnectionStatus_Offline_);
+		updateStatusLable(lblMachineStatus, ICommonConstants._ConnectionStatus_Offline_);
+		
+		initTimeThread();
+	}
+	
+	public void initWelcomePanel() {
+		welcomePane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));				
+		welcomePane.setBounds(0, IUIConstants._Banner_Height_, IUIConstants._Total_Width_, IUIConstants._Total_Height_);		
+		welcomePane.setLayout(null);
+		bossPane.add(welcomePane);
+	}
+	
+	public void initPlayerPanel() {
+		playerPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));				
+		playerPane.setBounds(0, IUIConstants._Banner_Height_, IUIConstants._Total_Width_, IUIConstants._Total_Height_);		
+		playerPane.setLayout(null);
+		bossPane.add(playerPane);
+	}
+	
+	
+	public void initTimeThread() {
+		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+		scheduler.scheduleAtFixedRate(new Runnable( ) {  
+            public void run() {
+            	 lblCurrentDate.setText(dateConverter.getCurrentTimestampInNineteenBitsInGMT());
+            }  
+        },  
+        0, 1, TimeUnit.SECONDS);
 	}
 	
 	public void initMessage() {
@@ -80,7 +131,7 @@ public class MainFrame extends JFrame implements IMessageListener {
 	public MainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setUndecorated(true);
-		setBounds(0, 0, 1079, 773);
+		setBounds(0, 0, 1439, 773);
 		
 		 getGraphicsConfiguration().getDevice().setFullScreenWindow(this);
 		bossPane = new JPanel();
@@ -88,61 +139,79 @@ public class MainFrame extends JFrame implements IMessageListener {
 		setContentPane(bossPane);
 		bossPane.setLayout(null);		
 		
-		
-		playerPane.setBounds(0, IUIConstants._Banner_Height_, IUIConstants._Total_Width_, IUIConstants._Total_Height_);		
-		playerPane.setLayout(null);
 		veryfyPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		veryfyPanel.setBounds(0, IUIConstants._Banner_Height_, IUIConstants._Total_Width_, IUIConstants._Total_Height_);		
+		veryfyPanel.setBounds(0, 74, 1425, 768);		
 		veryfyPanel.setLayout(null);
 		adminPane.setBounds(0, IUIConstants._Banner_Height_, IUIConstants._Total_Width_, IUIConstants._Total_Height_);		
 		adminPane.setLayout(null);
-		
-		bossPane.add(playerPane);
+				
 		bossPane.add(veryfyPanel);
 		bossPane.add(adminPane);
 		
-		lblServerConnectionStatus.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 18));
-		lblServerConnectionStatus.setBounds(37, 15, 169, 33);
+		lblServerStatusTitle.setBounds(37, 5, 169, 33);		
+		bossPane.add(lblServerStatusTitle);
 		
-		bossPane.add(lblServerConnectionStatus);
-		lblUnconnected.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 18));
-		lblUnconnected.setForeground(Color.RED);
-		lblUnconnected.setBounds(216, 20, 126, 23);
+		lblServerStatus.setBounds(216, 10, 188, 23);		
+		bossPane.add(lblServerStatus);
+				
+		lblMachineStatusTitle.setBounds(37, 35, 169, 33);
+		bossPane.add(lblMachineStatusTitle);
+				
+		lblMachineStatus.setBounds(216, 40, 188, 23);
+		bossPane.add(lblMachineStatus);
 		
-		bossPane.add(lblUnconnected);
+		lblCurrentDate.setBounds(1108, 0, 258, 33);
+		bossPane.add(lblCurrentDate);
+		
 		label.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				switchMode(IUIConstants.UIWorkModeEnum._WorkMode_Verify_);	
+				switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Verify_);	
 			}
 		});
 		label.setBounds(0, 0, 26, 23);
 		
 		bossPane.add(label);
+		
+		lblSystemInfoLog.setBounds(898, 35, 468, 33);
+		bossPane.add(lblSystemInfoLog);
 	}
 	
-	public void switchMode(IUIConstants.UIWorkModeEnum mode) {
-		switch (mode){
-			case _WorkMode_Player_:
+	public void switchMode(final ICommonConstants.MainFrameActivePanelEnum activePanel) {
+		switch (activePanel){
+			case _MainFrame_ActivePanel_Welcome_:
 			{
+				welcomePane.setVisible(true);
+				welcomePane.validate();
+				playerPane.setVisible(false);
+				veryfyPanel.hideEx();
+				adminPane.setVisible(false);				
+				break;
+			}
+			case _MainFrame_ActivePanel_Player_:
+			{
+				welcomePane.setVisible(false);
 				playerPane.setVisible(true);
 				playerPane.validate();
 				veryfyPanel.hideEx();
 				adminPane.setVisible(false);	
 				break;
 			}
-			case _WorkMode_Verify_:
+			case _MainFrame_ActivePanel_Verify_:
 			{
+				welcomePane.setVisible(false);
 				playerPane.setVisible(false);
 				veryfyPanel.showEx();
 				adminPane.setVisible(false);
 				break;
 			}
-			case _WorkMode_Admin_:
+			case _MainFrame_ActivePanel_Admin_:
 			{
+				welcomePane.setVisible(false);
 				playerPane.setVisible(false);
 				veryfyPanel.hideEx();
 				adminPane.setVisible(true);
+				adminPane.validate();
 				break;
 			}
 			default:
@@ -165,18 +234,22 @@ public class MainFrame extends JFrame implements IMessageListener {
 		switch (subMessageType) {
 			case _SubMessageType_MainFrame_Panel_:
 			{
-				final long role = vo.getId();
-				
-				if (IUserConstants._Role_Admin_ == role) {
-					switchMode(IUIConstants.UIWorkModeEnum._WorkMode_Admin_);
-				} else if (IUserConstants._Role_None_ == role) {
-					switchMode(IUIConstants.UIWorkModeEnum._WorkMode_Player_);
-				}
-				
+				switchMode(ICommonConstants.MainFrameActivePanelEnum.getActivePanelEnumById(vo.getParam1()));
 				break;
 			}
 			case _SubMessageType_MainFrame_ServerStatus_:
 			{
+				updateStatusLable(lblServerStatus, vo.getParam1());
+				break;
+			}
+			case _SubMessageType_MainFrame_MachineStatus_:
+			{
+				updateStatusLable(lblMachineStatus, vo.getParam1());
+				break;
+			}
+			case _SubMessageType_MainFrame_SystemInfoLog_:
+			{
+				updateMessageLable(lblSystemInfoLog, vo.getMessage());
 				break;
 			}
 		default:
@@ -184,14 +257,25 @@ public class MainFrame extends JFrame implements IMessageListener {
 		}
 	}
 	
-	public void updateServerStatusLable(boolean isOnline) {
-		if (true == isOnline) {
-			lblUnconnected.setText(ILanguageConstants._ServerStatus_Connected_);
-			lblUnconnected.setCo
+	public void updateMessageLable(final JLabel label, final String message) {
+		final String timestampStr = dateConverter.getCurrentTimestampInNineteenBitsInGMT();
+		label.setText(timestampStr + "  " + message);
+	}
+	
+	public void updateStatusLable(final JLabel label, final long status) {
+		if (ICommonConstants._ConnectionStatus_Online_ == status) {
+			label.setText(ILanguageConstants._ConnectionStatus_Connected_);
+			label.setForeground(Color.GREEN);
+		}
+		else if (ICommonConstants._ConnectionStatus_Offline_ == status) {
+			label.setText(ILanguageConstants._ConnectionStatus_Disconnected_);
+			label.setForeground(Color.RED);
 		}
 		else {
-			
+			throw new RuntimeException("Unsupported server status. status:" + status);
 		}
+		
+		label.validate();
 	}
 
 	@Override

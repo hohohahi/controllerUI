@@ -17,6 +17,8 @@ public abstract class AbstractBaseBean {
 	@Autowired
 	protected ILoggerHelper loggerHelper;
 	
+	@Autowired
+	protected IDateConverter dataConverter;
 	
 	@PostConstruct
 	public void initialize() {

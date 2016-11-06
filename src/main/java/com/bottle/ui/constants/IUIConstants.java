@@ -2,6 +2,7 @@ package com.bottle.ui.constants;
 
 public interface IUIConstants {
 	enum UIWorkModeEnum {
+		_WorkMode_Welcome_,
 		_WorkMode_Player_,
 		_WorkMode_Verify_,
 		_WorkMode_Admin_,
@@ -10,7 +11,7 @@ public interface IUIConstants {
 	
 	int _Total_Width_ = 1366;
 	int _Total_Height_ = 768;
-	int _Banner_Height_ = 64;
+	int _Banner_Height_ = 74;
 	
 	int _VideoPanel_Offset_X = 300;
 	int _VideoPanel_Width = 650;

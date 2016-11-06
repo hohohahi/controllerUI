@@ -10,47 +10,110 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bottle.business.common.IHttpClientHelper;
+import com.bottle.business.common.IMessageListener;
 import com.bottle.business.common.IMessageQueueManager;
 import com.bottle.business.common.vo.MessageVO;
 import com.bottle.common.AbstractBaseBean;
 import com.bottle.common.constants.ICommonConstants;
+import com.bottle.common.constants.ICommonConstants.MachineCommandEnum;
+import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
+import com.bottle.common.constants.ICommonConstants.SubMessageTypeEnum;
+import com.bottle.hardware.rxtx.command.ICommandSelector;
+import com.bottle.hardware.rxtx.command.IMachineCommandSender;
 
 @Service
-public class PingService extends AbstractBaseBean implements IPingService {
+public class PingService extends AbstractBaseBean implements IPingService, IMessageListener {
+	private boolean machineStatusFlag = false;
+	
 	@Autowired
 	private IHttpClientHelper httpHelper;
 	
 	@Autowired
-	private IMessageQueueManager messageManager;
+	private IMessageQueueManager messageManager;	
+	
+	@Autowired
+	private ICommandSelector commandSelector;
 	
 	@Override
 	public void initialize() {
 		super.initialize();
 		initExecutor();
+		messageManager.addListener(this);
 	}
 	
 	public void initExecutor() {
 		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 		scheduler.scheduleAtFixedRate(new Runnable( ) {  
             public void run() {
-            	final String url = getPingURL();
-            	JSONObject json = new JSONObject();
-            	json.put(ICommonConstants._UI_Identifier_Key_, ICommonConstants._UI_Identifier_Key_);
-            	            	
-            	try {
-            		JSONObject rtnJSON = httpHelper.postJSON(url, json);
-            		if (null != rtnJSON) {
-            			final MessageVO vo = new MessageVO();
-            			//messageManager.push(vo);
-            			System.out.println(rtnJSON);
-            		}
-				} catch (Exception e) {
-					
-					logErrorAndStack(e, e.getMessage());
-				}
+            	pingServer();
+            	pingMachine();
             }  
         },  
-        0, 30, TimeUnit.SECONDS);
+        0, ICommonConstants._PingService_Period_, TimeUnit.SECONDS);
+	}
+	
+	public void updateMachineStatusUI() {
+		final MessageVO vo = new MessageVO();		
+		vo.setMessageSource(MessageSourceEnum._MessageSource_MainFrame_);
+		vo.setSubMessageType(SubMessageTypeEnum._SubMessageType_MainFrame_MachineStatus_);
+		
+		long machineStatus = ICommonConstants._ConnectionStatus_Online_;
+		if (true == machineStatusFlag) {
+			machineStatus = ICommonConstants._ConnectionStatus_Online_;						
+		}
+		else {
+			machineStatus = ICommonConstants._ConnectionStatus_Offline_;
+		}
+		
+		vo.setParam1(machineStatus);	
+		messageManager.push(vo);
+	}
+	
+	public void pingMachine() {
+		try {
+			//1. update ui
+			updateMachineStatusUI();
+			
+			//2. set flag to false
+			machineStatusFlag = false;
+			
+			//3. ping machine
+			final IMachineCommandSender sender = commandSelector.select(MachineCommandEnum._MachineCommand_Ping_);
+			sender.send();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void pingServer() {
+		final String url = getPingURL();
+    	JSONObject json = new JSONObject();
+    	json.put(ICommonConstants._UI_Identifier_Key_, ICommonConstants._UI_Identifier_Key_);
+    	
+    	boolean isConnected = false;
+    	try {
+    		JSONObject rtnJSON = httpHelper.postJSON(url, json);
+    		if (null != rtnJSON) {
+    			isConnected = true;
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logErrorAndStack(e, e.getMessage());
+		}
+    	
+    	final MessageVO vo = new MessageVO();
+    	if (true == isConnected) {            		
+			vo.setMessageSource(MessageSourceEnum._MessageSource_MainFrame_);
+			vo.setSubMessageType(SubMessageTypeEnum._SubMessageType_MainFrame_ServerStatus_);
+			vo.setParam1(ICommonConstants._ConnectionStatus_Online_);   			
+    	}
+    	else {
+    		vo.setMessageSource(MessageSourceEnum._MessageSource_MainFrame_);
+			vo.setSubMessageType(SubMessageTypeEnum._SubMessageType_MainFrame_ServerStatus_);
+			vo.setParam1(ICommonConstants._ConnectionStatus_Offline_);
+    	}
+    	
+    	messageManager.push(vo);
 	}
 	
 	protected void logErrorAndStack(final Throwable e, final String errorMessage){
@@ -77,5 +140,26 @@ public class PingService extends AbstractBaseBean implements IPingService {
 	public static void main(String [] args) {
 		PingService service = new PingService();
 		System.out.println(service.getPingURL());
+	}
+
+	@Override
+	public void process(MessageVO vo) {
+		if (null == vo) {
+			throw new NullPointerException("vo is null.");
+		}
+		
+		final MessageSourceEnum messageSource = vo.getMessageSource();
+		if (false == messageSource.equals(getMessageType())) {
+			return;
+		}
+		
+		machineStatusFlag = true;
+		
+		updateMachineStatusUI();
+	}
+
+	@Override
+	public MessageSourceEnum getMessageType() {
+		return MessageSourceEnum._MessageSource_PingService_;
 	}
 }

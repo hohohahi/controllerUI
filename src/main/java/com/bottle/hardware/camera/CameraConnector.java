@@ -133,8 +133,15 @@ public class CameraConnector extends AbstractBaseBean implements ICameraConnecto
 			messageLabel.setText("login ok. " + role);
 			
 			MessageVO vo = new MessageVO();
-			vo.setId(role);
 			vo.setMessageSource(ICommonConstants.MessageSourceEnum._MessageSource_MainFrame_);
+			
+			if (role == IUserConstants._Role_Admin_) {
+				vo.setParam1(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Admin_.getId());
+			}
+			else if (role == IUserConstants._Role_SuperAdmin_) {
+				vo.setParam1(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_SuperAdmin_.getId());
+			}
+			
 			queueManager.push(vo);
 		}
 	}

@@ -111,8 +111,9 @@ public class VerifyPanel extends JPanel{
 	
 	public void exitVerify() {
 		MessageVO vo = new MessageVO();
-		vo.setId(IUserConstants._Role_None_);
+		vo.setParam1(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Welcome_.getId());
 		vo.setMessageSource(ICommonConstants.MessageSourceEnum._MessageSource_MainFrame_);
+		vo.setSubMessageType(ICommonConstants.SubMessageTypeEnum._SubMessageType_MainFrame_Panel_);
 		messageManager.push(vo);
 	}
 }

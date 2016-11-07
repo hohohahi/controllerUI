@@ -175,12 +175,23 @@ public class MainFrame extends JFrame implements IMessageListener {
 				switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Verify_);
 			}
 		});
-		label.setBounds(0, 0, 26, 23);
+		label.setBounds(0, 40, 26, 23);
 		
 		bossPane.add(label);
 		
 		lblSystemInfoLog.setBounds(898, 35, 468, 33);
 		bossPane.add(lblSystemInfoLog);
+		
+		JLabel directTriggerLabel = new JLabel("");
+		directTriggerLabel.setBounds(0, 5, 26, 23);
+		directTriggerLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Admin_);
+			}
+		});
+		
+		bossPane.add(directTriggerLabel);
 	}
 	
 	public void switchMode(final ICommonConstants.MainFrameActivePanelEnum activePanel) {

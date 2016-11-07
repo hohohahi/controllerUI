@@ -8,6 +8,7 @@ public class RxTxResponseVO {
 	private long errorCode = 0L;
 	private String errorMessage = "";
 	private String response = "";
+	private long param1 = 0L;
 	
 	public ICommonConstants.MachineCommandEnum getCommandType() {
 		return commandType;
@@ -38,5 +39,11 @@ public class RxTxResponseVO {
 	}
 	public void setResponse(String response) {
 		this.response = response;
+	}
+	public long getParam1() {
+		return param1;
+	}
+	public void setParam1(long param1) {
+		this.param1 = param1;
 	}
 }

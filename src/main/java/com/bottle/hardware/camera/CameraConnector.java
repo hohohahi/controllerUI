@@ -18,6 +18,7 @@ import com.bottle.business.common.vo.MessageVO;
 import com.bottle.business.login.ILoginManager;
 import com.bottle.common.AbstractBaseBean;
 import com.bottle.common.constants.ICommonConstants;
+import com.bottle.common.constants.ICommonConstants.SubMessageTypeEnum;
 import com.bottle.common.constants.IUserConstants;
 import com.bottle.hardware.camera.constants.ICameraConstants;
 import com.bottle.ui.components.verify.VerifyPanel;
@@ -134,6 +135,7 @@ public class CameraConnector extends AbstractBaseBean implements ICameraConnecto
 			
 			MessageVO vo = new MessageVO();
 			vo.setMessageSource(ICommonConstants.MessageSourceEnum._MessageSource_MainFrame_);
+			vo.setSubMessageType(SubMessageTypeEnum._SubMessageType_MainFrame_Panel_);
 			
 			if (role == IUserConstants._Role_Admin_) {
 				vo.setParam1(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Admin_.getId());

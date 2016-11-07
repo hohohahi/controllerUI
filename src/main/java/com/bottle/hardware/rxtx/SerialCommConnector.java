@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.bottle.common.AbstractBaseBean;
 import com.bottle.common.constants.ICommonConstants;
+import com.bottle.hardware.rxtx.command.ICommandSelector;
 import com.bottle.hardware.rxtx.command.IMachineCommandSender;
 import com.bottle.hardware.rxtx.exception.NoSuchPort;
 import com.bottle.hardware.rxtx.exception.NotASerialPort;
@@ -41,6 +42,9 @@ public class SerialCommConnector extends AbstractBaseBean implements ISerialComm
 	private SerialPort serialPort;
 	
 	private List<IMachineCommandSender> commandSenderList = new ArrayList<IMachineCommandSender>();
+	
+	@Autowired
+	private  ICommandSelector commandSelector;
 	
 	@Autowired
 	private IByteDataParser byteParser;
@@ -230,26 +234,26 @@ public class SerialCommConnector extends AbstractBaseBean implements ISerialComm
 			throw new NullPointerException("commandSenderList is null.");
 		}
 		
-		IMachineCommandSender toBeRemovedSender = null;
+		IMachineCommandSender rtnSender = null;
 		for (IMachineCommandSender commandSender : commandSenderList) {
 			final ICommonConstants.MachineCommandEnum currentCommandType = commandSender.getCommandType();
 			if (true == currentCommandType.equals(commandType)) {
-				toBeRemovedSender = commandSender;
+				rtnSender = commandSender;
 				break;
 			}
 		}
 		
-		if (null == toBeRemovedSender) {
+		if (null == rtnSender) {
 			if (false == ICommonConstants.MachineCommandEnum._MachineCommand_ReturnResult_.equals(commandType)) {
 				//no listener for this "Return  Result" command.  So exclude it
 				throw new RuntimeException("there is no listener avaliable. commandType:" + commandType);
-			}
+			}			
 		}
 		else {
-			commandSenderList.remove(toBeRemovedSender);
+			commandSenderList.remove(rtnSender);
 		}
 		
-		return toBeRemovedSender;
+		return rtnSender;
 	}
 
 	@Override
@@ -284,7 +288,12 @@ public class SerialCommConnector extends AbstractBaseBean implements ISerialComm
                         
                         final RxTxResponseVO responseVO = byteParser.parse(data);
                         final IMachineCommandSender sender = getCommandListenerAndRemoveIt(responseVO.getCommandType());
-                        sender.onReceive(responseVO);
+                        if (null != sender) {
+                        	sender.onReceive(responseVO);
+                        }                        
+                        else {
+                        	//return money
+                        }
                     }                        
                     
                 } catch (Throwable e) {

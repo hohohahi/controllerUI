@@ -1,5 +1,7 @@
 package com.bottle.ui.components.common;
 
+import java.awt.Component;
+
 import javax.swing.JPanel;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,4 +25,8 @@ public abstract class AbstractBasePanel extends JPanel {
 		vo.setMessage(message);
 		messageManager.push(vo);
 	}
+	
+	abstract public void processChildMessage(MessageVO vo);
+	abstract public void setParent(Component parent);
+	
 }

@@ -3,7 +3,6 @@ package com.bottle.ui;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Calendar;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -51,7 +50,8 @@ public class MainFrame extends JFrame implements IMessageListener {
 	@Autowired
 	private PlayerPanel playerPane;
 	
-	private AdminPanel adminPane = new AdminPanel();
+	@Autowired
+	private AdminPanel adminPane;
 	
 	
 	@Autowired
@@ -84,6 +84,7 @@ public class MainFrame extends JFrame implements IMessageListener {
 		
 		initWelcomePanel();
 		initPlayerPanel();
+		initAdminPanel();
 		initCamera();
 		initMessage();
 		
@@ -101,11 +102,18 @@ public class MainFrame extends JFrame implements IMessageListener {
 		bossPane.add(welcomePane);
 	}
 	
+	public void initAdminPanel() {
+		adminPane.setBounds(0, IUIConstants._Banner_Height_, IUIConstants._Total_Width_, IUIConstants._Total_Height_);		
+		adminPane.setLayout(null);
+		bossPane.add(adminPane);
+	}
+	
 	public void initPlayerPanel() {
 		playerPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));				
 		playerPane.setBounds(0, IUIConstants._Banner_Height_, IUIConstants._Total_Width_, IUIConstants._Total_Height_);		
 		playerPane.setLayout(null);
 		bossPane.add(playerPane);
+		playerPane.setParent(this);
 	}
 	
 	
@@ -142,11 +150,9 @@ public class MainFrame extends JFrame implements IMessageListener {
 		veryfyPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		veryfyPanel.setBounds(0, 74, 1425, 768);		
 		veryfyPanel.setLayout(null);
-		adminPane.setBounds(0, IUIConstants._Banner_Height_, IUIConstants._Total_Width_, IUIConstants._Total_Height_);		
-		adminPane.setLayout(null);
-				
+		
 		bossPane.add(veryfyPanel);
-		bossPane.add(adminPane);
+		
 		
 		lblServerStatusTitle.setBounds(37, 5, 169, 33);		
 		bossPane.add(lblServerStatusTitle);
@@ -166,7 +172,7 @@ public class MainFrame extends JFrame implements IMessageListener {
 		label.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Verify_);	
+				switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Verify_);
 			}
 		});
 		label.setBounds(0, 0, 26, 23);

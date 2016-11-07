@@ -98,12 +98,10 @@ public class ByteDataParser extends AbstractBaseBean implements IByteDataParser 
 				else {
 					vo.setIsSuccess(true);
 					int actualLength = length - 1;
-					char[] tChars=new char[actualLength];
-
-					for(int i=0; i<actualLength; i++)
-						tChars[i]=(char)dataArea[i+1];
-
-					String response = new String(tChars);
+					byte [] actualData = new byte[actualLength];
+					System.arraycopy(dataArea, 1, actualData, 0, actualLength);
+					
+					String response = super.dataTypeHelper.convert_byte_String(actualData);
 					vo.setResponse(response);
 				}
 			}

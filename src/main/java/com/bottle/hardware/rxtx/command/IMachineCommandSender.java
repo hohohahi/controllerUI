@@ -6,5 +6,6 @@ import com.bottle.hardware.rxtx.vo.RxTxResponseVO;
 public interface IMachineCommandSender {
 	ICommonConstants.MachineCommandEnum getCommandType();
 	void send();
+	void send(byte aid);
 	void onReceive(RxTxResponseVO responseVO);
 }

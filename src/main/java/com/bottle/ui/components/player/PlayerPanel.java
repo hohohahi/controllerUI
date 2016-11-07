@@ -4,18 +4,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.annotation.PostConstruct;
+import javax.swing.JFrame;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bottle.business.common.IMessageListener;
 import com.bottle.business.common.vo.MessageVO;
+import com.bottle.business.money.IReturnMoneyService;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 import com.bottle.hardware.rxtx.command.ICommandSelector;
 import com.bottle.hardware.rxtx.command.IMachineCommandSender;
 import com.bottle.ui.components.common.AbstractBasePanel;
 import com.bottle.ui.components.common.CommandButton;
+import com.bottle.ui.components.player.sub.RealProductionInfoPanel;
 
 @Component
 public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
@@ -29,9 +32,17 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 	final CommandButton stopCommandButton = new CommandButton("\u505C\u6B62\u6295\u74F6");
 	final CommandButton backCommandButton = new CommandButton("\u8FD4\u56DE\u4E3B\u754C\u9762");
 	final CommandButton returnMoneyCommandButton = new CommandButton("\u8FD4\u5229");
+	JFrame parentFrame = (JFrame)this.getParent();
+	@Autowired
+	private RealProductionInfoPanel realProductionInfoPanel;
+	
+	@Autowired
+	private IReturnMoneyService returnMoneyService;
+	
 	@PostConstruct
 	public void initialize() {
 		messageManager.addListener(this);
+		initLabel();
 	}
 	
 	public void showStartAndStopButtons() {
@@ -39,6 +50,12 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 		startCommandButton.validate();
 		stopCommandButton.setEnabled(isStarted);
 		stopCommandButton.validate();
+	}
+	
+	public void initLabel() {
+		realProductionInfoPanel.setBounds(380, 38, 1009, 493);
+		realProductionInfoPanel.setLayout(null);
+		add(realProductionInfoPanel);
 	}
 	
 	public PlayerPanel() {
@@ -67,6 +84,11 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 		add(stopCommandButton);
 		backCommandButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				MessageVO vo = new MessageVO();
+				vo.setParam1(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Welcome_.getId());
+				vo.setMessageSource(ICommonConstants.MessageSourceEnum._MessageSource_MainFrame_);
+				vo.setSubMessageType(ICommonConstants.SubMessageTypeEnum._SubMessageType_MainFrame_Panel_);
+				messageManager.push(vo);
 			}
 		});
 		
@@ -74,11 +96,12 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 		add(backCommandButton);
 		returnMoneyCommandButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				returnMoneyService.pay();
 			}
 		});
 		
 		returnMoneyCommandButton.setBounds(712, 559, 160, 70);
-		add(returnMoneyCommandButton);
+		add(returnMoneyCommandButton);				
 		
 		showStartAndStopButtons();
 	}
@@ -111,10 +134,24 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 				super.sendSystemInfo("error in stop command.");
 			}
 		}
+		else if (true == ICommonConstants.SubMessageTypeEnum._SubMessageType_PlayerPanel_RealProductionInfoPanel_.equals(subMessageType)) {
+			realProductionInfoPanel.processChildMessage(vo);
+		}
 	}
 
 	@Override
 	public MessageSourceEnum getMessageType() {
 		return MessageSourceEnum._MessageSource_PlayerPanel_;
+	}
+
+	@Override
+	public void processChildMessage(MessageVO vo) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setParent(java.awt.Component parent) {
+		this.parentFrame = (JFrame)parent;
 	}
 }

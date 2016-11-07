@@ -16,6 +16,11 @@ public abstract class AbstractBaseSerialManager extends AbstractBaseBean impleme
 		super.initialize();
 	}
 	
+	@Override
+	public void send(byte aid) {
+		//
+	}
+	
 	public void send() {
 		final MachineCommandEnum commandType = getCommandType();
 		byte [] startCommand = new byte[4];

@@ -20,6 +20,9 @@ public abstract class AbstractBaseBean {
 	@Autowired
 	protected IDateConverter dataConverter;
 	
+	@Autowired
+	protected IBasicDataTypeHelper dataTypeHelper;
+	
 	@PostConstruct
 	public void initialize() {
 		final String className = this.getClass().getName();
@@ -50,5 +53,11 @@ public abstract class AbstractBaseBean {
 	
 	protected void logErrorAndStack(final Throwable e, final String errorMessage){
 		this.loggerHelper.logging(logger, e, Level.ERROR, errorMessage);
+	}
+	
+	protected void validateObject(final Object object){
+		if (null == object){
+			throw new NullPointerException("object is null.");
+		}
 	}
 }

@@ -7,7 +7,9 @@ import com.bottle.hardware.rxtx.vo.RxTxResponseVO;
 public abstract class AbstractBaseCommandParser extends AbstractBaseBean implements ICommandParser{
 	public abstract ICommonConstants.MachineCommandEnum getCommandType();
 	
+	@Override
 	public RxTxResponseVO run(byte aid, byte[] dataArea) {
+		super.validateObject(dataArea);
 		RxTxResponseVO vo = new RxTxResponseVO();
 		
 		ICommonConstants.MachineCommandEnum commandType = getCommandType();

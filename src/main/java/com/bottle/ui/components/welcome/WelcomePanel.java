@@ -9,10 +9,10 @@ import javax.swing.JPanel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bottle.business.common.IMessageQueueManager;
+import com.bottle.business.common.service.IMessageQueueManager;
 import com.bottle.business.common.vo.MessageVO;
 import com.bottle.common.constants.ICommonConstants;
-import com.bottle.ui.components.common.CommandButton;
+import com.bottle.ui.components.common.FontButton;
 import com.bottle.ui.components.common.FontLabel;
 import com.bottle.ui.components.player.sub.SystemInfoPanel;
 import com.bottle.ui.constants.IUIConstants;
@@ -27,7 +27,7 @@ public class WelcomePanel extends JPanel{
 	@Autowired
 	private IMessageQueueManager messageManager;
 	
-	final CommandButton startCommandButton = new CommandButton("\u5F00\u59CB\u6295\u74F6");
+	final FontButton startCommandButton = new FontButton("\u5F00\u59CB\u6295\u74F6");
 	@PostConstruct
 	public void initialize() {
 

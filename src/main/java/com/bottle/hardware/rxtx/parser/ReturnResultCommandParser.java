@@ -3,7 +3,7 @@ package com.bottle.hardware.rxtx.parser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bottle.business.common.IMessageQueueManager;
+import com.bottle.business.common.service.IMessageQueueManager;
 import com.bottle.business.common.vo.MessageVO;
 import com.bottle.business.data.service.IProductionDataManager;
 import com.bottle.business.data.vo.ProductionDataVO;
@@ -40,7 +40,7 @@ public class ReturnResultCommandParser extends AbstractBaseCommandParser {
 		vo.setErrorCode((long)firstElement);
 		
 		ProductionDataVO productionDataVO = new ProductionDataVO();
-		productionDataVO.setTimestampStr(super.dataConverter.getCurrentTimestampInNineteenBitsInGMT());
+		productionDataVO.setTimestampStr(super.dateConverter.getCurrentTimestampInNineteenBitsInGMT());
 		
 		if (ICommonConstants._Zero_Byte_ == firstElement) {
 			if (length == 1) {

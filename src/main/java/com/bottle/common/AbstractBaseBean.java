@@ -6,6 +6,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bottle.business.data.service.IConfigurationManager;
+
 /***
  * 
  * @author Rainman
@@ -18,10 +20,13 @@ public abstract class AbstractBaseBean {
 	protected ILoggerHelper loggerHelper;
 	
 	@Autowired
-	protected IDateConverter dataConverter;
+	protected IDateConverter dateConverter;
 	
 	@Autowired
 	protected IBasicDataTypeHelper dataTypeHelper;
+	
+	@Autowired
+	protected IConfigurationManager configurationManager;
 	
 	@PostConstruct
 	public void initialize() {
@@ -31,6 +36,10 @@ public abstract class AbstractBaseBean {
 		logger.debug(outputMessage);
 	}
 	
+	public void setDataTypeHelper(IBasicDataTypeHelper dataTypeHelper) {
+		this.dataTypeHelper = dataTypeHelper;
+	}
+
 	public void destroy(){
 		final String className = this.getClass().getName();
 		String outputMessage = className + " destroy";
@@ -45,6 +54,10 @@ public abstract class AbstractBaseBean {
 	
 	protected void debugLog(String message){
 		logger.debug(message);
+	}
+	
+	protected void warnLog(String message){
+		logger.warn(message);
 	}
 	
 	protected void errorLog(String message){

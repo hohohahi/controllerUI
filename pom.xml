@@ -192,12 +192,28 @@
     	<artifactId>commons-lang3</artifactId>
     	<version>3.5</version>
 	</dependency>
+	<dependency>
+		<groupId>org.apache</groupId>
+		<artifactId>test</artifactId>
+		<version>1.0</version>
+		<scope>system</scope>
+		<systemPath>${basedir}/src/main/resources/lib/beautyeye_lnf.jar</systemPath>
+	</dependency>
+	<dependency>
+    	<groupId>org.apache.mina</groupId>
+    	<artifactId>mina-core</artifactId>
+    	<version>2.0.16</version>
+	</dependency>	
   </dependencies> 
 
   
   	<build>
   		<sourceDirectory>src/main/java</sourceDirectory>
   		<resources>  
+            <resource>  
+                <directory>src/main/resources/lib</directory>  
+                <targetPath>${project.build.directory}/lib</targetPath>  
+            </resource>
             <resource>  
                 <directory>src/main/resources</directory>  
                 <targetPath>${project.build.directory}/resources</targetPath>  
@@ -215,7 +231,11 @@
                     <defaultLibBundleDir>lib</defaultLibBundleDir>  
                     <source>1.8</source>  
                     <target>1.8</target>  
-                    <encoding>UTF-8</encoding>  
+                    <encoding>UTF-8</encoding>
+                    <compilerArguments>
+                    	<verbose />
+                        <bootclasspath>${java.home}/lib/rt.jar</bootclasspath>
+                    </compilerArguments>           
                 </configuration>  
             </plugin>
 			<plugin>

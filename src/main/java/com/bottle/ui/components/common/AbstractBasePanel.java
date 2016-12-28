@@ -6,12 +6,13 @@ import javax.swing.JPanel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bottle.business.common.IMessageQueueManager;
+import com.bottle.business.common.service.IMessageListener;
+import com.bottle.business.common.service.IMessageQueueManager;
 import com.bottle.business.common.vo.MessageVO;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 import com.bottle.common.constants.ICommonConstants.SubMessageTypeEnum;
 
-public abstract class AbstractBasePanel extends JPanel {
+public abstract class AbstractBasePanel extends JPanel implements IMessageListener{
 	protected static final long serialVersionUID = 1L;
 	
 	@Autowired
@@ -28,5 +29,9 @@ public abstract class AbstractBasePanel extends JPanel {
 	
 	abstract public void processChildMessage(MessageVO vo);
 	abstract public void setParent(Component parent);
+	
+	final protected void addMessageListener() {
+		messageManager.addListener(this);
+	}
 	
 }

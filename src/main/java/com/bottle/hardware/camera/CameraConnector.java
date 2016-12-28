@@ -4,8 +4,6 @@ import java.awt.image.BufferedImage;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.swing.JLabel;
-
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameGrabber.Exception;
 import org.bytedeco.javacv.Java2DFrameConverter;
@@ -13,7 +11,7 @@ import org.bytedeco.javacv.OpenCVFrameGrabber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bottle.business.common.IMessageQueueManager;
+import com.bottle.business.common.service.IMessageQueueManager;
 import com.bottle.business.common.vo.MessageVO;
 import com.bottle.business.login.ILoginManager;
 import com.bottle.common.AbstractBaseBean;
@@ -21,14 +19,14 @@ import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.SubMessageTypeEnum;
 import com.bottle.common.constants.IUserConstants;
 import com.bottle.hardware.camera.constants.ICameraConstants;
-import com.bottle.ui.components.verify.VerifyPanel;
+import com.bottle.ui.components.verify.VideoBarCodeVerifyPanel;
 import com.bottle.ui.components.verify.VideoPanel;  
 
 @Service
 public class CameraConnector extends AbstractBaseBean implements ICameraConnector {
 	private OpenCVFrameGrabber grabber;
 	private boolean isWorking = false;
-	private VerifyPanel panel;
+	private VideoBarCodeVerifyPanel panel;
 
 	@Autowired
 	private ILoginManager loginManager;
@@ -47,7 +45,7 @@ public class CameraConnector extends AbstractBaseBean implements ICameraConnecto
 		grabber = new OpenCVFrameGrabber(0);  
 	}
 
-	public void setPanel(VerifyPanel panel) {
+	public void setPanel(VideoBarCodeVerifyPanel panel) {
 		this.panel = panel;
 	}
 
@@ -130,9 +128,6 @@ public class CameraConnector extends AbstractBaseBean implements ICameraConnecto
 		videoPanel.repaint();
 		
 		if (IUserConstants._Role_None_ != role) {
-			final JLabel messageLabel = panel.getMessageLabel();
-			messageLabel.setText("login ok. " + role);
-			
 			MessageVO vo = new MessageVO();
 			vo.setMessageSource(ICommonConstants.MessageSourceEnum._MessageSource_MainFrame_);
 			vo.setSubMessageType(SubMessageTypeEnum._SubMessageType_MainFrame_Panel_);

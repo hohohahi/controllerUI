@@ -3,7 +3,7 @@ package com.bottle.hardware.rxtx.command;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bottle.business.common.IMessageQueueManager;
+import com.bottle.business.common.service.IMessageQueueManager;
 import com.bottle.business.common.vo.MessageVO;
 import com.bottle.common.constants.ICommonConstants.MachineCommandEnum;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
@@ -12,7 +12,7 @@ import com.bottle.hardware.rxtx.AbstractBaseSerialManager;
 import com.bottle.hardware.rxtx.vo.RxTxResponseVO;
 
 @Service
-public class StopCommandSender extends AbstractBaseSerialManager implements IMachineCommandSender {
+public class StopCommandSender extends AbstractBaseSerialManager {
 	@Autowired
 	private IMessageQueueManager messageManager;
 	

@@ -1,5 +1,5 @@
 package com.bottle.business.money;
 
 public interface IReturnMoneyService {
-	void pay();
+	void pay(final String phoneNumberStr);
 }

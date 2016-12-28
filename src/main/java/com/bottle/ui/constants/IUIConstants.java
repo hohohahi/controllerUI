@@ -10,8 +10,8 @@ public interface IUIConstants {
 	};
 	
 	int _Total_Width_ = 1366;
-	int _Total_Height_ = 768;
-	int _Banner_Height_ = 74;
+	int _Total_Height_ = 900;
+	int _Banner_Height_ = 40;
 	
 	int _VideoPanel_Offset_X = 300;
 	int _VideoPanel_Width = 650;

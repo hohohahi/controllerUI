@@ -6,10 +6,11 @@ import java.awt.event.ActionListener;
 import javax.annotation.PostConstruct;
 import javax.swing.JFrame;
 
+import org.apache.maven.surefire.shade.org.apache.maven.shared.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bottle.business.common.IMessageListener;
+import com.bottle.business.common.service.IMessageListener;
 import com.bottle.business.common.vo.MessageVO;
 import com.bottle.business.money.IReturnMoneyService;
 import com.bottle.common.constants.ICommonConstants;
@@ -17,7 +18,8 @@ import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 import com.bottle.hardware.rxtx.command.ICommandSelector;
 import com.bottle.hardware.rxtx.command.IMachineCommandSender;
 import com.bottle.ui.components.common.AbstractBasePanel;
-import com.bottle.ui.components.common.CommandButton;
+import com.bottle.ui.components.common.FontButton;
+import com.bottle.ui.components.player.sub.PhoneNumberInputDlg;
 import com.bottle.ui.components.player.sub.RealProductionInfoPanel;
 
 @Component
@@ -28,10 +30,10 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 	@Autowired
 	private ICommandSelector machineCommandSelector;
 	
-	final CommandButton startCommandButton = new CommandButton("\u5F00\u59CB\u6295\u74F6");
-	final CommandButton stopCommandButton = new CommandButton("\u505C\u6B62\u6295\u74F6");
-	final CommandButton backCommandButton = new CommandButton("\u8FD4\u56DE\u4E3B\u754C\u9762");
-	final CommandButton returnMoneyCommandButton = new CommandButton("\u8FD4\u5229");
+	final FontButton startCommandButton = new FontButton("\u5F00\u59CB\u6295\u74F6");
+	final FontButton stopCommandButton = new FontButton("\u505C\u6B62\u6295\u74F6");
+	final FontButton backCommandButton = new FontButton("\u8FD4\u56DE\u4E3B\u754C\u9762");
+	final FontButton returnMoneyCommandButton = new FontButton("\u8FD4\u5229");
 	JFrame parentFrame = (JFrame)this.getParent();
 	@Autowired
 	private RealProductionInfoPanel realProductionInfoPanel;
@@ -53,7 +55,7 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 	}
 	
 	public void initLabel() {
-		realProductionInfoPanel.setBounds(380, 38, 1009, 493);
+		realProductionInfoPanel.setBounds(100, 38, 1400, 593);
 		realProductionInfoPanel.setLayout(null);
 		add(realProductionInfoPanel);
 	}
@@ -68,7 +70,7 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 				startCommandButton.setEnabled(false);
 			}
 		});
-		startCommandButton.setBounds(311, 559, 160, 70);
+		startCommandButton.setBounds(311, 590, 160, 70);
 		add(startCommandButton);
 		
 		
@@ -80,7 +82,7 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 			}
 		});
 		
-		stopCommandButton.setBounds(510, 559, 160, 70);
+		stopCommandButton.setBounds(510, 590, 160, 70);
 		add(stopCommandButton);
 		backCommandButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -92,15 +94,25 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 			}
 		});
 		
-		backCommandButton.setBounds(906, 559, 160, 70);
+		backCommandButton.setBounds(906, 590, 160, 70);
 		add(backCommandButton);
 		returnMoneyCommandButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				returnMoneyService.pay();
+				PhoneNumberInputDlg dlg = new PhoneNumberInputDlg();				
+				dlg.setVisible(true);
+				
+				String phoneNumberStr = dlg.getPhoneNumber();
+				if (StringUtils.isNotEmpty(phoneNumberStr)) {
+					System.out.println(phoneNumberStr);
+					returnMoneyService.pay(phoneNumberStr);
+				}
+				else {
+					System.out.println("empty");
+				}
 			}
 		});
 		
-		returnMoneyCommandButton.setBounds(712, 559, 160, 70);
+		returnMoneyCommandButton.setBounds(712, 590, 160, 70);
 		add(returnMoneyCommandButton);				
 		
 		showStartAndStopButtons();

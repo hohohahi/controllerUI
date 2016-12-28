@@ -238,4 +238,32 @@ public class BasicDataTypeHelper implements IBasicDataTypeHelper {
 	
 		return rtnString;
 	}
+
+	@Override
+	public byte[] convert_String_byteArray(String srcString) {
+		if (null == srcString) {
+			throw new NullPointerException("srcString is null.");
+		}
+		
+		final int length = srcString.length();
+		char [] charArray = new char[length];
+		byte [] byteArray = new byte[length];
+		srcString.getChars(0, length, charArray, 0);
+		
+		for (int i = 0; i < length; i++) {
+			byteArray[i] = (byte)charArray[i];
+		}
+
+		return byteArray;
+	}
+	
+	public static void main(String [] args) {
+		BasicDataTypeHelper helper = new BasicDataTypeHelper();
+		final String srcString = "abcdefg123456";
+		byte [] rtnByteArray = helper.convert_String_byteArray(srcString);
+		final String rtnString = helper.convert_byte_String(rtnByteArray);
+		
+		System.out.println(srcString);
+		System.out.println(rtnString);
+	}
 }

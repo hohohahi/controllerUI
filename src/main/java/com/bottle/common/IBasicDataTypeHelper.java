@@ -136,5 +136,6 @@ public interface IBasicDataTypeHelper {
 	 double convert_d_minus(final double src);
 	 
 	 String convert_byte_String(final byte [] byteArray);
+	 byte [] convert_String_byteArray(final String srcString);
 	 double roundD_OneBit(double src);
 }

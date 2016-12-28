@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.bottle.business.common.IHttpClientHelper;
-import com.bottle.business.common.IMessageQueueManager;
+import com.bottle.business.common.service.IHttpClientHelper;
+import com.bottle.business.common.service.IMessageQueueManager;
 import com.bottle.business.common.vo.MessageVO;
+import com.bottle.business.data.service.IConfigurationManager;
 import com.bottle.business.data.service.IProductionDataManager;
 import com.bottle.business.data.vo.RealtimeStasticDataVO;
 import com.bottle.common.AbstractBaseBean;
@@ -25,8 +26,11 @@ public class ReturnMoneyService extends AbstractBaseBean implements IReturnMoney
 	@Autowired
 	private IProductionDataManager productionDataManager;
 	
+	@Autowired
+	private IConfigurationManager configurationManager;
+	
 	@Override
-	public void pay() {
+	public void pay(final String phoneNumberStr) {
 		final RealtimeStasticDataVO realVO = productionDataManager.getRealtimeStasticDataVO();
 		super.validateObject(realVO);
 		
@@ -34,7 +38,7 @@ public class ReturnMoneyService extends AbstractBaseBean implements IReturnMoney
 		
 		final String url = getReturnMoney();
     	JSONObject json = new JSONObject();
-    	json.put(ICommonConstants._UI_PhoneNumber_Key_, "18975811415");
+    	json.put(ICommonConstants._UI_PhoneNumber_Key_, phoneNumberStr);
     	json.put(ICommonConstants._UI_Amount_Key_, amount);
     	
     	try {
@@ -60,9 +64,7 @@ public class ReturnMoneyService extends AbstractBaseBean implements IReturnMoney
 		final StringBuilder buf = new StringBuilder();
 		
 		buf.append("http://")
-		   .append(ICommonConstants._Server_IP_)
-		   .append(":")
-		   .append(ICommonConstants._Server_Port_)
+		   .append(configurationManager.getConfigurationVO().getServerDomain())
 		   .append(ICommonConstants._URL_Seperator_)
 		   .append(ICommonConstants._Server_Name_)
 		   .append(ICommonConstants._URL_Seperator_)

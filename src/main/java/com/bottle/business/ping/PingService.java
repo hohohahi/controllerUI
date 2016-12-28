@@ -9,15 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.bottle.business.common.IHttpClientHelper;
-import com.bottle.business.common.IMessageListener;
-import com.bottle.business.common.IMessageQueueManager;
+import com.bottle.business.common.service.IHttpClientHelper;
+import com.bottle.business.common.service.IMessageListener;
+import com.bottle.business.common.service.IMessageQueueManager;
 import com.bottle.business.common.vo.MessageVO;
+import com.bottle.business.data.service.IConfigurationManager;
 import com.bottle.common.AbstractBaseBean;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MachineCommandEnum;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 import com.bottle.common.constants.ICommonConstants.SubMessageTypeEnum;
+import com.bottle.hardware.rxtx.ISerialCommConnector;
 import com.bottle.hardware.rxtx.command.ICommandSelector;
 import com.bottle.hardware.rxtx.command.IMachineCommandSender;
 
@@ -34,6 +36,12 @@ public class PingService extends AbstractBaseBean implements IPingService, IMess
 	@Autowired
 	private ICommandSelector commandSelector;
 	
+	@Autowired
+	private ISerialCommConnector serialCommConnector;
+	
+	@Autowired
+	private IConfigurationManager configurationManager;
+	
 	@Override
 	public void initialize() {
 		super.initialize();
@@ -43,13 +51,14 @@ public class PingService extends AbstractBaseBean implements IPingService, IMess
 	
 	public void initExecutor() {
 		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+		final long inteval = configurationManager.getConfigurationVO().getPingInteval_InSecond();
 		scheduler.scheduleAtFixedRate(new Runnable( ) {  
             public void run() {
-            	pingServer();
-            	pingMachine();
+            	//pingServer();
+            	//pingMachine();
             }  
         },  
-        0, ICommonConstants._PingService_Period_, TimeUnit.SECONDS);
+        0, inteval, TimeUnit.SECONDS);
 	}
 	
 	public void updateMachineStatusUI() {
@@ -78,8 +87,10 @@ public class PingService extends AbstractBaseBean implements IPingService, IMess
 			machineStatusFlag = false;
 			
 			//3. ping machine
-			final IMachineCommandSender sender = commandSelector.select(MachineCommandEnum._MachineCommand_Ping_);
-			sender.send();
+			if (true == serialCommConnector.getIsSerialPortReady()) {
+				final IMachineCommandSender sender = commandSelector.select(MachineCommandEnum._MachineCommand_Ping_);
+				sender.send();
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -124,9 +135,7 @@ public class PingService extends AbstractBaseBean implements IPingService, IMess
 		final StringBuilder buf = new StringBuilder();
 		
 		buf.append("http://")
-		   .append(ICommonConstants._Server_IP_)
-		   .append(":")
-		   .append(ICommonConstants._Server_Port_)
+		   .append(configurationManager.getConfigurationVO().getServerDomain())
 		   .append(ICommonConstants._URL_Seperator_)
 		   .append(ICommonConstants._Server_Name_)
 		   .append(ICommonConstants._URL_Seperator_)

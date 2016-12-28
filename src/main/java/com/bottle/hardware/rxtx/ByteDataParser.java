@@ -7,6 +7,7 @@ import com.bottle.common.AbstractBaseBean;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.hardware.rxtx.parser.ICommandParser;
 import com.bottle.hardware.rxtx.parser.IParserSelector;
+import com.bottle.hardware.rxtx.vo.ByteArrayParseResultVO;
 import com.bottle.hardware.rxtx.vo.RxTxResponseVO;
 
 @Service
@@ -15,128 +16,107 @@ public class ByteDataParser extends AbstractBaseBean implements IByteDataParser 
 	private IParserSelector parserSelector;
 	
 	@Override
-	public RxTxResponseVO parse(byte[] data) {		
-		if (null == data) {
-			throw new RuntimeException("data is null.");
-		}
-		
-		int length = data.length;
-		if (length < 6) {
-			String dataStr = "";
-			for (byte item : data) {
-				dataStr += item + "--";
-			}
-			throw new RuntimeException("Invalid data: data:" + dataStr + "--length:" + length);
-		}
-		
-		byte startByte = data[0];
-		byte endByte = data[length - 1];
-		if ((ICommonConstants._SerialComm_Data_StartByte_ != startByte)
-				|| (ICommonConstants._SerialComm_Data_EndByte_ != endByte)) {
-			throw new RuntimeException("Invalid start byte or end byte. startByte:" + startByte + "--endByte:" + endByte);
-		}
-		
-		byte pid = data[1];
-		byte aid = data[2];
-		byte [] content = new byte[length - 4]; 
-		System.arraycopy(data, 3, content, 0, length - 4);
-		byte [] dataArea = validateDataLengthAndGetData(content);
-		
-		ICommandParser parser = parserSelector.select(pid);
-		RxTxResponseVO vo = parser.run(aid, dataArea);
+	public RxTxResponseVO parse(byte[] srcByteArray) {				
+		final ByteArrayParseResultVO byteResult = extractValidByteArrayFromSrc(srcByteArray);
+		ICommandParser parser = parserSelector.select(byteResult.getPid());
+		RxTxResponseVO vo = parser.run(byteResult.getAid(), byteResult.getDataArray());
+		vo.setByteParseResultVO(byteResult);
 		
 		return vo;
 	}
 	
-	public byte [] validateDataLengthAndGetData(final byte [] content) {
-		if (null == content) {
-			throw new NullPointerException("content is null.");
+	public void validateInputByteArrayLength(final int length) {
+		if (length < 6) {			
+			throw new RuntimeException("Invalid data: datal length is invalid length:" + length);
 		}
-		
-		int length = content.length;
-		if (length < 2) {
-			throw new RuntimeException("the data length area is not two bits long.");
-		}
-		byte lowByte = content[0];
-		byte highByte = content[1];
-		int actualLength = ((int)highByte * 16) + (int)lowByte;
-		
-		if (actualLength != (length - 2)) {
-			throw new RuntimeException("invoid length. content:" + content + "--actualLength:" + actualLength + "--ideal length:" + (length-2));
-		}
-		
-		byte [] rtnBytes = new byte[actualLength];
-		if (actualLength != 0) {
-			System.arraycopy(content, 2, rtnBytes, 0, actualLength);
-		}		
-		
-		return rtnBytes;
 	}
 	
-	public void getCommandTypeByPIDAndAID(final byte pid, final byte aid, final RxTxResponseVO vo, byte [] dataArea) {
+	//srcByteArray -> content  -> data
+	public ByteArrayParseResultVO extractValidByteArrayFromSrc(byte [] srcByteArray) {
+		super.validateObject(srcByteArray);
 		
-		if (pid == 0x20 && aid == 0x10) {
-			vo.setCommandType(ICommonConstants.MachineCommandEnum._MachineCommand_ReturnResult_);
-			if (null == dataArea || dataArea.length == 0){
-				throw new RuntimeException("return result command.data area is null or empty");
+		int length = srcByteArray.length;
+		validateInputByteArrayLength(length);
+		
+		int validNum = 0;
+		final ByteArrayParseResultVO resultVO = new ByteArrayParseResultVO();
+		for (int startPos = 0; startPos < length; startPos++) {
+			final byte currentStartByte = srcByteArray[startPos];
+			if (ICommonConstants._SerialComm_Data_StartByte_ != currentStartByte) {
+				continue;
 			}
 			
-			int length = dataArea.length;
-			byte firstElement = dataArea[0];
-			if (firstElement != 0x00) {
-				if (length > 1) {
-					throw new RuntimeException("return result command. first element is not zero, but length is more than 1.");
+			for (int endPos = startPos; endPos < length; endPos++) {
+				final byte currentEndByte = srcByteArray[endPos];
+				if (ICommonConstants._SerialComm_Data_EndByte_ != currentEndByte) {
+					continue;
+				}
+
+				final int validDataLength = endPos - startPos + 1 - 4;
+				
+				if (validDataLength < 0) {
+					continue;
 				}
 				
-				vo.setIsSuccess(false);
-				vo.setErrorCode((long)firstElement);
-			}
-			else {
-				if (length == 1) {
-					throw new RuntimeException("return result command. first element is zero, but length is 1.");
+				byte [] content = new byte[validDataLength];
+				System.arraycopy(srcByteArray, startPos+3, content, 0, validDataLength);
+				if (true == isContentLengthValid(content)) {
+					byte [] rtnBytes = new byte[validDataLength-2];
+					if (validDataLength-2 != 0) {
+						System.arraycopy(content, 2, rtnBytes, 0, validDataLength-2);
+					}		
+					validNum++;
+					resultVO.setDataLength(validDataLength);
+					resultVO.setDataArray(rtnBytes);
+					resultVO.setContentArray(content);
+					resultVO.setPid(srcByteArray[startPos+1]);
+					resultVO.setAid(srcByteArray[startPos+2]);
 				}
 				else {
-					vo.setIsSuccess(true);
-					int actualLength = length - 1;
-					byte [] actualData = new byte[actualLength];
-					System.arraycopy(dataArea, 1, actualData, 0, actualLength);
-					
-					String response = super.dataTypeHelper.convert_byte_String(actualData);
-					vo.setResponse(response);
+					System.out.println("not valid. startPos:" + startPos + "--endPos:" + endPos);
 				}
 			}
-
 		}
-		else if (pid == 0x30 && aid == 0x11) {
-			vo.setCommandType(ICommonConstants.MachineCommandEnum._MachineCommand_DownloadTemplate_);
-			vo.setIsSuccess(true);
+		
+		if (validNum != 1) {
+			String extraMessage = "";
+			for (byte ele : srcByteArray) {
+				extraMessage += ele + "--";
+			}
+			throw new RuntimeException("error in extract data from input byte array. validNum:" + validNum + "--length:" + length + "--data:" + extraMessage);
 		}
-		else if (pid == 0x30 && aid == 0x12) {
-			vo.setCommandType(ICommonConstants.MachineCommandEnum._MachineCommand_DownloadTemplate_);
-			vo.setIsSuccess(false);
-			
-			if (null == dataArea || dataArea.length == 0){
-				throw new RuntimeException("downlad template command.data area is null or empty. pid:" + pid + "--aid:" + aid);
-			}
-			
-			int length = dataArea.length;
-			byte firstElement = dataArea[0];
-			
-			if (length != 1) {
-				throw new RuntimeException("downlad template command. length is more than 1.");
-			}
-			
-			if (firstElement == 0x00) {
-				throw new RuntimeException("downlad template command. first element can not be zero.");				
-			}
-			else {
-				vo.setErrorCode((long)firstElement);
-			}
-		}
-		else if (pid == 0x50 && aid == 0x11) {
-			vo.setCommandType(ICommonConstants.MachineCommandEnum._MachineCommand_Ping_);
-			vo.setIsSuccess(true);
-		}
+		
+		return resultVO;
 	}
 	
+	public boolean isContentLengthValid(final byte [] content) {
+		super.validateObject(content);
+		int length = content.length;
+		
+		if (length < 2) {
+			throw new RuntimeException("length of content is invalid. length:" + length);
+		}
+		
+		byte lowByte = content[0];
+		byte highByte = content[1];
+		
+		int actualLength = ((int)highByte * 256) + (int)lowByte;
+		
+		boolean isValid = false;
+		if (actualLength != (length - 2)) {
+			isValid = false;
+		}
+		else {
+			isValid = true;
+		}
+		
+		return isValid;
+	}
+
+	public static void main(String [] args) {
+		ByteDataParser parse = new ByteDataParser();
+		byte [] inputSrcByteArray = new byte[]{0x56, 0x68, 0x68, 0x10, 0x11, 0x01, 0x00, 0x01, 0x16, 0x16};
+		final ByteArrayParseResultVO vo = parse.extractValidByteArrayFromSrc(inputSrcByteArray);
+		System.out.println(vo);
+	}
 }

@@ -5,6 +5,7 @@ public class ProductionDataVO {
 	private String barCode = "";
 	private String templateName = "";
 	private double price = 0.0d;
+	private long weight = 0L;
 	private String timestampStr = "";
 	private boolean isSuccessful = false;
 	
@@ -45,9 +46,16 @@ public class ProductionDataVO {
 		this.price = price;
 	}
 	
+	public long getWeight() {
+		return weight;
+	}
+	public void setWeight(long weight) {
+		this.weight = weight;
+	}
 	@Override
 	public String toString() {
 		return "ProductionDataVO [errorCode=" + errorCode + ", barCode=" + barCode + ", templateName=" + templateName
-				+ ", price=" + price + ", timestampStr=" + timestampStr + ", isSuccessful=" + isSuccessful + "]";
+				+ ", price=" + price + ", weight=" + weight + ", timestampStr=" + timestampStr + ", isSuccessful="
+				+ isSuccessful + "]";
 	}
 }

@@ -1,38 +1,50 @@
 package com.bottle.ui;
 
 import java.awt.Color;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bottle.business.common.IMessageListener;
-import com.bottle.business.common.IMessageQueueManager;
+import com.bottle.business.common.service.IMessageListener;
+import com.bottle.business.common.service.IMessageQueueManager;
 import com.bottle.business.common.vo.MessageVO;
+import com.bottle.business.data.service.IConfigurationManager;
+import com.bottle.business.verify.ISecretTriggerManager;
 import com.bottle.common.IDateConverter;
 import com.bottle.common.ILoggerHelper;
+import com.bottle.common.IResourceLoader;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
-import com.bottle.common.constants.ILanguageConstants;
-import com.bottle.hardware.camera.ICameraConnector;
+import com.bottle.hardware.rxtx.ISerialCommConnector;
 import com.bottle.ui.components.admin.AdminPanel;
+import com.bottle.ui.components.common.ClickFontLabel;
 import com.bottle.ui.components.common.FontLabel;
+import com.bottle.ui.components.exit.ExitDialog;
 import com.bottle.ui.components.player.PlayerPanel;
-import com.bottle.ui.components.verify.VerifyPanel;
+import com.bottle.ui.components.verify.VerifyDialog;
 import com.bottle.ui.components.welcome.WelcomePanel;
 import com.bottle.ui.constants.IUIConstants;
+
+import gnu.io.SerialPortEvent;
 
 @Component
 public class MainFrame extends JFrame implements IMessageListener {
@@ -42,7 +54,8 @@ public class MainFrame extends JFrame implements IMessageListener {
 	
 	private JPanel bossPane;
 	
-	private VerifyPanel veryfyPanel = new VerifyPanel();
+	@Autowired
+	private ISerialCommConnector serialConnector;
 	
 	@Autowired
 	private WelcomePanel welcomePane;
@@ -52,11 +65,7 @@ public class MainFrame extends JFrame implements IMessageListener {
 	
 	@Autowired
 	private AdminPanel adminPane;
-	
-	
-	@Autowired
-	private ICameraConnector cameraConnector;
-	
+		
 	@Autowired
 	private ILoggerHelper loggerHelper;	
 	
@@ -64,16 +73,31 @@ public class MainFrame extends JFrame implements IMessageListener {
 	private IDateConverter dateConverter;
 	
 	@Autowired
+	private IResourceLoader resourceLoader;
+	
+	@Autowired
 	private IMessageQueueManager messageManager;
 	
-	private final JLabel lblServerStatusTitle = new FontLabel("\u670D\u52A1\u5668\u8FDE\u63A5\u72B6\u6001");
-	private final JLabel lblServerStatus = new FontLabel();
-	private final JLabel lblMachineStatusTitle = new FontLabel("\u4E3B\u63A7\u8FDE\u63A5\u72B6\u6001");
-	private final JLabel lblMachineStatus = new FontLabel();
+	@Autowired
+	private IConfigurationManager configurationManager;
+	
+	@Autowired
+	private ISerialCommConnector serialCommConnector;
+	
+	@Autowired
+	private VerifyDialog verifyDialog;
+	
+	@Autowired
+	private ISecretTriggerManager adminPanelVerifyManager;
+	
+	private final ClickFontLabel lblServerStatus = new ClickFontLabel(1);
+	private final ClickFontLabel lblSerialPortStatus = new ClickFontLabel(2);
+	private final ClickFontLabel lblMachineStatus = new ClickFontLabel(3);
 	private final JLabel lblCurrentDate = new FontLabel();
 	private final JLabel lblSystemInfoLog = new FontLabel();
-	
-	private final JLabel label = new JLabel("");
+	private boolean isLastOperationSuccessful = false;
+	private Icon connectedIcon = new ImageIcon();
+	private Icon disconnectedIcon = new ImageIcon();
 	
 	@PostConstruct
 	public void initialize() {
@@ -85,14 +109,41 @@ public class MainFrame extends JFrame implements IMessageListener {
 		initWelcomePanel();
 		initPlayerPanel();
 		initAdminPanel();
-		initCamera();
+		initStatusIcons();
 		initMessage();
 		
 		switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Welcome_);
+		initStatusLabels();
+		initTimeThread();
+		initSerialCommPort();
+	}
+
+	public void initSerialCommPort() {
+		serialCommConnector.initSerialPort();
+	}
+	
+	public void initStatusLabels(){
 		updateStatusLable(lblServerStatus, ICommonConstants._ConnectionStatus_Offline_);
 		updateStatusLable(lblMachineStatus, ICommonConstants._ConnectionStatus_Offline_);
+		updateStatusLable(lblSerialPortStatus, ICommonConstants._ConnectionStatus_Offline_);
 		
-		initTimeThread();
+		lblServerStatus.setTriggerManager(adminPanelVerifyManager);
+		lblMachineStatus.setTriggerManager(adminPanelVerifyManager);
+		lblSerialPortStatus.setTriggerManager(adminPanelVerifyManager);
+	}
+	
+	public void initStatusIcons() {
+		try {
+			final File redLabelImageFile = resourceLoader.loadResourceAsFile("redLabel.png");
+			final BufferedImage redLabelImage=ImageIO.read(redLabelImageFile);
+			disconnectedIcon = new ImageIcon(redLabelImage);
+			
+			final File greenLabelImageFile = resourceLoader.loadResourceAsFile("greenLabel.png");
+			final BufferedImage greenLabelImage=ImageIO.read(greenLabelImageFile);
+			connectedIcon = new ImageIcon(greenLabelImage);
+		} catch (IOException e) {
+			loggerHelper.logging(logger, e, Level.ERROR, e.getMessage());
+		}
 	}
 	
 	public void initWelcomePanel() {
@@ -129,69 +180,85 @@ public class MainFrame extends JFrame implements IMessageListener {
 	
 	public void initMessage() {
 		messageManager.addListener(this);
-		veryfyPanel.setMessageManager(messageManager);
-	}
-	
-	public void initCamera() {
-		veryfyPanel.init(cameraConnector);
 	}
 	
 	public MainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//setUndecorated(true);
-		setBounds(0, 0, 1439, 773);
-		
-		 getGraphicsConfiguration().getDevice().setFullScreenWindow(this);
+		setUndecorated(true);
+		//setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setBounds(0, 0, 2000, 1500);
+		//GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
+		//setExtendedState(JFrame.MAXIMIZED_BOTH);
+		//getGraphicsConfiguration().getDevice().setFullScreenWindow(this);
 		bossPane = new JPanel();
-		bossPane.setBorder(new EmptyBorder(5, 5, 5, 5));			
+		//bossPane.setBorder(new EmptyBorder(5, 5, 5, 5));			
 		setContentPane(bossPane);
-		bossPane.setLayout(null);		
+		bossPane.setLayout(null);
 		
-		veryfyPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		veryfyPanel.setBounds(0, 74, 1425, 768);		
-		veryfyPanel.setLayout(null);
-		
-		bossPane.add(veryfyPanel);
-		
-		
-		lblServerStatusTitle.setBounds(37, 5, 169, 33);		
-		bossPane.add(lblServerStatusTitle);
-		
-		lblServerStatus.setBounds(216, 10, 188, 23);		
+		lblServerStatus.setBounds(10, 5, 68, 23);		
 		bossPane.add(lblServerStatus);
 				
-		lblMachineStatusTitle.setBounds(37, 35, 169, 33);
-		bossPane.add(lblMachineStatusTitle);
-				
-		lblMachineStatus.setBounds(216, 40, 188, 23);
+		lblSerialPortStatus.setBounds(83, 5, 68, 23);
+		bossPane.add(lblSerialPortStatus);
+		
+		lblMachineStatus.setBounds(156, 5, 68, 23);
 		bossPane.add(lblMachineStatus);
 		
-		lblCurrentDate.setBounds(1108, 0, 258, 33);
+		
+		
+		lblCurrentDate.setBounds(1179, 0, 246, 33);
 		bossPane.add(lblCurrentDate);
-		
-		label.addMouseListener(new MouseAdapter() {
+
+		lblSystemInfoLog.setOpaque(true);
+		lblSystemInfoLog.setVerticalTextPosition(JLabel.CENTER);
+		lblSystemInfoLog.setHorizontalAlignment(JLabel.CENTER);
+		lblSystemInfoLog.setBounds(234, 5, 939, 33);		
+		lblSystemInfoLog.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Verify_);
+				SerialPortEvent event = new SerialPortEvent(null, 1, false, false);
+				serialConnector.serialEvent(event);
+				if (true == lblSystemInfoLog.getForeground().equals(new Color(60, 60, 60))) {
+					lblSystemInfoLog.setForeground(new Color(250, 250, 250));
+					lblSystemInfoLog.setBackground(new Color(250, 250, 250));
+				}
+				else {
+					lblSystemInfoLog.setForeground(new Color(60, 60, 60));
+					if (true == isLastOperationSuccessful) {
+						lblSystemInfoLog.setBackground(Color.GREEN);
+					}
+					else {
+						lblSystemInfoLog.setBackground(Color.RED);
+					}
+				}
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
-		label.setBounds(0, 40, 26, 23);
-		
-		bossPane.add(label);
-		
-		lblSystemInfoLog.setBounds(898, 35, 468, 33);
 		bossPane.add(lblSystemInfoLog);
-		
-		JLabel directTriggerLabel = new JLabel("");
-		directTriggerLabel.setBounds(0, 5, 26, 23);
-		directTriggerLabel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Admin_);
-			}
-		});
-		
-		bossPane.add(directTriggerLabel);
 	}
 	
 	public void switchMode(final ICommonConstants.MainFrameActivePanelEnum activePanel) {
@@ -201,7 +268,6 @@ public class MainFrame extends JFrame implements IMessageListener {
 				welcomePane.setVisible(true);
 				welcomePane.validate();
 				playerPane.setVisible(false);
-				veryfyPanel.hideEx();
 				adminPane.setVisible(false);				
 				break;
 			}
@@ -210,23 +276,13 @@ public class MainFrame extends JFrame implements IMessageListener {
 				welcomePane.setVisible(false);
 				playerPane.setVisible(true);
 				playerPane.validate();
-				veryfyPanel.hideEx();
 				adminPane.setVisible(false);	
-				break;
-			}
-			case _MainFrame_ActivePanel_Verify_:
-			{
-				welcomePane.setVisible(false);
-				playerPane.setVisible(false);
-				veryfyPanel.showEx();
-				adminPane.setVisible(false);
 				break;
 			}
 			case _MainFrame_ActivePanel_Admin_:
 			{
 				welcomePane.setVisible(false);
 				playerPane.setVisible(false);
-				veryfyPanel.hideEx();
 				adminPane.setVisible(true);
 				adminPane.validate();
 				break;
@@ -259,6 +315,11 @@ public class MainFrame extends JFrame implements IMessageListener {
 				updateStatusLable(lblServerStatus, vo.getParam1());
 				break;
 			}
+			case _SubMessageType_MainFrame_SerialPortStatus_:
+			{
+				updateStatusLable(lblSerialPortStatus, vo.getParam1());
+				break;
+			}
 			case _SubMessageType_MainFrame_MachineStatus_:
 			{
 				updateStatusLable(lblMachineStatus, vo.getParam1());
@@ -266,7 +327,19 @@ public class MainFrame extends JFrame implements IMessageListener {
 			}
 			case _SubMessageType_MainFrame_SystemInfoLog_:
 			{
-				updateMessageLable(lblSystemInfoLog, vo.getMessage());
+				updateSystemInfoLable(vo.getMessage(), vo.getIsBooleanParam3());
+				break;
+			}
+			case _SubMessageType_MainFrame_VerifyDialog_:
+			{
+				verifyDialog.setVisible(true);
+				break;
+			}	
+			case _SubMessageType_MainFrame_ExitDlg_:
+			{
+				ExitDialog dlg = new ExitDialog(configurationManager.getConfigurationVO());
+				dlg.setVisible(true);
+				System.exit(0);
 				break;
 			}
 		default:
@@ -274,19 +347,38 @@ public class MainFrame extends JFrame implements IMessageListener {
 		}
 	}
 	
-	public void updateMessageLable(final JLabel label, final String message) {
+	public void updateSystemInfoLable(final String message, boolean isSuccessful) {
+		System.out.println("message:" + message + "--isSuccessful:" + isSuccessful);
+		
+		isLastOperationSuccessful = isSuccessful;
 		final String timestampStr = dateConverter.getCurrentTimestampInNineteenBitsInGMT();
-		label.setText(timestampStr + "  " + message);
+		
+		lblSystemInfoLog.setText(timestampStr + "  " + message);
+		lblSystemInfoLog.setForeground(new Color(60, 60, 60));
+		if (true == isSuccessful) {
+			lblSystemInfoLog.setBackground(Color.GREEN);
+		}
+		else {
+			lblSystemInfoLog.setBackground(Color.RED);
+		}
+			
+		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+		
+		int hideDelay = configurationManager.getConfigurationVO().getHideDelayInSecond_SystemInfoMessage();
+		scheduler.schedule(new Runnable( ) {  
+            public void run() {
+            	lblSystemInfoLog.setForeground(new Color(250, 250, 250));
+				lblSystemInfoLog.setBackground(new Color(250, 250, 250));				
+            }  
+        }, hideDelay, TimeUnit.SECONDS);        
 	}
 	
 	public void updateStatusLable(final JLabel label, final long status) {
 		if (ICommonConstants._ConnectionStatus_Online_ == status) {
-			label.setText(ILanguageConstants._ConnectionStatus_Connected_);
-			label.setForeground(Color.GREEN);
+			label.setIcon(connectedIcon);
 		}
 		else if (ICommonConstants._ConnectionStatus_Offline_ == status) {
-			label.setText(ILanguageConstants._ConnectionStatus_Disconnected_);
-			label.setForeground(Color.RED);
+			label.setIcon(disconnectedIcon);
 		}
 		else {
 			throw new RuntimeException("Unsupported server status. status:" + status);

@@ -1,5 +1,8 @@
 package com.bottle.business.common.vo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.bottle.common.constants.ICommonConstants;
 
 public class MessageVO {
@@ -8,6 +11,7 @@ public class MessageVO {
 	private long param1 = 0L;
 	private long param2 = 0L;
 	private boolean booleanParam3 = false;
+	private List<Long> longListParameter4 = new ArrayList<Long>();
 	private ICommonConstants.MessageSourceEnum messageSource = ICommonConstants.MessageSourceEnum._MessageSource_None;
 	private ICommonConstants.SubMessageTypeEnum subMessageType = ICommonConstants.SubMessageTypeEnum._SubMessageType_None_;
 	
@@ -52,6 +56,18 @@ public class MessageVO {
 	}
 	public void setBooleanParam3(boolean booleanParam3) {
 		this.booleanParam3 = booleanParam3;
+	}
+	public List<Long> getLongListParameter4() {
+		return longListParameter4;
+	}
+	public void setLongListParameter4(List<Long> longListParameter4) {
+		this.longListParameter4 = longListParameter4;
+	}
+	@Override
+	public String toString() {
+		return "MessageVO [id=" + id + ", message=" + message + ", param1=" + param1 + ", param2=" + param2
+				+ ", booleanParam3=" + booleanParam3 + ", messageSource=" + messageSource + ", subMessageType="
+				+ subMessageType + "]";
 	}
 	
 }

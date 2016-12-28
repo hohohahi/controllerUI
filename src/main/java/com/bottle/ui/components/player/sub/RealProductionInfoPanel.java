@@ -27,14 +27,14 @@ import com.bottle.ui.components.common.MyTableWrapper;
 public class RealProductionInfoPanel extends AbstractBasePanel{
 	private static final long serialVersionUID = 1L;
 	
-	JLabel TotalNumTitleLabel = new FontLabel("\u6295\u74F6\u603B\u6570", 48);
-	JLabel totalNumLabel = new FontLabel("a", 48);
-	JLabel ValidNumTitleLabel = new FontLabel("\u6709\u6548\u6295\u74F6\u6570", 48);
-	JLabel validNumLabel = new FontLabel("b", 48);
-	JLabel InvalidNumTitleLabel = new FontLabel("\u65E0\u6548\u6295\u74F6\u6570", 48);
-	JLabel invalidNumLabel = new FontLabel("c", 48);
-	JLabel MoneyTitleLabel = new FontLabel("\u8FD4\u5229\u91D1\u989D", 48);
-	JLabel moneyLabel = new FontLabel("d", 48);
+	JLabel TotalNumTitleLabel = new FontLabel("\u6295\u74F6\u603B\u6570", 42);
+	JLabel totalNumLabel = new FontLabel("a", 42);
+	JLabel ValidNumTitleLabel = new FontLabel("\u6709\u6548\u6295\u74F6\u6570", 42);
+	JLabel validNumLabel = new FontLabel("b", 42);
+	JLabel InvalidNumTitleLabel = new FontLabel("\u65E0\u6548\u6295\u74F6\u6570", 42);
+	JLabel invalidNumLabel = new FontLabel("c", 42);
+	JLabel MoneyTitleLabel = new FontLabel("\u8FD4\u5229\u91D1\u989D", 42);
+	JLabel moneyLabel = new FontLabel("d", 42);
 	
 	private MyTableWrapper realCheckResultTableWrapper;
 	private JTable realCheckResultTable;;
@@ -63,58 +63,54 @@ public class RealProductionInfoPanel extends AbstractBasePanel{
 		
 		realCheckResultTableWrapper = createWrapper();
 	    this.realCheckResultTable = realCheckResultTableWrapper.getTable();
-	    realCheckResultTable.setBounds(430, 48, 536, 388);
+	    realCheckResultTable.setBounds(30, 48, 536, 388);
 	    JScrollPane scrollPane_server=new JScrollPane(realCheckResultTable);
-	    scrollPane_server.setSize(735, 424);
-	    scrollPane_server.setLocation(486, 67);
+	    scrollPane_server.setSize(617, 424);
+	    scrollPane_server.setLocation(393, 71);
 	    this.add(scrollPane_server);
 	    
 		TotalNumTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		TotalNumTitleLabel.setBounds(23, 41, 255, 69);
+		TotalNumTitleLabel.setBounds(0, 41, 241, 69);
 		add(TotalNumTitleLabel);
 		totalNumLabel.setText("0");
 				
 		totalNumLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		totalNumLabel.setBounds(288, 41, 174, 69);
+		totalNumLabel.setBounds(217, 41, 174, 69);
 		add(totalNumLabel);
 		
 		ValidNumTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		ValidNumTitleLabel.setBounds(23, 153, 255, 69);
+		ValidNumTitleLabel.setBounds(0, 153, 241, 69);
 		add(ValidNumTitleLabel);
 		validNumLabel.setText("0");
 		
 		validNumLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		validNumLabel.setBounds(288, 153, 174, 69);
+		validNumLabel.setBounds(217, 153, 174, 69);
 		add(validNumLabel);						
 		
 		InvalidNumTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		InvalidNumTitleLabel.setBounds(23, 268, 255, 69);
+		InvalidNumTitleLabel.setBounds(0, 268, 241, 69);
 		add(InvalidNumTitleLabel);
 		invalidNumLabel.setText("0");
 				
 		invalidNumLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		invalidNumLabel.setBounds(288, 268, 174, 69);
+		invalidNumLabel.setBounds(217, 268, 174, 69);
 		add(invalidNumLabel);
 		
 		MoneyTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		MoneyTitleLabel.setBounds(23, 397, 255, 69);
+		MoneyTitleLabel.setBounds(0, 397, 241, 69);
 		add(MoneyTitleLabel);
 				
 		moneyLabel.setText("0");
 		moneyLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		moneyLabel.setBounds(288, 397, 174, 69);
+		moneyLabel.setBounds(217, 397, 174, 69);
 		add(moneyLabel);		
 	    
 	    FontLabel ResultDetailLabel = new FontLabel("\u65E0\u6548\u6295\u74F6\u6570", 36);
 	    ResultDetailLabel.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 28));
 	    ResultDetailLabel.setText("\u68C0\u6D4B\u7ED3\u679C\u8BE6\u60C5");
 	    ResultDetailLabel.setHorizontalAlignment(SwingConstants.CENTER);
-	    ResultDetailLabel.setBounds(486, 7, 224, 49);
+	    ResultDetailLabel.setBounds(393, 11, 224, 49);
 	    add(ResultDetailLabel);
-	    
-	    JButton button = new JButton("\u5220\u9664\u4E3B\u63A7\u4E0A\u6307\u5B9A\u6A21\u7248\u6210\u529F");
-	    button.setBounds(55, 502, 89, 23);
-	    add(button);
 	}
 	
 	public void updateRealCheckResultTable() {

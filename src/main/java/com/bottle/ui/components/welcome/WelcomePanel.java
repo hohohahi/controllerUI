@@ -38,11 +38,11 @@ public class WelcomePanel extends JPanel{
 		
 		SystemInfoPanel panel = new SystemInfoPanel();
 		
-		panel.setBounds(200, 325, IUIConstants._Total_Width_-200, 350);
+		panel.setBounds(10, 324, 1000, 350);
 		add(panel);				
 		
 		FontLabel lblWelcomeMessageLabel = new FontLabel("\u6B22\u8FCE\u4F7F\u7528\u667A\u80FD\u996E\u6599\u74F6\u56DE\u6536\u673A", 60);		
-		lblWelcomeMessageLabel.setBounds(241, 11, 777, 146);
+		lblWelcomeMessageLabel.setBounds(150, 20, 777, 146);
 		lblWelcomeMessageLabel.setForeground(Color.BLUE);
 		add(lblWelcomeMessageLabel);
 		
@@ -53,7 +53,7 @@ public class WelcomePanel extends JPanel{
 			}
 		});
 		btnNewButton.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 33));
-		btnNewButton.setBounds(489, 178, 321, 87);
+		btnNewButton.setBounds(349, 177, 321, 87);
 		add(btnNewButton);
 	}
 	

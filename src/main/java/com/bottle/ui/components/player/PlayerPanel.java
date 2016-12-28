@@ -55,7 +55,7 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 	}
 	
 	public void initLabel() {
-		realProductionInfoPanel.setBounds(100, 38, 1400, 593);
+		realProductionInfoPanel.setBounds(5, 38, 1400, 593);
 		realProductionInfoPanel.setLayout(null);
 		add(realProductionInfoPanel);
 	}
@@ -70,7 +70,7 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 				startCommandButton.setEnabled(false);
 			}
 		});
-		startCommandButton.setBounds(311, 590, 160, 70);
+		startCommandButton.setBounds(151, 590, 160, 70);
 		add(startCommandButton);
 		
 		
@@ -82,7 +82,7 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 			}
 		});
 		
-		stopCommandButton.setBounds(510, 590, 160, 70);
+		stopCommandButton.setBounds(360, 590, 160, 70);
 		add(stopCommandButton);
 		backCommandButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -94,7 +94,7 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 			}
 		});
 		
-		backCommandButton.setBounds(906, 590, 160, 70);
+		backCommandButton.setBounds(746, 590, 160, 70);
 		add(backCommandButton);
 		returnMoneyCommandButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -112,7 +112,7 @@ public class PlayerPanel extends AbstractBasePanel implements IMessageListener{
 			}
 		});
 		
-		returnMoneyCommandButton.setBounds(712, 590, 160, 70);
+		returnMoneyCommandButton.setBounds(552, 590, 160, 70);
 		add(returnMoneyCommandButton);				
 		
 		showStartAndStopButtons();

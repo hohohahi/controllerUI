@@ -112,7 +112,6 @@ public class TemplateService extends AbstractBaseBean implements ITemplateServic
 	@Override
 	public void uploadTemplate(TemplateVO template) {
 		try {
-			template.setWeight(50);
 			JSONObject rtnJSON = httpHelper.postJSON(getURL(super.configurationManager.getConfigurationVO().getApi_UI_UploadTemplate()), (JSONObject)JSONObject.toJSON(template));
 			if (null != rtnJSON) {
 				RestResultVO result = rtnJSON.toJavaObject(RestResultVO.class);

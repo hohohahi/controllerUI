@@ -12,7 +12,7 @@ public interface ICommonConstants {
 	String _Server_Name_ = "Bottle_CloudServer";
 
 	//Serial Port
-	String _SerialPort_Name_ = "COM2";
+	String _SerialPort_Name_ = "COM9";
 	int _SerialPort_BauDRate_ = 38400;
 	byte _SerialComm_Data_StartByte_ = 0x68;
 	byte _SerialComm_Data_EndByte_ = 0x16;

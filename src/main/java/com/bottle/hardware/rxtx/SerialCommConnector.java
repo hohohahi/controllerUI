@@ -95,7 +95,7 @@ public class SerialCommConnector extends AbstractBaseBean implements ISerialComm
 			final int dataBits = vo.getSerialDataBits();
 			final int stopBits = vo.getSerialStopBits();
 			final int parity = vo.getSerialParity();
-			serialPort = openPort(portName, baudRate, dataBits, stopBits, parity);
+			serialPort = openPort("COM9", baudRate, dataBits, stopBits, parity);
 			this.addListener();
 			isSerialPortReady = true;			
 		} catch (Throwable e) {

@@ -268,4 +268,9 @@ public class TemplateService extends AbstractBaseBean implements ITemplateServic
 			logErrorAndStack(e, e.getMessage());
 		}
 	}
+	
+	
+	public static void main(String [] args) {
+		System.out.println("abc");
+	}
 }

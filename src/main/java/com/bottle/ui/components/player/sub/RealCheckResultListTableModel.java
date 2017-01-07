@@ -43,7 +43,7 @@ public class RealCheckResultListTableModel extends AbstractBaseTableModel
 		case 2:
 			return oscarCandidate.getName();
 		case 3:
-			return oscarCandidate.getBarCode();
+			return oscarCandidate.getErrorCode();
 		case 4:
 			return oscarCandidate.getPrice();
 		}

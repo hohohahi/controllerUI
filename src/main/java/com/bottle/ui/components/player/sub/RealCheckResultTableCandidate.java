@@ -7,14 +7,14 @@ public class RealCheckResultTableCandidate extends BaseTableCandidate
 	private long id = 0L;
 	private String timestamp = "";
 	private String name = "";
-	private String barCode = "";
+	private long errorCode = 0L;
 	private double price = 0.0d;
 	
-	public RealCheckResultTableCandidate(final long id, final String timestamp, final String name, final String barCode, final double price) {
+	public RealCheckResultTableCandidate(final long id, final String timestamp, final String name, final long errorCode, final double price) {
 		this.id = id;
 		this.timestamp = timestamp;
 		this.name = name;
-		this.barCode = barCode;
+		this.errorCode = errorCode;
 		this.price = price;
 	}
 
@@ -26,12 +26,12 @@ public class RealCheckResultTableCandidate extends BaseTableCandidate
 		this.id = id;
 	}
 
-	public String getBarCode() {
-		return barCode;
+	public long getErrorCode() {
+		return errorCode;
 	}
 
-	public void setBarCode(String barCode) {
-		this.barCode = barCode;
+	public void setErrorCode(long errorCode) {
+		this.errorCode = errorCode;
 	}
 
 	public double getPrice() {
@@ -60,7 +60,7 @@ public class RealCheckResultTableCandidate extends BaseTableCandidate
 
 	@Override
 	public String toString() {
-		return "RealCheckResultTableCandidate [id=" + id + ", timestamp=" + timestamp + ", name=" + name + ", barCode="
-				+ barCode + ", price=" + price + "]";
+		return "RealCheckResultTableCandidate [id=" + id + ", timestamp=" + timestamp + ", name=" + name + ", errorCode="
+				+ errorCode + ", price=" + price + "]";
 	}
 }

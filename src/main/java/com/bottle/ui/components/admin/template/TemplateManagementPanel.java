@@ -34,6 +34,7 @@ import com.bottle.ui.components.common.AbstractBasePanel;
 import com.bottle.ui.components.common.FontButton;
 import com.bottle.ui.components.common.FontLabel;
 import com.bottle.ui.components.common.MyTableWrapper;
+import javax.swing.JButton;
 
 @Component
 public class TemplateManagementPanel extends AbstractBasePanel {

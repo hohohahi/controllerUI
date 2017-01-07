@@ -53,9 +53,9 @@ public class RealProductionInfoPanel extends AbstractBasePanel{
 		return new MyTableWrapper(new ArrayList<String>(){{add(ILanguageConstants._RealProductionInfoPanel_Order_);
 														   add(ILanguageConstants._RealProductionInfoPanel_Timestamp_); 
 														   add(ILanguageConstants._RealProductionInfoPanel_ModelName_); 
-														   add(ILanguageConstants._RealProductionInfoPanel_BarCode_);
+														   add(ILanguageConstants._RealProductionInfoPanel_ErrorCode_);
 														   add(ILanguageConstants._RealProductionInfoPanel_Price_);}}, 
-							              new ArrayList<Integer>(){{add(50); add(250); add(160); add(197); add(60);}}, new RealCheckResultListTableModel());
+							              new ArrayList<Integer>(){{add(50); add(238); add(160); add(97); add(60);}}, new RealCheckResultListTableModel());
 	}
 	
 	public RealProductionInfoPanel() {
@@ -123,7 +123,7 @@ public class RealProductionInfoPanel extends AbstractBasePanel{
 		long index = 0;
 		for (final ProductionDataVO vo : historyList) {
 			index++;
-			realCheckResultTableWrapper.add(new RealCheckResultTableCandidate(index, vo.getTimestampStr(), vo.getTemplateName(), vo.getBarCode(), vo.getPrice()));
+			realCheckResultTableWrapper.add(new RealCheckResultTableCandidate(index, vo.getTimestampStr(), vo.getTemplateName(), vo.getErrorCode(), vo.getPrice()));
 		}
 	}
 

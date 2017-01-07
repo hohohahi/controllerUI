@@ -186,7 +186,7 @@ public class MainFrame extends JFrame implements IMessageListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setUndecorated(true);
 		//setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setBounds(0, 0, 2000, 1500);
+		setBounds(0, 0, 1024, 1500);
 		//GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
 		//setExtendedState(JFrame.MAXIMIZED_BOTH);
 		//getGraphicsConfiguration().getDevice().setFullScreenWindow(this);

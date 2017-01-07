@@ -10,7 +10,7 @@ public interface ILanguageConstants {
 	String _RealProductionInfoPanel_Order_ = "\u5E8F\u53F7";
 	String _RealProductionInfoPanel_Timestamp_ = "\u65F6\u95F4";
 	String _RealProductionInfoPanel_ModelName_ = "\u6A21\u677F\u540D\u79F0";
-	String _RealProductionInfoPanel_BarCode_ = "\u4E8C\u7EF4\u7801";
+	String _RealProductionInfoPanel_ErrorCode_ = "\u9519\u8BEF\u7801";
 	String _RealProductionInfoPanel_Price_ = "\u5355\u4EF7";
 	String _RealProductionInfoPanel_Weight_ = "\u91CD\u91CF";
 	

@@ -65,8 +65,8 @@ public class RealProductionInfoPanel extends AbstractBasePanel{
 	    this.realCheckResultTable = realCheckResultTableWrapper.getTable();
 	    realCheckResultTable.setBounds(30, 48, 536, 388);
 	    JScrollPane scrollPane_server=new JScrollPane(realCheckResultTable);
-	    scrollPane_server.setSize(617, 424);
-	    scrollPane_server.setLocation(393, 71);
+	    scrollPane_server.setSize(659, 424);
+	    scrollPane_server.setLocation(351, 71);
 	    this.add(scrollPane_server);
 	    
 		TotalNumTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -109,7 +109,7 @@ public class RealProductionInfoPanel extends AbstractBasePanel{
 	    ResultDetailLabel.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 28));
 	    ResultDetailLabel.setText("\u68C0\u6D4B\u7ED3\u679C\u8BE6\u60C5");
 	    ResultDetailLabel.setHorizontalAlignment(SwingConstants.CENTER);
-	    ResultDetailLabel.setBounds(393, 11, 224, 49);
+	    ResultDetailLabel.setBounds(351, 11, 224, 49);
 	    add(ResultDetailLabel);
 	}
 	

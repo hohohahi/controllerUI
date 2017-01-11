@@ -14,7 +14,7 @@ import com.bottle.business.common.vo.MessageVO;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.ui.components.common.FontButton;
 import com.bottle.ui.components.common.FontLabel;
-import com.bottle.ui.components.player.sub.SystemInfoPanel;
+import com.bottle.ui.components.player.sub.PictureBackgroundPanel;
 import com.bottle.ui.constants.IUIConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -36,32 +36,14 @@ public class WelcomePanel extends JPanel{
 	public WelcomePanel() {
 		setLayout(null);
 		
-		SystemInfoPanel panel = new SystemInfoPanel();
-		
-		panel.setBounds(10, 324, 1000, 350);
-		add(panel);				
-		
 		FontLabel lblWelcomeMessageLabel = new FontLabel("\u6B22\u8FCE\u4F7F\u7528\u667A\u80FD\u996E\u6599\u74F6\u56DE\u6536\u673A", 60);		
 		lblWelcomeMessageLabel.setBounds(150, 20, 777, 146);
 		lblWelcomeMessageLabel.setForeground(Color.BLUE);
 		add(lblWelcomeMessageLabel);
 		
-		JButton btnNewButton = new JButton("\u8FDB\u5165\u64CD\u4F5C\u754C\u9762");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				clickEnterOperationPageButton();
-			}
-		});
-		btnNewButton.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 33));
-		btnNewButton.setBounds(349, 177, 321, 87);
-		add(btnNewButton);
-	}
-	
-	public void clickEnterOperationPageButton() {
-		final MessageVO vo = new MessageVO();
-		vo.setMessageSource(ICommonConstants.MessageSourceEnum._MessageSource_MainFrame_);
-		vo.setSubMessageType(ICommonConstants.SubMessageTypeEnum._SubMessageType_MainFrame_Panel_);
-		vo.setParam1(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Player_.getId());
-		messageManager.push(vo);
+		PictureBackgroundPanel panel = new PictureBackgroundPanel();
+		
+		panel.setBounds(0, 0, IUIConstants._Total_Width_, IUIConstants._Total_Height_);
+		add(panel);				
 	}
 }

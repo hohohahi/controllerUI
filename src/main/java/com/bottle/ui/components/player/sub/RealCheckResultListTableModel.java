@@ -3,6 +3,7 @@ package com.bottle.ui.components.player.sub;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bottle.common.constants.ILanguageConstants;
 import com.bottle.ui.components.common.AbstractBaseTableModel;
 import com.bottle.ui.components.common.BaseTableCandidate;
 
@@ -42,8 +43,27 @@ public class RealCheckResultListTableModel extends AbstractBaseTableModel
 			return oscarCandidate.getTimestamp();
 		case 2:
 			return oscarCandidate.getName();
-		case 3:
-			return oscarCandidate.getErrorCode();
+		case 3:{
+			long errorCode = oscarCandidate.getErrorCode();
+			String errorMessage = "";
+			if (errorCode == 1) {
+				errorMessage = ILanguageConstants._CheckErrorMessage_ReadBarCode_;
+			}
+			else if (errorCode == 2) {
+				errorMessage = ILanguageConstants._CheckErrorMessage_Overweight_;
+			}
+			else if (errorCode == 3) {
+				errorMessage = ILanguageConstants._CheckErrorMessage_ImageMatch_;
+			}
+			else if (errorCode == 4) {
+				errorMessage = ILanguageConstants._CheckErrorMessage_UnknowTemplate_;
+			}
+			else {
+				errorMessage = ILanguageConstants._CheckErrorMessage_Unknown_;
+			}
+			
+			return errorMessage;
+		}			
 		case 4:
 			return oscarCandidate.getPrice();
 		}

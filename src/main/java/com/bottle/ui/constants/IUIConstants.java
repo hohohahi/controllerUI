@@ -9,9 +9,8 @@ public interface IUIConstants {
 		_WorkMode_SuperAdmin_
 	};
 	
-	int _Total_Width_ = 1500;
-	int _Total_Height_ = 900;
-	int _Banner_Height_ = 40;
+	int _Total_Width_ = 1050;
+	int _Total_Height_ = 1680;
 	
 	int _VideoPanel_Offset_X = 300;
 	int _VideoPanel_Width = 650;

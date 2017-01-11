@@ -23,7 +23,6 @@ import com.bottle.ui.components.common.AbstractBasePanel;
 import com.bottle.ui.components.common.FontLabel;
 import com.bottle.ui.components.common.MyTableWrapper;
 
-@Component
 public class RealProductionInfoPanel extends AbstractBasePanel{
 	private static final long serialVersionUID = 1L;
 	
@@ -44,7 +43,7 @@ public class RealProductionInfoPanel extends AbstractBasePanel{
 	
 	@Autowired
 	public void initialize() {
-		updateStatisticData();
+		
 	}
 	
 	
@@ -82,7 +81,6 @@ public class RealProductionInfoPanel extends AbstractBasePanel{
 		ValidNumTitleLabel.setBounds(0, 153, 241, 69);
 		add(ValidNumTitleLabel);
 		validNumLabel.setText("0");
-		
 		validNumLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		validNumLabel.setBounds(217, 153, 174, 69);
 		add(validNumLabel);						
@@ -123,26 +121,13 @@ public class RealProductionInfoPanel extends AbstractBasePanel{
 		long index = 0;
 		for (final ProductionDataVO vo : historyList) {
 			index++;
-			realCheckResultTableWrapper.add(new RealCheckResultTableCandidate(index, vo.getTimestampStr(), vo.getTemplateName(), vo.getErrorCode(), vo.getPrice()));
+			realCheckResultTableWrapper.add(new RealCheckResultTableCandidate(index, vo.getTemplateName(), vo.getErrorCode(), vo.getPrice()));
 		}
-	}
-
-	public void updateStatisticData() {
-		RealtimeStasticDataVO data = productionDataManager.getRealtimeStasticDataVO();
-		totalNumLabel.setText(data.getTotalNum() + "");
-		totalNumLabel.validate();
-		validNumLabel.setText(data.getTotalValidNum() + "");
-		validNumLabel.validate();
-		invalidNumLabel.setText(data.getTotalInvalidNum() + "");
-		invalidNumLabel.validate();
-		moneyLabel.setText(data.getTotalMoney() + "");
-		moneyLabel.validate();
 	}
 	
 	@Override
 	public void processChildMessage(MessageVO vo) {
-		updateStatisticData();
-		updateRealCheckResultTable();
+
 	}
 
 	@Override

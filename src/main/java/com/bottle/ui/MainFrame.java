@@ -94,7 +94,6 @@ public class MainFrame extends JFrame implements IMessageListener {
 		playerPane.setBounds(0, 0, IUIConstants._Total_Width_, IUIConstants._Total_Height_);		
 		playerPane.setLayout(null);
 		bossPane.add(playerPane);
-		playerPane.setParent(this);
 	}
 	
 	public void initMessage() {

@@ -16,8 +16,20 @@ import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.bottle.business.common.service.IMessageQueueManager;
+import com.bottle.business.common.vo.MessageVO;
+import com.bottle.common.constants.ICommonConstants;
+import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
+
+@Component
 public class PictureBackgroundPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	
+	@Autowired
+	private IMessageQueueManager messageManager;
 	
 	private List<String> filenameList = new ArrayList<String>();
 	private String curFilename = "";
@@ -32,7 +44,11 @@ public class PictureBackgroundPanel extends JPanel {
 		addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println(123);
+				final MessageVO vo = new MessageVO();
+				vo.setMessageSource(MessageSourceEnum._MessageSource_MainFrame_);
+				vo.setSubMessageType(ICommonConstants.SubMessageTypeEnum._SubMessageType_MainFrame_Panel_);
+				vo.setParam1(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Player_.getId());
+				messageManager.push(vo);
 			}
 
 			@Override

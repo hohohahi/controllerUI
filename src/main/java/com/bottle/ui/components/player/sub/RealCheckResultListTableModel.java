@@ -40,10 +40,8 @@ public class RealCheckResultListTableModel extends AbstractBaseTableModel
 		case 0:
 			return oscarCandidate.getId();
 		case 1:
-			return oscarCandidate.getTimestamp();
-		case 2:
 			return oscarCandidate.getName();
-		case 3:{
+		case 2:{
 			long errorCode = oscarCandidate.getErrorCode();
 			String errorMessage = "";
 			if (errorCode == 1) {
@@ -64,7 +62,7 @@ public class RealCheckResultListTableModel extends AbstractBaseTableModel
 			
 			return errorMessage;
 		}			
-		case 4:
+		case 3:
 			return oscarCandidate.getPrice();
 		}
 		

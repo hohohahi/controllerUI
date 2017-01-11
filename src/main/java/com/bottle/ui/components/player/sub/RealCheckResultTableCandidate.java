@@ -5,14 +5,12 @@ import com.bottle.ui.components.common.BaseTableCandidate;
 public class RealCheckResultTableCandidate extends BaseTableCandidate
 {
 	private long id = 0L;
-	private String timestamp = "";
 	private String name = "";
 	private long errorCode = 0L;
 	private double price = 0.0d;
 	
-	public RealCheckResultTableCandidate(final long id, final String timestamp, final String name, final long errorCode, final double price) {
+	public RealCheckResultTableCandidate(final long id, final String name, final long errorCode, final double price) {
 		this.id = id;
-		this.timestamp = timestamp;
 		this.name = name;
 		this.errorCode = errorCode;
 		this.price = price;
@@ -50,17 +48,9 @@ public class RealCheckResultTableCandidate extends BaseTableCandidate
 		this.name = name;
 	}
 
-	public String getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
-	}
-
 	@Override
 	public String toString() {
-		return "RealCheckResultTableCandidate [id=" + id + ", timestamp=" + timestamp + ", name=" + name + ", errorCode="
+		return "RealCheckResultTableCandidate [id=" + id +  ", name=" + name + ", errorCode="
 				+ errorCode + ", price=" + price + "]";
 	}
 }

@@ -109,8 +109,7 @@ public class MainFrame extends JFrame implements IMessageListener {
 		//GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
 		//setExtendedState(JFrame.MAXIMIZED_BOTH);
 		//getGraphicsConfiguration().getDevice().setFullScreenWindow(this);
-		bossPane = new JPanel();
-		//bossPane.setBorder(new EmptyBorder(5, 5, 5, 5));			
+		bossPane = new JPanel();		
 		setContentPane(bossPane);
 		bossPane.setLayout(null);
 		

@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class PictureBackgroundPanel extends JPanel {
 	private List<String> filenameList = new ArrayList<String>();
 	private String curFilename = "";
 	private int curPos = 0;
-	private Image image=null;
+
 	private int height = 0;
 	private int weight = 0;
 	
@@ -86,23 +87,36 @@ public class PictureBackgroundPanel extends JPanel {
 		this.validate();
 		this.repaint();
 	}
+	
+	public Image loadImage(final String filename) {
+		Image image = null;
+		try {
+			final String relativePath = "resources/images/" + filename;
+			File systemInfoPictureFile = new File(relativePath);
+			if (false == systemInfoPictureFile.exists()) {
+				URL pathURL = ClassLoader.getSystemResource("");
+				
+				File classPath = new File(pathURL.getFile());
+				String fullPath = classPath.getParent() + File.separator + relativePath;
+				systemInfoPictureFile = new File(fullPath);
+			}
+			
+			image = ImageIO.read(systemInfoPictureFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	return image;
+	}
     public void paint(Graphics g){
         try {
         	
-        	final String relativePath = "resources/images/" + curFilename;
-        	File systemInfoPictureFile = new File(relativePath);
-        	if (false == systemInfoPictureFile.exists()) {
-        		URL pathURL = ClassLoader.getSystemResource("");
-        		
-        		File classPath = new File(pathURL.getFile());
-        		String fullPath = classPath.getParent() + File.separator + relativePath;
-        		systemInfoPictureFile = new File(fullPath);
-        	}
-            image=ImageIO.read(systemInfoPictureFile);
+        	final Image mainImage = loadImage(curFilename);        	                  
+            g.drawImage(mainImage, 0, 0, this.weight, this.height, null);
             
-            
-            g.drawImage(image, 0, 0, this.weight, this.height, null);
-            System.out.println(relativePath);
+            final Image title = loadImage("title.png");        	                  
+            g.drawImage(title, 150, 30, 750, 100, null);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

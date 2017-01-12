@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -28,6 +28,9 @@ import com.bottle.business.money.IReturnMoneyService;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 import com.bottle.common.constants.ILanguageConstants;
+import com.bottle.hardware.rxtx.command.ICommandSelector;
+import com.bottle.hardware.rxtx.command.IMachineCommandSender;
+import com.bottle.ui.components.common.FontButton;
 import com.bottle.ui.components.common.FontLabel;
 import com.bottle.ui.components.common.MyTableWrapper;
 import com.bottle.ui.components.player.sub.PhoneNumberInputDlg;
@@ -35,10 +38,12 @@ import com.bottle.ui.components.player.sub.RealCheckResultListTableModel;
 import com.bottle.ui.components.player.sub.RealCheckResultTableCandidate;
 import com.bottle.ui.constants.IUIConstants;
 
-@Component
-public class PlayerPanel extends JPanel implements IMessageListener{
+public class PlayerFrameExt extends JFrame implements IMessageListener{
 	private static final long serialVersionUID = 1L;
 	private boolean isStarted = false;
+	
+	@Autowired
+	private ICommandSelector machineCommandSelector;
 	
 	@Autowired
 	protected IMessageQueueManager messageManager;
@@ -57,6 +62,8 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	private MyTableWrapper realCheckResultTableWrapper;
 	private JTable realCheckResultTable;;
 	
+	final FontButton startCommandButton = new FontButton("\u5F00\u59CB\u6295\u74F6");
+	
 	final CircleButton returnProfitButton = new CircleButton("\u8FD4\u5229", Color.BLUE, Color.GRAY, new Dimension(200, 200));
 	final CircleButton donationButton = new CircleButton("\u6350\u8D60", new Color(80, 240, 60), Color.GRAY, new Dimension(200, 200));
 	@PostConstruct
@@ -65,27 +72,33 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		updateStatisticData();
 	}
 	
-	public PlayerPanel() {
+	public void showStartAndStopButtons() {
+		startCommandButton.setBounds(80, 369, 160, 70);
+		startCommandButton.setEnabled(!isStarted);
+		startCommandButton.validate();
+	}
+	
+	public PlayerFrameExt() {
 		
 		//this.setPreferredSize(new Dimension(IUIConstants._Total_Width_, IUIConstants._Total_Height_));
 		//this.setPreferredSize();
-		setLayout(null);
-		this.setAutoscrolls(true);
-		this.setPreferredSize(new Dimension(IUIConstants._Total_Width_, IUIConstants._Total_Height_));
+		getContentPane().setLayout(null);
+		setUndecorated(true);
+		
 		ValidNumTitleLabel.setBounds(-12, 65, 335, 69);		
 		ValidNumTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		add(ValidNumTitleLabel);
+		getContentPane().add(ValidNumTitleLabel);
 		validNumLabel.setBounds(287, 65, 118, 69);
 		validNumLabel.setText("0");
 		validNumLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		add(validNumLabel);								
+		getContentPane().add(validNumLabel);								
 		MoneyTitleLabel.setBounds(-12, 176, 335, 69);
 		MoneyTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		add(MoneyTitleLabel);				
+		getContentPane().add(MoneyTitleLabel);				
 		moneyLabel.setBounds(287, 176, 118, 69);
 		moneyLabel.setText("0");
 		moneyLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		add(moneyLabel);
+		getContentPane().add(moneyLabel);
 		
 		realCheckResultTableWrapper = createWrapper();
 	    this.realCheckResultTable = realCheckResultTableWrapper.getTable();
@@ -93,8 +106,18 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	    
 		JScrollPane scrollPane_server=new JScrollPane(realCheckResultTable);
 		scrollPane_server.setBounds(440, 71, 600, 424);
-	    this.add(scrollPane_server);
+	    getContentPane().add(scrollPane_server);
 	    
+		startCommandButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Start_);
+				sender.send();
+				startCommandButton.setEnabled(false);
+			}
+		});
+		getContentPane().add(startCommandButton);
+		
+		showStartAndStopButtons();
 		returnProfitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				PhoneNumberInputDlg dlg = new PhoneNumberInputDlg();				
@@ -112,9 +135,9 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		});
 		
 		returnProfitButton.setBounds(445, 1300, 250, 250);
-		add(returnProfitButton);
+		getContentPane().add(returnProfitButton);
 		donationButton.setBounds(759, 1300, 250, 250);
-		add(donationButton);
+		getContentPane().add(donationButton);
 	}
 
 	@Override
@@ -130,17 +153,16 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		
 		final ICommonConstants.SubMessageTypeEnum subMessageType = vo.getSubMessageType();
 		if (true == ICommonConstants.SubMessageTypeEnum._SubMessageType_PlayerPanel_StartCommandButton_.equals(subMessageType)) {
-			//startCommandButton.setEnabled(true);
+			startCommandButton.setEnabled(true);
 			isStarted = vo.getIsBooleanParam3();
-			//showStartAndStopButtons();
+			showStartAndStopButtons();
 			if (false == isStarted) {
 				//super.sendSystemInfo("error in start command.");
 			}
 		}
 		else if (true == ICommonConstants.SubMessageTypeEnum._SubMessageType_PlayerPanel_StopCommandButton_.equals(subMessageType)) {
-			//stopCommandButton.setEnabled(true);
 			isStarted = !vo.getIsBooleanParam3();
-			//showStartAndStopButtons();
+			showStartAndStopButtons();
 			if (true == isStarted) {
 				//super.sendSystemInfo("error in stop command.");
 			}
@@ -180,10 +202,6 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	
 	@SuppressWarnings("serial")
 	public MyTableWrapper createWrapper() {
-		return new MyTableWrapper(new ArrayList<String>(){{add(ILanguageConstants._RealProductionInfoPanel_Order_);
-														   add(ILanguageConstants._RealProductionInfoPanel_ModelName_); 
-														   add(ILanguageConstants._RealProductionInfoPanel_ErrorCode_);
-														   add(ILanguageConstants._RealProductionInfoPanel_Price_);}}, 
-							              new ArrayList<Integer>(){{add(50); add(160); add(97); add(60);}}, new RealCheckResultListTableModel());
+		return null;
 	}
 }

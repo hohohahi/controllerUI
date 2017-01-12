@@ -17,6 +17,8 @@ import com.bottle.common.IResourceLoader;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 import com.bottle.hardware.rxtx.ISerialCommConnector;
+import com.bottle.hardware.rxtx.command.ICommandSelector;
+import com.bottle.hardware.rxtx.command.IMachineCommandSender;
 import com.bottle.ui.components.admin.AdminPanel;
 import com.bottle.ui.components.exit.ExitDialog;
 import com.bottle.ui.components.player.PlayerPanel;
@@ -56,6 +58,9 @@ public class MainFrame extends JFrame implements IMessageListener {
 	@Autowired
 	private VerifyDialog verifyDialog;
 	
+	@Autowired
+	private ICommandSelector machineCommandSelector;
+	
 	@PostConstruct
 	public void initialize() {
 		final String className = this.getClass().getName();
@@ -89,8 +94,7 @@ public class MainFrame extends JFrame implements IMessageListener {
 		bossPane.add(adminPane);
 	}
 	
-	public void initPlayerPanel() {
-		playerPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));				
+	public void initPlayerPanel() {			
 		playerPane.setBounds(0, 0, IUIConstants._Total_Width_, IUIConstants._Total_Height_);		
 		playerPane.setLayout(null);
 		bossPane.add(playerPane);
@@ -111,7 +115,7 @@ public class MainFrame extends JFrame implements IMessageListener {
 		bossPane = new JPanel();		
 		setContentPane(bossPane);
 		bossPane.setLayout(null);
-		
+		bossPane.setBounds(0, 0, IUIConstants._Total_Width_, IUIConstants._Total_Height_);
 		
 	}
 	
@@ -120,17 +124,24 @@ public class MainFrame extends JFrame implements IMessageListener {
 			case _MainFrame_ActivePanel_Welcome_:
 			{
 				welcomePane.setVisible(true);
-				welcomePane.validate();
+				welcomePane.validate();				
+				adminPane.setVisible(false);
+				
 				playerPane.setVisible(false);
-				adminPane.setVisible(false);				
+				final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Stop_);
+				sender.send();
+				
 				break;
 			}
 			case _MainFrame_ActivePanel_Player_:
 			{
-				welcomePane.setVisible(false);
+				welcomePane.setVisible(false);				
+				adminPane.setVisible(false);	
 				playerPane.setVisible(true);
 				playerPane.validate();
-				adminPane.setVisible(false);	
+				
+				final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Start_);
+				sender.send();
 				break;
 			}
 			case _MainFrame_ActivePanel_Admin_:

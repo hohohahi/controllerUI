@@ -1,6 +1,5 @@
 package com.bottle.ui.components.welcome;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import com.bottle.business.common.service.IMessageQueueManager;
 import com.bottle.ui.components.common.FontButton;
-import com.bottle.ui.components.common.FontLabel;
 import com.bottle.ui.components.player.sub.PictureBackgroundPanel;
 import com.bottle.ui.constants.IUIConstants;
 

@@ -24,8 +24,7 @@ import com.bottle.business.common.vo.MessageVO;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 
-@Component
-public class PictureBackgroundPanel extends JPanel {
+public class PlayerPictureBannerPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	@Autowired
@@ -38,49 +37,15 @@ public class PictureBackgroundPanel extends JPanel {
 	private int height = 0;
 	private int weight = 0;
 	
-	public PictureBackgroundPanel() {
+	public PlayerPictureBannerPanel() {
 		setLayout(null);
 		initTimeThread();
-		addMouseListener(new MouseListener(){
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				final MessageVO vo = new MessageVO();
-				vo.setMessageSource(MessageSourceEnum._MessageSource_MainFrame_);
-				vo.setSubMessageType(ICommonConstants.SubMessageTypeEnum._SubMessageType_MainFrame_Panel_);
-				vo.setParam1(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Player_.getId());
-				messageManager.push(vo);
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
 	}
 	
 	public void initTimeThread() {
 		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 		scheduler.scheduleAtFixedRate(new Runnable( ) {  
-            public void run() {            	
+            public void run() {
             	if (filenameList.size() == 0) {
             		curFilename = "SystemInfo.png";
             	}
@@ -92,7 +57,7 @@ public class PictureBackgroundPanel extends JPanel {
                 	
             		curFilename = filenameList.get(curPos);
             	}
-            	        
+            	      
             	validatePicture();
             }  
         },  
@@ -126,13 +91,9 @@ public class PictureBackgroundPanel extends JPanel {
     	return image;
 	}
     public void paint(Graphics g){
-        try {
-        	
+        try {        	
         	final Image mainImage = loadImage(curFilename);        	                  
-            g.drawImage(mainImage, 0, 0, this.weight, this.height, null);
-            
-            final Image title = loadImage("title.png");        	                  
-            g.drawImage(title, 150, 30, 750, 100, null);
+            g.drawImage(mainImage, 0, 0, this.weight, this.height, null);      
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

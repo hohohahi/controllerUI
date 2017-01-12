@@ -31,6 +31,7 @@ import com.bottle.common.constants.ILanguageConstants;
 import com.bottle.ui.components.common.FontLabel;
 import com.bottle.ui.components.common.MyTableWrapper;
 import com.bottle.ui.components.player.sub.PhoneNumberInputDlg;
+import com.bottle.ui.components.player.sub.PlayerPictureBannerPanel;
 import com.bottle.ui.components.player.sub.RealCheckResultListTableModel;
 import com.bottle.ui.components.player.sub.RealCheckResultTableCandidate;
 import com.bottle.ui.constants.IUIConstants;
@@ -59,6 +60,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	
 	final CircleButton returnProfitButton = new CircleButton("\u8FD4\u5229", Color.BLUE, Color.GRAY, new Dimension(200, 200));
 	final CircleButton donationButton = new CircleButton("\u6350\u8D60", new Color(80, 240, 60), Color.GRAY, new Dimension(200, 200));
+	private PlayerPictureBannerPanel bannerPanel = new PlayerPictureBannerPanel();
 	@PostConstruct
 	public void initialize() {
 		messageManager.addListener(this);
@@ -92,7 +94,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	    realCheckResultTable.setBounds(30, 48, 536, 388);
 	    
 		JScrollPane scrollPane_server=new JScrollPane(realCheckResultTable);
-		scrollPane_server.setBounds(440, 71, 600, 424);
+		scrollPane_server.setBounds(440, 12, 600, 586);
 	    this.add(scrollPane_server);
 	    
 		returnProfitButton.addActionListener(new ActionListener() {
@@ -115,6 +117,15 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		add(returnProfitButton);
 		donationButton.setBounds(759, 1300, 250, 250);
 		add(donationButton);
+		
+		bannerPanel.setBounds(5, 295, 423, 675);
+		List<String> imageNameList = new ArrayList<String>();
+		imageNameList.add("playerbanner.png");
+		bannerPanel.setImageFileNameList(imageNameList);
+		bannerPanel.setWeight(423);
+		bannerPanel.setHeight(675);
+		System.out.println("add images: size:" + imageNameList.size());
+		add(bannerPanel);
 	}
 
 	@Override

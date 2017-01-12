@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -18,6 +20,8 @@ import javax.swing.JPanel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bottle.business.common.service.IMessageQueueManager;
+import com.bottle.business.common.vo.MessageVO;
+import com.bottle.common.constants.ICommonConstants;
 
 public class PlayerPictureBannerPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -32,15 +36,15 @@ public class PlayerPictureBannerPanel extends JPanel {
 	private int height = 0;
 	private int weight = 0;
 	private int leftExpiredTime_InSecond = 0;
+	private Timer changePictureTimer = new Timer();
 	public PlayerPictureBannerPanel() {
 		setLayout(null);
-		initTimeThread();
 	}
 	
-	public void initTimeThread() {
-		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-		scheduler.scheduleAtFixedRate(new Runnable( ) {  
-            public void run() {
+	public void initChangeBannerPictureTimeThread() {
+		changePictureTimer = new Timer();  
+		changePictureTimer.schedule(new TimerTask() {  
+            public void run() {              	            	
             	if (filenameList.size() == 0) {
             		curFilename = "SystemInfo.png";
             	}
@@ -55,8 +59,13 @@ public class PlayerPictureBannerPanel extends JPanel {
             	      
             	validatePicture();
             }  
-        },  
-        0, 5, TimeUnit.SECONDS);
+        }, 0, 6000);
+	}
+	
+	public void resetTimer() {
+		changePictureTimer.cancel();
+		curPos = 0;
+		leftExpiredTime_InSecond = 0;
 	}
 	
 	public void validatePicture() {

@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +18,6 @@ import com.bottle.common.IResourceLoader;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 import com.bottle.hardware.rxtx.ISerialCommConnector;
-import com.bottle.hardware.rxtx.command.ICommandSelector;
-import com.bottle.hardware.rxtx.command.IMachineCommandSender;
 import com.bottle.ui.components.admin.AdminPanel;
 import com.bottle.ui.components.exit.ExitDialog;
 import com.bottle.ui.components.player.PlayerPanel;
@@ -27,7 +26,7 @@ import com.bottle.ui.components.welcome.WelcomePanel;
 import com.bottle.ui.constants.IUIConstants;
 
 @Component
-public class MainFrame extends JFrame implements IMessageListener {
+public class MainFrame extends JFrame implements IMessageListener, InitializingBean {
 	private static final long serialVersionUID = -632890096779473173L;
 	
 	final Logger logger = Logger.getLogger(this.getClass());
@@ -58,9 +57,6 @@ public class MainFrame extends JFrame implements IMessageListener {
 	@Autowired
 	private VerifyDialog verifyDialog;
 	
-	@Autowired
-	private ICommandSelector machineCommandSelector;
-	
 	@PostConstruct
 	public void initialize() {
 		final String className = this.getClass().getName();
@@ -72,8 +68,6 @@ public class MainFrame extends JFrame implements IMessageListener {
 		initPlayerPanel();
 		initAdminPanel();
 		initMessage();
-		
-		switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Welcome_, true);
 		initSerialCommPort();
 	}
 
@@ -119,44 +113,39 @@ public class MainFrame extends JFrame implements IMessageListener {
 		
 	}
 	
-	public void switchMode(final ICommonConstants.MainFrameActivePanelEnum activePanel, boolean  isInitialized) {
+	public void switchMode(final ICommonConstants.MainFrameActivePanelEnum activePanel) {
 		switch (activePanel){
 			case _MainFrame_ActivePanel_Welcome_:
 			{
 				welcomePane.setVisible(true);
-				welcomePane.validate();				
-				adminPane.setVisible(false);
-				
+				welcomePane.validate();
+				welcomePane.active();
+				adminPane.setVisible(false);				
 				playerPane.setVisible(false);
-				if (false == isInitialized) {
-					final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Stop_);
-					sender.send();
-				}
-				
+				playerPane.deactive();		
+								
 				break;
 			}
 			case _MainFrame_ActivePanel_Player_:
 			{
-				welcomePane.setVisible(false);				
+				welcomePane.setVisible(false);
+				welcomePane.deactived();
 				adminPane.setVisible(false);	
 				playerPane.setVisible(true);
 				playerPane.validate();
-				
-				if (false == isInitialized) {
-					playerPane.initExpireTimer();
-					
-					final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Start_);
-					sender.send();
-				}
+				playerPane.active();				
 								
 				break;
 			}
 			case _MainFrame_ActivePanel_Admin_:
 			{
 				welcomePane.setVisible(false);
-				playerPane.setVisible(false);
+				welcomePane.deactived();
+				playerPane.setVisible(false);		
+				playerPane.deactive();
 				adminPane.setVisible(true);
 				adminPane.validate();
+				
 				break;
 			}
 			default:
@@ -179,7 +168,7 @@ public class MainFrame extends JFrame implements IMessageListener {
 		switch (subMessageType) {
 			case _SubMessageType_MainFrame_Panel_:
 			{
-				switchMode(ICommonConstants.MainFrameActivePanelEnum.getActivePanelEnumById(vo.getParam1()), false);
+				switchMode(ICommonConstants.MainFrameActivePanelEnum.getActivePanelEnumById(vo.getParam1()));
 				break;
 			}
 			case _SubMessageType_MainFrame_VerifyDialog_:
@@ -202,5 +191,10 @@ public class MainFrame extends JFrame implements IMessageListener {
 	@Override
 	public MessageSourceEnum getMessageType() {
 		return ICommonConstants.MessageSourceEnum._MessageSource_MainFrame_;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Welcome_);
 	}
 }

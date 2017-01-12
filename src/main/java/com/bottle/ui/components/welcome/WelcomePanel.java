@@ -42,4 +42,12 @@ public class WelcomePanel extends JPanel{
 	public WelcomePanel() {
 		setLayout(null);
 	}
+	
+	public void active() {
+		bannerPicturePanel.initChangeBannerPictureTimeThread();
+	}
+	
+	public void deactived() {
+		bannerPicturePanel.resetTimer();
+	}
 }

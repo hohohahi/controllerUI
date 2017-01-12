@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -37,10 +39,10 @@ public class PictureBackgroundPanel extends JPanel {
 
 	private int height = 0;
 	private int weight = 0;
+	private Timer changePictureTimer = new Timer();
 	
 	public PictureBackgroundPanel() {
 		setLayout(null);
-		initTimeThread();
 		addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -77,10 +79,10 @@ public class PictureBackgroundPanel extends JPanel {
 		});
 	}
 	
-	public void initTimeThread() {
-		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-		scheduler.scheduleAtFixedRate(new Runnable( ) {  
-            public void run() {            	
+	public void initChangeBannerPictureTimeThread() {
+		changePictureTimer = new Timer();  
+		changePictureTimer.schedule(new TimerTask() {  
+            public void run() {              	            	
             	if (filenameList.size() == 0) {
             		curFilename = "SystemInfo.png";
             	}
@@ -92,11 +94,15 @@ public class PictureBackgroundPanel extends JPanel {
                 	
             		curFilename = filenameList.get(curPos);
             	}
-            	        
+            	      
             	validatePicture();
             }  
-        },  
-        0, 5, TimeUnit.SECONDS);
+        }, 0, 5000);
+	}
+	
+	public void resetTimer() {
+		changePictureTimer.cancel();
+		curPos = 0;
 	}
 	
 	public void validatePicture() {
@@ -127,7 +133,7 @@ public class PictureBackgroundPanel extends JPanel {
 	}
     public void paint(Graphics g){
         try {
-        	
+        	g.clearRect( 0, 0, this.weight, this.height);
         	final Image mainImage = loadImage(curFilename);        	                  
             g.drawImage(mainImage, 0, 0, this.weight, this.height, null);
             

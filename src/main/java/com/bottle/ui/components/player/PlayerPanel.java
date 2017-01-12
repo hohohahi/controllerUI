@@ -30,6 +30,8 @@ import com.bottle.business.data.vo.RealtimeStasticDataVO;
 import com.bottle.business.money.IReturnMoneyService;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
+import com.bottle.hardware.rxtx.command.ICommandSelector;
+import com.bottle.hardware.rxtx.command.IMachineCommandSender;
 import com.bottle.common.constants.ILanguageConstants;
 import com.bottle.ui.components.common.FontLabel;
 import com.bottle.ui.components.common.MyTableWrapper;
@@ -43,6 +45,9 @@ import com.bottle.ui.constants.IUIConstants;
 public class PlayerPanel extends JPanel implements IMessageListener{
 	private static final long serialVersionUID = 1L;
 	private boolean isStarted = false;
+	
+	@Autowired
+	private ICommandSelector machineCommandSelector;
 	
 	@Autowired
 	protected IMessageQueueManager messageManager;
@@ -68,6 +73,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	final CircleButton donationButton = new CircleButton("\u6350\u8D60", new Color(80, 240, 60), Color.GRAY, new Dimension(200, 200));
 	private PlayerPictureBannerPanel bannerPanel = new PlayerPictureBannerPanel();
 	private int expiredTime_InSecond = 0;
+	private Timer expireTimer = new Timer();
 	@PostConstruct
 	public void initialize() {
 		messageManager.addListener(this);
@@ -131,7 +137,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		imageNameList.add("greenearth.jpg");
 		bannerPanel.setImageFileNameList(imageNameList);
 		bannerPanel.setWeight(423);
-		bannerPanel.setHeight(675);
+		bannerPanel.setHeight(675);		
 		add(bannerPanel);
 	}
 
@@ -202,19 +208,39 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 														   add(ILanguageConstants._RealProductionInfoPanel_ModelName_); 
 														   add(ILanguageConstants._RealProductionInfoPanel_ErrorCode_);
 														   add(ILanguageConstants._RealProductionInfoPanel_Price_);}}, 
-							              new ArrayList<Integer>(){{add(50); add(160); add(97); add(60);}}, new RealCheckResultListTableModel());
+							              new ArrayList<Integer>(){{add(50); add(190); add(197); add(60);}}, new RealCheckResultListTableModel());
+	}
+	
+	public void active() {
+		initExpireTimer();
+		bannerPanel.initChangeBannerPictureTimeThread();
+		
+		if (true == productionDataManager.getIsSerialPortInitialized()) {
+			final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Start_);
+			sender.send();
+		}		
+	}
+	
+	public void deactive() {
+		expireTimer.cancel();
+		expiredTime_InSecond = 0;
+		bannerPanel.resetTimer();
+		
+		if (true == productionDataManager.getIsSerialPortInitialized()) {
+			final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Stop_);
+			sender.send();
+		}		
 	}
 	
 	public void initExpireTimer() {
 		int playerPanelIdelTime_InSeconds = configurationManager.getConfigurationVO().getPlayerPanelIdelTime_InSeconds();
-		Timer timer = new Timer();  
-        timer.schedule(new TimerTask() {  
+		expireTimer = new Timer();  
+		expireTimer.schedule(new TimerTask() {  
             public void run() {              	            	
             	expiredTime_InSecond++;
             	bannerPanel.setLeftExpiredTime_InSecond(playerPanelIdelTime_InSeconds - expiredTime_InSecond);
             	bannerPanel.repaint();
             	
-            	System.out.println("expiredTime_InSecond:" + expiredTime_InSecond);
             	if (expiredTime_InSecond > playerPanelIdelTime_InSeconds) {            		
             		expiredTime_InSecond = 0;
             		MessageVO vo = new MessageVO();
@@ -223,7 +249,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
     				vo.setSubMessageType(ICommonConstants.SubMessageTypeEnum._SubMessageType_MainFrame_Panel_);
     				messageManager.push(vo);
     			
-            		timer.cancel();
+    				expireTimer.cancel();
             	}
             }  
         }, 0, 1000); 

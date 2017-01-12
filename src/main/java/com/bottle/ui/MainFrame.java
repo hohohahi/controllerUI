@@ -73,7 +73,7 @@ public class MainFrame extends JFrame implements IMessageListener {
 		initAdminPanel();
 		initMessage();
 		
-		switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Welcome_);
+		switchMode(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Welcome_, true);
 		initSerialCommPort();
 	}
 
@@ -119,7 +119,7 @@ public class MainFrame extends JFrame implements IMessageListener {
 		
 	}
 	
-	public void switchMode(final ICommonConstants.MainFrameActivePanelEnum activePanel) {
+	public void switchMode(final ICommonConstants.MainFrameActivePanelEnum activePanel, boolean  isInitialized) {
 		switch (activePanel){
 			case _MainFrame_ActivePanel_Welcome_:
 			{
@@ -128,8 +128,10 @@ public class MainFrame extends JFrame implements IMessageListener {
 				adminPane.setVisible(false);
 				
 				playerPane.setVisible(false);
-				final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Stop_);
-				sender.send();
+				if (false == isInitialized) {
+					final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Stop_);
+					sender.send();
+				}
 				
 				break;
 			}
@@ -140,8 +142,11 @@ public class MainFrame extends JFrame implements IMessageListener {
 				playerPane.setVisible(true);
 				playerPane.validate();
 				
-				final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Start_);
-				sender.send();
+				if (false == isInitialized) {
+					final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Start_);
+					sender.send();
+				}
+								
 				break;
 			}
 			case _MainFrame_ActivePanel_Admin_:
@@ -172,7 +177,7 @@ public class MainFrame extends JFrame implements IMessageListener {
 		switch (subMessageType) {
 			case _SubMessageType_MainFrame_Panel_:
 			{
-				switchMode(ICommonConstants.MainFrameActivePanelEnum.getActivePanelEnumById(vo.getParam1()));
+				switchMode(ICommonConstants.MainFrameActivePanelEnum.getActivePanelEnumById(vo.getParam1()), false);
 				break;
 			}
 			case _SubMessageType_MainFrame_VerifyDialog_:

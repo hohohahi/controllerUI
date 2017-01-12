@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.annotation.PostConstruct;
 import javax.swing.JLabel;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Component;
 import com.bottle.business.common.service.IMessageListener;
 import com.bottle.business.common.service.IMessageQueueManager;
 import com.bottle.business.common.vo.MessageVO;
+import com.bottle.business.data.service.IConfigurationManager;
 import com.bottle.business.data.service.IProductionDataManager;
 import com.bottle.business.data.vo.ProductionDataVO;
 import com.bottle.business.data.vo.RealtimeStasticDataVO;
@@ -50,6 +53,9 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	@Autowired
 	private IProductionDataManager productionDataManager;
 	
+	@Autowired
+	private IConfigurationManager configurationManager;
+	
 	JLabel ValidNumTitleLabel = new FontLabel("\u6709\u6548\u6295\u74F6\u6570", 42);
 	JLabel validNumLabel = new FontLabel("b", 42);
 	JLabel MoneyTitleLabel = new FontLabel("\u8FD4\u5229\u91D1\u989D", 42);
@@ -61,6 +67,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	final CircleButton returnProfitButton = new CircleButton("\u8FD4\u5229", Color.BLUE, Color.GRAY, new Dimension(200, 200));
 	final CircleButton donationButton = new CircleButton("\u6350\u8D60", new Color(80, 240, 60), Color.GRAY, new Dimension(200, 200));
 	private PlayerPictureBannerPanel bannerPanel = new PlayerPictureBannerPanel();
+	private int expiredTime_InSecond = 0;
 	@PostConstruct
 	public void initialize() {
 		messageManager.addListener(this);
@@ -121,10 +128,10 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		bannerPanel.setBounds(5, 295, 423, 675);
 		List<String> imageNameList = new ArrayList<String>();
 		imageNameList.add("playerbanner.png");
+		imageNameList.add("greenearth.jpg");
 		bannerPanel.setImageFileNameList(imageNameList);
 		bannerPanel.setWeight(423);
 		bannerPanel.setHeight(675);
-		System.out.println("add images: size:" + imageNameList.size());
 		add(bannerPanel);
 	}
 
@@ -196,5 +203,29 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 														   add(ILanguageConstants._RealProductionInfoPanel_ErrorCode_);
 														   add(ILanguageConstants._RealProductionInfoPanel_Price_);}}, 
 							              new ArrayList<Integer>(){{add(50); add(160); add(97); add(60);}}, new RealCheckResultListTableModel());
+	}
+	
+	public void initExpireTimer() {
+		int playerPanelIdelTime_InSeconds = configurationManager.getConfigurationVO().getPlayerPanelIdelTime_InSeconds();
+		Timer timer = new Timer();  
+        timer.schedule(new TimerTask() {  
+            public void run() {              	            	
+            	expiredTime_InSecond++;
+            	bannerPanel.setLeftExpiredTime_InSecond(playerPanelIdelTime_InSeconds - expiredTime_InSecond);
+            	bannerPanel.repaint();
+            	
+            	System.out.println("expiredTime_InSecond:" + expiredTime_InSecond);
+            	if (expiredTime_InSecond > playerPanelIdelTime_InSeconds) {            		
+            		expiredTime_InSecond = 0;
+            		MessageVO vo = new MessageVO();
+    				vo.setParam1(ICommonConstants.MainFrameActivePanelEnum._MainFrame_ActivePanel_Welcome_.getId());
+    				vo.setMessageSource(ICommonConstants.MessageSourceEnum._MessageSource_MainFrame_);
+    				vo.setSubMessageType(ICommonConstants.SubMessageTypeEnum._SubMessageType_MainFrame_Panel_);
+    				messageManager.push(vo);
+    			
+            		timer.cancel();
+            	}
+            }  
+        }, 0, 1000); 
 	}
 }

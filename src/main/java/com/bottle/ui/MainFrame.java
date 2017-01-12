@@ -143,6 +143,8 @@ public class MainFrame extends JFrame implements IMessageListener {
 				playerPane.validate();
 				
 				if (false == isInitialized) {
+					playerPane.initExpireTimer();
+					
 					final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Start_);
 					sender.send();
 				}

@@ -39,6 +39,7 @@ public class ConfigurationVO implements Cloneable {
 	//ui
 	private int secretTriggerExpireTime_InMillisecond = 0;
 	private int exitWarningTime_InSeconds = 0;
+	private int playerPanelIdelTime_InSeconds = 0;
 	public ConfigurationVO() {
 		identifier = ICommonConstants._Bottle_Identifier_;
 		serialCommandTimeout_InMilliSecond = 1000*30;
@@ -66,6 +67,7 @@ public class ConfigurationVO implements Cloneable {
 		secretTriggerExpireTime_InMillisecond = ICommonConstants._SecretTriggerExpireTime_InMillisecond;
 		
 		exitWarningTime_InSeconds = ICommonConstants._exitWarningTime_InSeconds_;
+		playerPanelIdelTime_InSeconds = ICommonConstants._playerPanelIdelTime_InSeconds_;
 	}
 	
 	public String getIdentifier() {
@@ -254,6 +256,14 @@ public class ConfigurationVO implements Cloneable {
 
 	public void setExitWarningTime_InSeconds(int exitWarningTime_InSeconds) {
 		this.exitWarningTime_InSeconds = exitWarningTime_InSeconds;
+	}
+
+	public int getPlayerPanelIdelTime_InSeconds() {
+		return playerPanelIdelTime_InSeconds;
+	}
+
+	public void setPlayerPanelIdelTime_InSeconds(int playerPanelIdelTime_InSeconds) {
+		this.playerPanelIdelTime_InSeconds = playerPanelIdelTime_InSeconds;
 	}
 
 	@Override

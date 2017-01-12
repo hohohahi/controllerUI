@@ -1,9 +1,8 @@
 package com.bottle.ui.components.player.sub;
 
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -17,12 +16,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.bottle.business.common.service.IMessageQueueManager;
-import com.bottle.business.common.vo.MessageVO;
-import com.bottle.common.constants.ICommonConstants;
-import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 
 public class PlayerPictureBannerPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -36,7 +31,7 @@ public class PlayerPictureBannerPanel extends JPanel {
 
 	private int height = 0;
 	private int weight = 0;
-	
+	private int leftExpiredTime_InSecond = 0;
 	public PlayerPictureBannerPanel() {
 		setLayout(null);
 		initTimeThread();
@@ -65,6 +60,7 @@ public class PlayerPictureBannerPanel extends JPanel {
 	}
 	
 	public void validatePicture() {
+		this.invalidate();
 		this.validate();
 		this.repaint();
 	}
@@ -92,8 +88,12 @@ public class PlayerPictureBannerPanel extends JPanel {
 	}
     public void paint(Graphics g){
         try {        	
+        	g.clearRect( 0, 0, this.weight, this.height);
         	final Image mainImage = loadImage(curFilename);        	                  
-            g.drawImage(mainImage, 0, 0, this.weight, this.height, null);      
+            g.drawImage(mainImage, 0, 0, this.weight, this.height, null);
+            
+            g.setFont(new Font("Tahoma", Font.BOLD, 36));
+            g.drawString("Exit in " + leftExpiredTime_InSecond + " seconds", 50, 50);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -112,4 +112,12 @@ public class PlayerPictureBannerPanel extends JPanel {
     public void setWeight(final int weight) {
     	this.weight = weight;
     }
+
+	public int getLeftExpiredTime_InSecond() {
+		return leftExpiredTime_InSecond;
+	}
+
+	public void setLeftExpiredTime_InSecond(int leftExpiredTime_InSecond) {
+		this.leftExpiredTime_InSecond = leftExpiredTime_InSecond;
+	}
 }

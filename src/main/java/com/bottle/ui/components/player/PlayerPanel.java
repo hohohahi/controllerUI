@@ -61,10 +61,10 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	@Autowired
 	private IConfigurationManager configurationManager;
 	
-	JLabel ValidNumTitleLabel = new FontLabel("\u6709\u6548\u6295\u74F6\u6570", 42);
-	JLabel validNumLabel = new FontLabel("b", 42);
-	JLabel MoneyTitleLabel = new FontLabel("\u8FD4\u5229\u91D1\u989D", 42);
-	JLabel moneyLabel = new FontLabel("d", 42);
+	JLabel ValidNumTitleLabel = new FontLabel("\u6295\u74F6\u6570", 72);
+	JLabel validNumLabel = new FontLabel("b", 72);
+	JLabel MoneyTitleLabel = new FontLabel("\u91D1\u989D", 72);
+	JLabel moneyLabel = new FontLabel("d", 72);
 	
 	private MyTableWrapper realCheckResultTableWrapper;
 	private JTable realCheckResultTable;;
@@ -87,17 +87,17 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		setLayout(null);
 		this.setAutoscrolls(true);
 		this.setPreferredSize(new Dimension(IUIConstants._Total_Width_, IUIConstants._Total_Height_));
-		ValidNumTitleLabel.setBounds(-12, 65, 335, 69);		
+		ValidNumTitleLabel.setBounds(0, 65, 250, 69);		
 		ValidNumTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(ValidNumTitleLabel);
-		validNumLabel.setBounds(287, 65, 118, 69);
+		validNumLabel.setBounds(251, 65, 171, 69);
 		validNumLabel.setText("0");
 		validNumLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(validNumLabel);								
-		MoneyTitleLabel.setBounds(-12, 176, 335, 69);
+		MoneyTitleLabel.setBounds(0, 176, 234, 69);
 		MoneyTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(MoneyTitleLabel);				
-		moneyLabel.setBounds(287, 176, 118, 69);
+		moneyLabel.setBounds(233, 176, 195, 69);
 		moneyLabel.setText("0");
 		moneyLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(moneyLabel);
@@ -107,7 +107,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	    realCheckResultTable.setBounds(30, 48, 536, 388);
 	    
 		JScrollPane scrollPane_server=new JScrollPane(realCheckResultTable);
-		scrollPane_server.setBounds(440, 12, 600, 586);
+		scrollPane_server.setBounds(440, 12, 600, 624);
 	    this.add(scrollPane_server);
 	    
 		returnProfitButton.addActionListener(new ActionListener() {
@@ -127,8 +127,10 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		});
 		
 		returnProfitButton.setBounds(445, 1300, 250, 250);
+		returnProfitButton.setEnabled(false);
 		add(returnProfitButton);
 		donationButton.setBounds(759, 1300, 250, 250);
+		donationButton.setEnabled(false);
 		add(donationButton);
 		
 		bannerPanel.setBounds(5, 295, 423, 675);
@@ -195,6 +197,11 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		validNumLabel.validate();
 		moneyLabel.setText(data.getTotalMoney() + "");
 		moneyLabel.validate();
+		
+		if (data.getTotalMoney() > 0.0d) {
+			donationButton.setEnabled(true);
+			returnProfitButton.setEnabled(true);
+		}
 	}
 	
 	@Override
@@ -208,7 +215,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 														   add(ILanguageConstants._RealProductionInfoPanel_ModelName_); 
 														   add(ILanguageConstants._RealProductionInfoPanel_ErrorCode_);
 														   add(ILanguageConstants._RealProductionInfoPanel_Price_);}}, 
-							              new ArrayList<Integer>(){{add(50); add(190); add(197); add(60);}}, new RealCheckResultListTableModel());
+							              new ArrayList<Integer>(){{add(50); add(260); add(220); add(60);}}, new RealCheckResultListTableModel());
 	}
 	
 	public void active() {

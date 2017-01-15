@@ -151,6 +151,8 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			
 				expiredTime_InSecond = 0;
+				returnProfitButton.setEnabled(true);
+				returnProfitButton.repaint();
 			}
 		});
 		btnNewButton.setBounds(339, 12, 98, 28);
@@ -284,11 +286,15 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		
 		if (true == basicDataTypeHelper.isGreaterThanZero(data.getTotalMoney())) {
 			donationButton.setEnabled(true);
+			donationButton.repaint();
 			returnProfitButton.setEnabled(true);
+			returnProfitButton.repaint();
 		}
 		else {
 			donationButton.setEnabled(false);
 			returnProfitButton.setEnabled(false);
+			donationButton.repaint();
+			returnProfitButton.repaint();
 		}
 	}
 	

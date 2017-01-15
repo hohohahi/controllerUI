@@ -12,6 +12,11 @@ public class FontLabel extends JLabel{
 		setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 18));
 	}
 	
+	public FontLabel(int fontSize) {
+		super();
+		setFont(new Font("Microsoft JhengHei Light", Font.BOLD, fontSize));
+	}
+	
 	public FontLabel(String text) {
 		super(text);
 		setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 18));

@@ -1,6 +1,5 @@
 package com.bottle.ui.components.player.sub;
 
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
@@ -23,7 +22,6 @@ public class PlayerPictureBannerPanel extends JPanel {
 
 	private int height = 0;
 	private int weight = 0;
-	private int leftExpiredTime_InSecond = 0;
 	private Timer changePictureTimer = new Timer();
 	public PlayerPictureBannerPanel() {
 		setLayout(null);
@@ -62,7 +60,6 @@ public class PlayerPictureBannerPanel extends JPanel {
 	public void resetTimer() {
 		changePictureTimer.cancel();
 		curPos = 0;
-		leftExpiredTime_InSecond = 0;
 	}
 	
 	public void validatePicture() {
@@ -97,9 +94,6 @@ public class PlayerPictureBannerPanel extends JPanel {
         	g.clearRect( 0, 0, this.weight, this.height);
         	final Image mainImage = loadImage(curFilename);        	                  
             g.drawImage(mainImage, 0, 0, this.weight, this.height, null);
-            
-            g.setFont(new Font("Tahoma", Font.BOLD, 36));
-            g.drawString("Exit in " + leftExpiredTime_InSecond + " seconds", 50, 50);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -118,12 +112,4 @@ public class PlayerPictureBannerPanel extends JPanel {
     public void setWeight(final int weight) {
     	this.weight = weight;
     }
-
-	public int getLeftExpiredTime_InSecond() {
-		return leftExpiredTime_InSecond;
-	}
-
-	public void setLeftExpiredTime_InSecond(int leftExpiredTime_InSecond) {
-		this.leftExpiredTime_InSecond = leftExpiredTime_InSecond;
-	}
 }

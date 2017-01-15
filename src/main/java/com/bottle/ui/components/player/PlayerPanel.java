@@ -118,7 +118,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	    realCheckResultTable.setBounds(30, 48, 536, 388);
 	    
 		JScrollPane scrollPane_server=new JScrollPane(realCheckResultTable);
-		scrollPane_server.setBounds(639, 12, 401, 695);
+		scrollPane_server.setBounds(639, 12, 401, 800);
 		scrollPane_server.getVerticalScrollBar().setUI(new CBScrollBarUI());
 	    this.add(scrollPane_server);
 	    
@@ -138,10 +138,10 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 			}
 		});
 		
-		returnProfitButton.setBounds(445, 1380, 250, 250);
+		returnProfitButton.setBounds(445, 1410, 250, 250);
 		returnProfitButton.setEnabled(false);
 		add(returnProfitButton);
-		donationButton.setBounds(759, 1380, 250, 250);
+		donationButton.setBounds(759, 1410, 250, 250);
 		donationButton.setEnabled(false);
 		add(donationButton);
 		

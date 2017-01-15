@@ -124,8 +124,41 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
 				
+			}			
+		});
+		
+		moneyLabel.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				MessageVO vo = new MessageVO();
+				vo.setMessageSource(ICommonConstants.MessageSourceEnum._MessageSource_MainFrame_);
+				vo.setSubMessageType(ICommonConstants.SubMessageTypeEnum._SubMessageType_MainFrame_ExitDlg_);
+				messageManager.push(vo);
 			}
-			
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}			
 		});
 	}
 	

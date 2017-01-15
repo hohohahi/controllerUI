@@ -35,7 +35,7 @@ public class ExitDialog extends JDialog {
 		setUndecorated(true);
 		
 		setTitle("\u786E\u5B9A\u8981\u9000\u51FA\u7A0B\u5E8F\u5417");
-		setBounds(100, 100, 622, 96);
+		setBounds(0, 100, 622, 96);
 		setLocationRelativeTo(null);
 		
 		

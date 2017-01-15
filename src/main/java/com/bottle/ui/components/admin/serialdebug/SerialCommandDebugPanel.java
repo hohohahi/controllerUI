@@ -72,8 +72,8 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 	    resultTable.setBounds(430, 48, 536, 388);
 	    
 	    scrollPane = new JScrollPane(resultTable);
-	    scrollPane.setSize(784, 594);
-	    scrollPane.setLocation(370, 74);
+	    scrollPane.setSize(754, 1254);
+	    scrollPane.setLocation(10, 313);
 	    this.add(scrollPane);  
 
 	    
@@ -87,7 +87,7 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 		});
 		setLayout(null);
 		
-		openDoorButton.setBounds(10, 24, 170, 53);
+		openDoorButton.setBounds(10, 24, 153, 53);
 		add(openDoorButton);
 		closeDoorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -98,7 +98,7 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 			}
 		});
 							
-		closeDoorButton.setBounds(190, 24, 170, 53);
+		closeDoorButton.setBounds(173, 24, 153, 53);
 		add(closeDoorButton);
 		
 		
@@ -110,7 +110,7 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 				platformDownButton.setEnabled(false);
 			}
 		});
-		platformDownButton.setBounds(10, 132, 170, 53);
+		platformDownButton.setBounds(448, 24, 153, 53);
 		add(platformDownButton);
 		
 		
@@ -122,7 +122,7 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 				platformUpButton.setEnabled(false);
 			}
 		});
-		platformUpButton.setBounds(190, 132, 170, 53);
+		platformUpButton.setBounds(611, 24, 153, 53);
 		add(platformUpButton);
 		
 		movePositiveButton.addActionListener(new ActionListener() {
@@ -133,7 +133,7 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 				movePositiveButton.setEnabled(false);
 			}
 		});
-		movePositiveButton.setBounds(10, 333, 170, 53);
+		movePositiveButton.setBounds(10, 183, 153, 53);
 		add(movePositiveButton);
 		
 		moveNegativeButton.addActionListener(new ActionListener() {
@@ -144,7 +144,7 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 				moveNegativeButton.setEnabled(false);
 			}
 		});
-		moveNegativeButton.setBounds(190, 333, 170, 53);
+		moveNegativeButton.setBounds(173, 183, 153, 53);
 		add(moveNegativeButton);
 		
 		stopMoveButton.addActionListener(new ActionListener() {
@@ -155,7 +155,7 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 				stopMoveButton.setEnabled(false);
 			}
 		});		
-		stopMoveButton.setBounds(10, 435, 170, 53);
+		stopMoveButton.setBounds(336, 183, 170, 53);
 		add(stopMoveButton);
 		
 		moveWheelButton.addActionListener(new ActionListener() {
@@ -166,7 +166,7 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 				moveWheelButton.setEnabled(false);
 			}
 		});
-		moveWheelButton.setBounds(10, 233, 170, 53);
+		moveWheelButton.setBounds(10, 102, 153, 53);
 		add(moveWheelButton);
 		
 		stopWheelButton.addActionListener(new ActionListener() {
@@ -177,7 +177,7 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 				stopWheelButton.setEnabled(false);
 			}
 		});
-		stopWheelButton.setBounds(190, 233, 170, 53);
+		stopWheelButton.setBounds(173, 102, 153, 53);
 		add(stopWheelButton);
 		
 		openLightButton.addActionListener(new ActionListener() {
@@ -188,7 +188,7 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 				openLightButton.setEnabled(false);
 			}
 		});		
-		openLightButton.setBounds(10, 534, 170, 53);
+		openLightButton.setBounds(448, 102, 153, 53);
 		add(openLightButton);
 		
 		closeLightButton.addActionListener(new ActionListener() {
@@ -199,7 +199,7 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 				closeLightButton.setEnabled(false);
 			}
 		});		
-		closeLightButton.setBounds(190, 534, 170, 53);
+		closeLightButton.setBounds(611, 102, 153, 53);
 		add(closeLightButton);		
 		
 		FontButton commandButton = new FontButton("\u5173\u95ED\u5149\u6E90");
@@ -209,14 +209,14 @@ public class SerialCommandDebugPanel extends AbstractBasePanel {
 			}
 		});
 		commandButton.setText("\u5237\u65B0");
-		commandButton.setBounds(370, 24, 252, 39);
+		commandButton.setBounds(10, 263, 252, 39);
 		add(commandButton);
 		
 		allLogRadioButton.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 18));
-		allLogRadioButton.setBounds(691, 24, 133, 39);
+		allLogRadioButton.setBounds(331, 263, 133, 39);
 		add(allLogRadioButton);
 		
-		noPingLogRadioButton.setBounds(842, 24, 196, 39);
+		noPingLogRadioButton.setBounds(482, 263, 196, 39);
 		noPingLogRadioButton.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 18));
 		add(noPingLogRadioButton);
 		

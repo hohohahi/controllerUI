@@ -105,7 +105,7 @@ public class AdminPanel extends AbstractBasePanel {
 	}
 	
 	public void initTab() {
-		tabbedpane.setBounds(52, 10, 1480, 900);
+		tabbedpane.setBounds(52, 30, 998, 1650);
 		
 		tabbedpane.add("\u4E32\u53E3\u547D\u4EE4\u8C03\u8BD5", serialCommandDebugPanel); //serial command debug
 		tabbedpane.add("\u6A21\u7248\u7BA1\u7406", templateManagementPanel);   //model management

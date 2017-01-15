@@ -23,17 +23,18 @@ public class PlayerPictureBannerPanel extends JPanel {
 	private int height = 0;
 	private int weight = 0;
 	private Timer changePictureTimer = new Timer();
-	public PlayerPictureBannerPanel() {
+	public PlayerPictureBannerPanel(int width, int height) {
 		setLayout(null);
 		
 		List<String> imageNameList = new ArrayList<String>();
 		imageNameList.add("playerbanner.png");
-		imageNameList.add("greenearth.jpg");
+		imageNameList.add("greenearth625x1000.png");
+		imageNameList.add("greenword625x1000.png");
 		setImageFileNameList(imageNameList);
 		
 		curFilename = imageNameList.get(0);
-		setWeight(625);
-		setHeight(800);	
+		setWeight(width);
+		setHeight(height);	
 	}
 	
 	public void initChangeBannerPictureTimeThread() {

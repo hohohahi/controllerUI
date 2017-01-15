@@ -82,7 +82,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	
 	final CircleButton returnProfitButton = new CircleButton("\u8FD4\u5229", Color.BLUE, Color.GRAY, Color.LIGHT_GRAY, new Dimension(200, 200));
 	final CircleButton donationButton = new CircleButton("\u6350\u8D60", new Color(80, 240, 60), Color.GRAY, Color.LIGHT_GRAY, new Dimension(200, 200));
-	private PlayerPictureBannerPanel bannerPanel = new PlayerPictureBannerPanel();
+	private PlayerPictureBannerPanel bannerPanel = new PlayerPictureBannerPanel(625, 1000);
 	private int expiredTime_InSecond = 0;
 	private Timer expireTimer = new Timer();
 	@PostConstruct
@@ -145,14 +145,14 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		donationButton.setEnabled(false);
 		add(donationButton);
 		
-		expireTimeLabel.setBounds(5, 0, 400, 40);
+		expireTimeLabel.setBounds(5, 1600, 400, 40);
 		
 		add(expireTimeLabel);
 		
-		bannerPanel.setBounds(5, 395, 625, 800);	
+		bannerPanel.setBounds(5, 395, 625, 1000);	
 		add(bannerPanel);
 		
-		JButton btnNewButton = new JButton("\u8BF7\u8F93\u5165\u6709\u6548\u7684\u624B\u673A\u53F7\u7801()");
+		JButton btnNewButton = new JButton("\u79D2\u540E\u8FD4\u56DE\u6B22\u8FCE\u754C\u9762!");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			
 				expiredTime_InSecond = 0;
@@ -359,7 +359,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	}
 	
 	public void updateExpireLabel(int leftTimeInSeconds) {
-		expireTimeLabel.setText("  " + leftTimeInSeconds + "秒后返回欢迎界面！");
+		expireTimeLabel.setText("  " + leftTimeInSeconds + "\u79D2\u540E\u8FD4\u56DE\u6B22\u8FCE\u754C\u9762!");
 		expireTimeLabel.repaint();
 		expireTimeLabel.invalidate();
 	}

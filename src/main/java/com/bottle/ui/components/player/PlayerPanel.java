@@ -75,7 +75,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	JLabel validNumLabel = new FontLabel("b", 72);
 	JLabel MoneyTitleLabel = new FontLabel("\u91D1\u989D", 72);
 	JLabel moneyLabel = new FontLabel("d", 72);
-	FontLabel expireTimeLabel = new FontLabel(24);
+	FontLabel expireTimeLabel = new FontLabel(36);
 	
 	private MyTableWrapper realCheckResultTableWrapper;
 	private JTable realCheckResultTable;;
@@ -145,7 +145,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		donationButton.setEnabled(false);
 		add(donationButton);
 		
-		expireTimeLabel.setBounds(5, 1380, 400, 40);
+		expireTimeLabel.setBounds(5, 1600, 400, 40);
 		
 		add(expireTimeLabel);
 		
@@ -360,5 +360,6 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	
 	public void updateExpireLabel(int leftTimeInSeconds) {
 		expireTimeLabel.setText("Expire in " + leftTimeInSeconds + " seconds");
+		expireTimeLabel.repaint();
 	}
 }

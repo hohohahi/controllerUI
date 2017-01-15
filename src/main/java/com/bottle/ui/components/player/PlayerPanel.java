@@ -97,17 +97,17 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		setLayout(null);
 		this.setAutoscrolls(true);
 		this.setPreferredSize(new Dimension(IUIConstants._Total_Width_, IUIConstants._Total_Height_));
-		ValidNumTitleLabel.setBounds(64, 65, 250, 69);		
+		ValidNumTitleLabel.setBounds(59, 83, 250, 69);		
 		ValidNumTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(ValidNumTitleLabel);
-		validNumLabel.setBounds(450, 65, 171, 69);
+		validNumLabel.setBounds(421, 83, 195, 69);
 		validNumLabel.setText("0");
 		validNumLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(validNumLabel);								
-		MoneyTitleLabel.setBounds(66, 176, 234, 69);
+		MoneyTitleLabel.setBounds(59, 246, 234, 69);
 		MoneyTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(MoneyTitleLabel);				
-		moneyLabel.setBounds(442, 176, 195, 69);
+		moneyLabel.setBounds(421, 246, 195, 69);
 		moneyLabel.setText("0");
 		moneyLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(moneyLabel);
@@ -137,14 +137,14 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 			}
 		});
 		
-		returnProfitButton.setBounds(445, 1300, 250, 250);
+		returnProfitButton.setBounds(445, 1380, 250, 250);
 		returnProfitButton.setEnabled(false);
 		add(returnProfitButton);
-		donationButton.setBounds(759, 1300, 250, 250);
+		donationButton.setBounds(759, 1380, 250, 250);
 		donationButton.setEnabled(false);
 		add(donationButton);
 		
-		bannerPanel.setBounds(5, 295, 625, 800);	
+		bannerPanel.setBounds(5, 395, 625, 800);	
 		add(bannerPanel);
 		
 		JButton btnNewButton = new JButton("\u8BF7\u8F93\u5165\u6709\u6548\u7684\u624B\u673A\u53F7\u7801()");

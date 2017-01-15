@@ -145,7 +145,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		donationButton.setEnabled(false);
 		add(donationButton);
 		
-		expireTimeLabel.setBounds(5, 1380, 100, 40);
+		expireTimeLabel.setBounds(5, 1380, 400, 40);
 		
 		add(expireTimeLabel);
 		

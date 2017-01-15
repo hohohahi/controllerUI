@@ -77,7 +77,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "\u6A21\u677F\u5B66\u4E60\u533A\u57DF", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(10, 486, 972, 174);
+		panel.setBounds(10, 1500, 761, 174);
 		add(panel);
 		panel.setLayout(null);
 		
@@ -89,12 +89,12 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 				learnTemplateButton.setEnabled(false);
 			}
 		});
-		learnTemplateButton.setBounds(635, 43, 135, 33);
+		learnTemplateButton.setBounds(560, 43, 188, 33);
 		panel.add(learnTemplateButton);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "Content", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_1.setBounds(10, 23, 615, 129);
+		panel_1.setBounds(10, 23, 491, 129);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -106,16 +106,16 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 		panel_1.add(barCodeLabel);
 		
 		JLabel label_1 = new FontLabel("\u662F\u5426\u91D1\u5C5E", 14);
-		label_1.setBounds(221, 16, 79, 37);
+		label_1.setBounds(200, 16, 79, 37);
 		panel_1.add(label_1);
-		isMetalLabel.setBounds(310, 18, 55, 33);
+		isMetalLabel.setBounds(289, 16, 39, 33);
 		panel_1.add(isMetalLabel);
 		
 		JLabel label_3 = new FontLabel("\u91CD\u91CF", 14);
-		label_3.setBounds(386, 16, 79, 37);
+		label_3.setBounds(335, 16, 79, 37);
 		panel_1.add(label_3);
 		
-		weightLabel.setBounds(475, 20, 46, 33);
+		weightLabel.setBounds(406, 20, 46, 33);
 		panel_1.add(weightLabel);
 		
 		JLabel label_5 = new FontLabel("\u56FE\u5F62\u7279\u5F81\u7801", 14);
@@ -142,7 +142,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 			}
 		});
 
-		uploadTemplateButton.setBounds(635, 103, 135, 33);
+		uploadTemplateButton.setBounds(560, 103, 188, 33);
 		panel.add(uploadTemplateButton);
 		
 		FontButton cmndbtnC = new FontButton("\u6D4B\u8BD5\u4E0A\u4F20\u6A21\u7248");
@@ -233,7 +233,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	    );
 	    
 	    JScrollPane scrollPane_server=new JScrollPane(existedTemplateTable);
-	    scrollPane_server.setSize(569, 424);
+	    scrollPane_server.setSize(562, 551);
 	    scrollPane_server.setLocation(10, 51);
 	    this.add(scrollPane_server);
 	    
@@ -281,8 +281,8 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	    );
 	    
 	    JScrollPane scrollPane_machine=new JScrollPane(machineTemplateTable);
-	    scrollPane_machine.setSize(569, 424);
-	    scrollPane_machine.setLocation(605, 51);
+	    scrollPane_machine.setSize(562, 800);
+	    scrollPane_machine.setLocation(10, 655);
 	    this.add(scrollPane_machine);
 	    
 	    JLabel lblNewLabel = new FontLabel("\u670D\u52A1\u5668\u6A21\u677F\u7BA1\u7406");
@@ -291,7 +291,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	    
 	    FontLabel fontLabel = new FontLabel("\u670D\u52A1\u5668\u6A21\u677F\u7BA1\u7406");
 	    fontLabel.setText("\u4E3B\u63A7\u6A21\u677F\u7BA1\u7406");
-	    fontLabel.setBounds(615, 8, 140, 32);
+	    fontLabel.setBounds(10, 613, 140, 32);
 	    add(fontLabel);
 	    
 	    
@@ -303,7 +303,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 				sender.send();
 	    	}
 	    });
-	    queryMachineTemplateListButton.setBounds(854, 8, 97, 32);
+	    queryMachineTemplateListButton.setBounds(570, 728, 188, 32);
 
 	    add(queryMachineTemplateListButton);
 	    
@@ -324,7 +324,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	    	}
 	    });
 	    
-	    downloadToMachineButton.setBounds(254, 8, 127, 32);
+	    downloadToMachineButton.setBounds(582, 266, 188, 32);
 	    add(downloadToMachineButton);
 	    
 	    deleteTemplateFromMachineButton.addActionListener(new ActionListener() {
@@ -342,7 +342,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 				}
 	    	}
 	    });
-	    deleteTemplateFromMachineButton.setBounds(986, 8, 188, 32);
+	    deleteTemplateFromMachineButton.setBounds(585, 774, 188, 32);
 	    add(deleteTemplateFromMachineButton);
 	    
 	    
@@ -355,7 +355,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	    	}
 	    });
 
-	    deleteTemplateFromServerButton.setBounds(391, 8, 188, 32);
+	    deleteTemplateFromServerButton.setBounds(582, 320, 188, 32);
 	    add(deleteTemplateFromServerButton);
 	    
 	    
@@ -365,7 +365,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	    	}
 	    });
 
-	    flushServerTemplateButton.setBounds(171, 8, 71, 32);
+	    flushServerTemplateButton.setBounds(582, 220, 188, 32);
 	    add(flushServerTemplateButton);
 	}
 	

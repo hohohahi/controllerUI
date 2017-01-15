@@ -10,24 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.bottle.business.common.service.IMessageQueueManager;
-import com.bottle.business.common.vo.MessageVO;
-import com.bottle.common.constants.ICommonConstants;
-
 public class PlayerPictureBannerPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
-	@Autowired
-	private IMessageQueueManager messageManager;
 	
 	private List<String> filenameList = new ArrayList<String>();
 	private String curFilename = "";
@@ -39,6 +27,15 @@ public class PlayerPictureBannerPanel extends JPanel {
 	private Timer changePictureTimer = new Timer();
 	public PlayerPictureBannerPanel() {
 		setLayout(null);
+		
+		List<String> imageNameList = new ArrayList<String>();
+		imageNameList.add("playerbanner.png");
+		imageNameList.add("greenearth.jpg");
+		setImageFileNameList(imageNameList);
+		
+		curFilename = imageNameList.get(0);
+		setWeight(625);
+		setHeight(800);	
 	}
 	
 	public void initChangeBannerPictureTimeThread() {

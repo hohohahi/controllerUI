@@ -10,11 +10,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.annotation.PostConstruct;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 import org.apache.maven.surefire.shade.org.apache.maven.shared.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +30,15 @@ import com.bottle.business.data.service.IProductionDataManager;
 import com.bottle.business.data.vo.ProductionDataVO;
 import com.bottle.business.data.vo.RealtimeStasticDataVO;
 import com.bottle.business.money.IReturnMoneyService;
+import com.bottle.common.IBasicDataTypeHelper;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
+import com.bottle.common.constants.ILanguageConstants;
 import com.bottle.hardware.rxtx.command.ICommandSelector;
 import com.bottle.hardware.rxtx.command.IMachineCommandSender;
-import com.bottle.common.constants.ILanguageConstants;
 import com.bottle.ui.components.common.FontLabel;
 import com.bottle.ui.components.common.MyTableWrapper;
+import com.bottle.ui.components.player.component.CBScrollBarUI;
 import com.bottle.ui.components.player.sub.PhoneNumberInputDlg;
 import com.bottle.ui.components.player.sub.PlayerPictureBannerPanel;
 import com.bottle.ui.components.player.sub.RealCheckResultListTableModel;
@@ -45,6 +49,9 @@ import com.bottle.ui.constants.IUIConstants;
 public class PlayerPanel extends JPanel implements IMessageListener{
 	private static final long serialVersionUID = 1L;
 	private boolean isStarted = false;
+	
+	@Autowired
+	private IBasicDataTypeHelper basicDataTypeHelper;
 	
 	@Autowired
 	private ICommandSelector machineCommandSelector;
@@ -61,6 +68,9 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	@Autowired
 	private IConfigurationManager configurationManager;
 	
+	@Autowired
+	private PhoneNumberInputDlg phoneNumberInputDlg;
+	
 	JLabel ValidNumTitleLabel = new FontLabel("\u6295\u74F6\u6570", 72);
 	JLabel validNumLabel = new FontLabel("b", 72);
 	JLabel MoneyTitleLabel = new FontLabel("\u91D1\u989D", 72);
@@ -69,8 +79,8 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	private MyTableWrapper realCheckResultTableWrapper;
 	private JTable realCheckResultTable;;
 	
-	final CircleButton returnProfitButton = new CircleButton("\u8FD4\u5229", Color.BLUE, Color.GRAY, new Dimension(200, 200));
-	final CircleButton donationButton = new CircleButton("\u6350\u8D60", new Color(80, 240, 60), Color.GRAY, new Dimension(200, 200));
+	final CircleButton returnProfitButton = new CircleButton("\u8FD4\u5229", Color.BLUE, Color.GRAY, Color.LIGHT_GRAY, new Dimension(200, 200));
+	final CircleButton donationButton = new CircleButton("\u6350\u8D60", new Color(80, 240, 60), Color.GRAY, Color.LIGHT_GRAY, new Dimension(200, 200));
 	private PlayerPictureBannerPanel bannerPanel = new PlayerPictureBannerPanel();
 	private int expiredTime_InSecond = 0;
 	private Timer expireTimer = new Timer();
@@ -78,26 +88,26 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	public void initialize() {
 		messageManager.addListener(this);
 		updateStatisticData();
+		updateRealCheckResultTable();
 	}
 	
-	public PlayerPanel() {
-		
+	public PlayerPanel() {		
 		//this.setPreferredSize(new Dimension(IUIConstants._Total_Width_, IUIConstants._Total_Height_));
 		//this.setPreferredSize();
 		setLayout(null);
 		this.setAutoscrolls(true);
 		this.setPreferredSize(new Dimension(IUIConstants._Total_Width_, IUIConstants._Total_Height_));
-		ValidNumTitleLabel.setBounds(0, 65, 250, 69);		
+		ValidNumTitleLabel.setBounds(64, 65, 250, 69);		
 		ValidNumTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(ValidNumTitleLabel);
-		validNumLabel.setBounds(251, 65, 171, 69);
+		validNumLabel.setBounds(450, 65, 171, 69);
 		validNumLabel.setText("0");
 		validNumLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(validNumLabel);								
-		MoneyTitleLabel.setBounds(0, 176, 234, 69);
+		MoneyTitleLabel.setBounds(66, 176, 234, 69);
 		MoneyTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(MoneyTitleLabel);				
-		moneyLabel.setBounds(233, 176, 195, 69);
+		moneyLabel.setBounds(442, 176, 195, 69);
 		moneyLabel.setText("0");
 		moneyLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(moneyLabel);
@@ -107,15 +117,16 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	    realCheckResultTable.setBounds(30, 48, 536, 388);
 	    
 		JScrollPane scrollPane_server=new JScrollPane(realCheckResultTable);
-		scrollPane_server.setBounds(440, 12, 600, 624);
+		scrollPane_server.setBounds(639, 12, 401, 695);
+		scrollPane_server.getVerticalScrollBar().setUI(new CBScrollBarUI());
 	    this.add(scrollPane_server);
 	    
 		returnProfitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				PhoneNumberInputDlg dlg = new PhoneNumberInputDlg();				
-				dlg.setVisible(true);
+			public void actionPerformed(ActionEvent e) {	
+				phoneNumberInputDlg.reset();
+				phoneNumberInputDlg.setVisible(true);
 				
-				String phoneNumberStr = dlg.getPhoneNumber();
+				String phoneNumberStr = phoneNumberInputDlg.getPhoneNumber();
 				if (StringUtils.isNotEmpty(phoneNumberStr)) {
 					System.out.println(phoneNumberStr);
 					returnMoneyService.pay(phoneNumberStr);
@@ -133,14 +144,17 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		donationButton.setEnabled(false);
 		add(donationButton);
 		
-		bannerPanel.setBounds(5, 295, 423, 675);
-		List<String> imageNameList = new ArrayList<String>();
-		imageNameList.add("playerbanner.png");
-		imageNameList.add("greenearth.jpg");
-		bannerPanel.setImageFileNameList(imageNameList);
-		bannerPanel.setWeight(423);
-		bannerPanel.setHeight(675);		
+		bannerPanel.setBounds(5, 295, 625, 800);	
 		add(bannerPanel);
+		
+		JButton btnNewButton = new JButton("\u8BF7\u8F93\u5165\u6709\u6548\u7684\u624B\u673A\u53F7\u7801()");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {			
+				expiredTime_InSecond = 0;
+			}
+		});
+		btnNewButton.setBounds(339, 12, 98, 28);
+		add(btnNewButton);
 	}
 
 	@Override
@@ -175,6 +189,12 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 			updateRealCheckResultTable();
 			updateStatisticData();
 		}
+		else if (true == ICommonConstants.SubMessageTypeEnum._SubMessageType_PlayerPanel_ThrowBottleActionDetected_.equals(subMessageType)) {
+			expiredTime_InSecond = 0;
+		}
+		else if (true == ICommonConstants.SubMessageTypeEnum._SubMessageType_PlayerPanel_InvalidBottleTakenAwayDetected_.equals(subMessageType)) {
+			//expiredTime_InSecond = 0;
+		}
 	}
 
 	public void updateRealCheckResultTable() {
@@ -184,11 +204,74 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		//existedTemplateTableWrapper.setTableModel(new ModelListTableModel());
 		
 		final List<ProductionDataVO> historyList = productionDataManager.getHistoryRealtimeStasticData();
-		long index = 0;
 		for (final ProductionDataVO vo : historyList) {
-			index++;
-			realCheckResultTableWrapper.add(new RealCheckResultTableCandidate(index, vo.getTemplateName(), vo.getErrorCode(), vo.getPrice()));
+			realCheckResultTableWrapper.add(new RealCheckResultTableCandidate(vo.getTemplateName(), vo.getPrice()));
 		}
+		
+		int scrollBarWidth = UIManager.getInt("ScrollBar.width");
+		System.out.println(scrollBarWidth);
+		
+		 realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
+		    realCheckResultTable.invalidate();
 	}
 
 	public void updateStatisticData() {
@@ -198,9 +281,14 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		moneyLabel.setText(data.getTotalMoney() + "");
 		moneyLabel.validate();
 		
-		if (data.getTotalMoney() > 0.0d) {
+		
+		if (true == basicDataTypeHelper.isGreaterThanZero(data.getTotalMoney())) {
 			donationButton.setEnabled(true);
 			returnProfitButton.setEnabled(true);
+		}
+		else {
+			donationButton.setEnabled(false);
+			returnProfitButton.setEnabled(false);
 		}
 	}
 	
@@ -211,11 +299,9 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	
 	@SuppressWarnings("serial")
 	public MyTableWrapper createWrapper() {
-		return new MyTableWrapper(new ArrayList<String>(){{add(ILanguageConstants._RealProductionInfoPanel_Order_);
-														   add(ILanguageConstants._RealProductionInfoPanel_ModelName_); 
-														   add(ILanguageConstants._RealProductionInfoPanel_ErrorCode_);
+		return new MyTableWrapper(new ArrayList<String>(){{add(ILanguageConstants._RealProductionInfoPanel_ModelName_);
 														   add(ILanguageConstants._RealProductionInfoPanel_Price_);}}, 
-							              new ArrayList<Integer>(){{add(50); add(260); add(220); add(60);}}, new RealCheckResultListTableModel());
+							              new ArrayList<Integer>(){{add(280); add(60);}}, new RealCheckResultListTableModel());
 	}
 	
 	public void active() {

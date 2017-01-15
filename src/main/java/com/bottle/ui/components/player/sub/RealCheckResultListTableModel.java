@@ -38,31 +38,8 @@ public class RealCheckResultListTableModel extends AbstractBaseTableModel
 		RealCheckResultTableCandidate oscarCandidate = (RealCheckResultTableCandidate)this.candidates.get(row);
 		switch (column) {
 		case 0:
-			return oscarCandidate.getId();
+			return oscarCandidate.getName();		
 		case 1:
-			return oscarCandidate.getName();
-		case 2:{
-			long errorCode = oscarCandidate.getErrorCode();
-			String errorMessage = "";
-			if (errorCode == 1) {
-				errorMessage = ILanguageConstants._CheckErrorMessage_ReadBarCode_;
-			}
-			else if (errorCode == 2) {
-				errorMessage = ILanguageConstants._CheckErrorMessage_Overweight_;
-			}
-			else if (errorCode == 3) {
-				errorMessage = ILanguageConstants._CheckErrorMessage_ImageMatch_;
-			}
-			else if (errorCode == 4) {
-				errorMessage = ILanguageConstants._CheckErrorMessage_UnknowTemplate_;
-			}
-			else {
-				errorMessage = ILanguageConstants._CheckErrorMessage_Unknown_;
-			}
-			
-			return errorMessage;
-		}			
-		case 3:
 			return oscarCandidate.getPrice();
 		}
 		

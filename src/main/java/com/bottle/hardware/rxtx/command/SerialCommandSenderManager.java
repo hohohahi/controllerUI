@@ -158,7 +158,9 @@ public class SerialCommandSenderManager extends AbstractBaseBean implements ISer
 		}
 		
 		if (null == rtnSender) {
-			if (false == ICommonConstants.MachineCommandEnum._MachineCommand_ReturnResult_.equals(commandType)) {
+			if ((false == ICommonConstants.MachineCommandEnum._MachineCommand_ReturnResult_.equals(commandType))
+					&& (false == ICommonConstants.MachineCommandEnum._MachineCommand_ReturnStatus_ThrowBottleActionDetected_.equals(commandType))
+					&& (false == ICommonConstants.MachineCommandEnum._MachineCommand_ReturnResult_InvalidBottleTakenAwayDetected.equals(commandType))) {
 				//no listener for this "Return  Result" command.  So exclude it
 				throw new RuntimeException("there is no listener avaliable. commandType:" + commandType);
 			}			

@@ -42,7 +42,7 @@ public interface ICommonConstants {
 	int _PingService_Period_ = 30;
 	int _SecretTriggerExpireTime_InMillisecond = 20;
 	int _exitWarningTime_InSeconds_ = 5;
-	int _playerPanelIdelTime_InSeconds_ = 20;
+	int _playerPanelIdelTime_InSeconds_ = 60;
 	
 	byte _Zero_Byte_ = (byte)0x00;
 	
@@ -86,6 +86,8 @@ public interface ICommonConstants {
 		_MachineCommand_Start_(0x10, 0x10, 0x11, 0x12),
 		_MachineCommand_Stop_(0x11, 0x10, 0x11, 0x12),
 		_MachineCommand_ReturnResult_(0x20, _Zero_Byte_, 0x10, _Zero_Byte_),
+		_MachineCommand_ReturnStatus_ThrowBottleActionDetected_(0x21, _Zero_Byte_, 0x10, _Zero_Byte_),
+		_MachineCommand_ReturnResult_InvalidBottleTakenAwayDetected(0x22, _Zero_Byte_, 0x10, _Zero_Byte_),
 		_MachineCommand_DownloadTemplate_(0x30, 0x10, 0x11, 0x12),		
 		_MachineCommand_LearnTemplate_(0x32, 0x10, 0x11, 0x12),
 		_MachineCommand_DeleteTemplate_(0x33, 0x10, 0x11, 0x12),
@@ -173,6 +175,8 @@ public interface ICommonConstants {
 		_SubMessageType_PlayerPanel_StartCommandButton_,
 		_SubMessageType_PlayerPanel_StopCommandButton_,
 		_SubMessageType_PlayerPanel_RealProductionInfoPanel_,
+		_SubMessageType_PlayerPanel_ThrowBottleActionDetected_,
+		_SubMessageType_PlayerPanel_InvalidBottleTakenAwayDetected_,
 		_SubMessageType_AdminPanel_Tab_DebugCommandPanel_OpenDoorButton_,
 		_SubMessageType_AdminPanel_Tab_DebugCommandPanel_CloseDoorButton_,
 		_SubMessageType_AdminPanel_Tab_DebugCommandPanel_PlatformDownButton_,

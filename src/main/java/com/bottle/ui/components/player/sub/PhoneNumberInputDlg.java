@@ -4,15 +4,20 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JDialog;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public class PhoneNumberInputDlg extends JDialog implements WindowListener{
+import org.springframework.stereotype.Component;
+
+@Component
+public class PhoneNumberInputDlg extends JDialog{
 	private static final long serialVersionUID = 1L;
-	final MyPhoneNumberPanel keyPopup = new MyPhoneNumberPanel();
+	private MyPhoneNumberPanel keyPopup = new MyPhoneNumberPanel();
+	private BarCodePicturePanel machineBarCodePicturePanel = new BarCodePicturePanel("machineBarCode250.jpg", 250, 250);
+	private BarCodePicturePanel downloadBarCodePicturePanel = new BarCodePicturePanel("machineBarCode250.jpg", 250, 250);
+	
 	private JTextField textField;
 	public static void main(String[] args) {
 		try {
@@ -39,60 +44,28 @@ public class PhoneNumberInputDlg extends JDialog implements WindowListener{
 	
 	public PhoneNumberInputDlg() {
 		this.setModal(true);
-		setBounds(100, 100, 447, 425);
+		setBounds(100, 100, 706, 700);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
-		
+		this.setTitle("Please input your phone number:");
 		textField = new JTextField();
-		textField.setBounds(0, 0, 434, 88);
+		textField.setBounds(10, 11, 669, 109);
 		getContentPane().add(textField);
 		textField.setColumns(10);
-		textField.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 62));
+		textField.setFont(new Font("Microsoft JhengHei Light", Font.BOLD, 100));
 		textField.setForeground(Color.RED);
 		
-		keyPopup.setBounds(0, 89, 434, 353);
+		keyPopup.setBounds(287, 131, 388, 546);
 		keyPopup.setLayout(new FlowLayout());
 		keyPopup.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(keyPopup);	
 		keyPopup.setTextField(textField);
 		keyPopup.setFatherDlg(this);
 		
-		this.addWindowListener(this); 
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
+		machineBarCodePicturePanel.setBounds(20, 131, 250, 250);
+		getContentPane().add(machineBarCodePicturePanel);
 		
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
+		downloadBarCodePicturePanel.setBounds(20, 401, 250, 250);
+		getContentPane().add(downloadBarCodePicturePanel);
 	}
 }

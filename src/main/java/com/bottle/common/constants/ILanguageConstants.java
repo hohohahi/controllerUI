@@ -17,6 +17,7 @@ public interface ILanguageConstants {
 	String _CheckErrorMessage_ReadBarCode_ = "\u8BFB\u4E8C\u7EF4\u7801\u9519\u8BEF";
 	String _CheckErrorMessage_Overweight_ = "\u8D85\u91CD";
 	String _CheckErrorMessage_ImageMatch_ = "\u56FE\u50CF\u5339\u914D\u9519\u8BEF";
+	
 	String _CheckErrorMessage_UnknowTemplate_ = "\u672A\u77E5\u4E8C\u7EF4\u7801";
 	String _CheckErrorMessage_Unknown_ = "\u672A\u77E5\u9519\u8BEF";
 	

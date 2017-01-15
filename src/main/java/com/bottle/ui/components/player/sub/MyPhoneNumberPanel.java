@@ -30,16 +30,19 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.springframework.util.StringUtils;
+
 import sun.swing.SwingUtilities2;  
    
 public class MyPhoneNumberPanel extends JPanel {  
     private static final long serialVersionUID = 1L;  
-    private static int _font_size_ = 36;
-    private static int _key_size_ = 84;
-    private static int _backspace_key_width_ = 213;
-    private static int _backspace_key_height_ = 84;
+    private static int _font_size_ = 48;
+    private static int _key_size_height_ = 120;
+    private static int _key_size_width_ = 120;
+    private static int _backspace_key_width_ = 120;
+    private static int _backspace_key_height_ = 120;
     private static int _keyboard_width_ = 500;
-    private static int _keyboard_height_ = 400;
+    private static int _keyboard_height_ = 500;
     private static JDialog fatherDlg;
     
     public static void main(String[] args) {  
@@ -75,34 +78,7 @@ public class MyPhoneNumberPanel extends JPanel {
 			}});
         usernamePanel.add(username, BorderLayout.CENTER);
         frame.add(usernamePanel);  
-  
-        final JPanel passwordPanel = new JPanel(new BorderLayout());  
-        passwordPanel.setBackground(Color.WHITE);  
-        passwordPanel.setPreferredSize(new Dimension(202, 30));  
-        passwordPanel.setLayout(new BorderLayout());  
-        passwordPanel.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        final JTextField passowrdText = new JTextField();  
-        passowrdText.setSelectedTextColor(Color.BLACK); 
-        passowrdText.setSelectionColor(Color.WHITE); 
-        passowrdText.setForeground(Color.BLACK);  
-        passowrdText.setFont(passowrdText.getFont().deriveFont(22f));  
-        passowrdText.setBorder(new EmptyBorder(5, 3, 0, 3));
-        passowrdText.addFocusListener(new FocusListener() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				keyPopup.setTextField(passowrdText);
-			}
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				// TODO Auto-generated method stub
-				
-			}});
-        passwordPanel.add(passowrdText, BorderLayout.CENTER);
-        frame.add(passwordPanel);
           
-  
-        
         //keyPopup.setVisible(false);
         frame.add(keyPopup);
         frame.setVisible(true);  
@@ -174,7 +150,7 @@ public class MyPhoneNumberPanel extends JPanel {
             proxyPanel.setSize(popupSize.width - 6, popupSize.height - 7);  
             add(proxyPanel);  
   
-            rows = new RowPanel[] { new RowPanel(RowType.first), new RowPanel(RowType.second), new RowPanel(RowType.third)};  
+            rows = new RowPanel[] { new RowPanel(RowType.first), new RowPanel(RowType.second), new RowPanel(RowType.third), new RowPanel(RowType.fourth)};  
             for (int i = 0; i < rows.length; i++) {  
                 proxyPanel.add(rows[i]);  
             }  
@@ -202,15 +178,16 @@ public class MyPhoneNumberPanel extends JPanel {
                 clickBackSpace();  
             } else if (keyLable.isEnter()) {  
                 clickEnter();  
-            } else if (keyLable.isCommKey()) {  
-                String key;  
-                if (status == KeyStatus.normal) {  
-                    key = keyLable.getLowerLeftKey() == null ? keyLable.getCenterKey() : keyLable.getLowerLeftKey();  
-                } else {  
-                    key = "";  
-                }  
-                clickCommKey(key);  
-            }  
+            }
+            else {
+            	 String key;  
+                 if (status == KeyStatus.normal) {  
+                     key = keyLable.getLowerLeftKey() == null ? keyLable.getCenterKey() : keyLable.getLowerLeftKey();  
+                 } else {  
+                     key = "";  
+                 }  
+                 clickCommKey(key);  
+            }
         }  
    
         public void notifyKeyLabel() {  
@@ -249,7 +226,18 @@ public class MyPhoneNumberPanel extends JPanel {
         }  
         
         public void clickEnter() {
-        	fatherDlg.setVisible(false);
+        	final String content = textField.getText();
+        	if (true == StringUtils.isEmpty(content)) {
+        		System.out.println("clickEnter: content is empty. content:" + content);
+        	}
+        	else {
+        		if (content.length() != 11) {
+        			System.out.println("clickEnter: content length is invalid. length:" + content.length());
+        		}
+        		else {
+        			fatherDlg.setVisible(false);
+        		}
+        	}        	
         }  
    
         public void clickCommKey(String key) {  
@@ -260,10 +248,11 @@ public class MyPhoneNumberPanel extends JPanel {
                 
                 if (null == textField) {
                 	return;
-                }
+                }                         
                 
                 int curPos = textField.getCaret().getDot();
                 String text = textField.getText();
+                
                 String prefixString = "";
                 if (0 == curPos) {
                 	prefixString = "";
@@ -298,24 +287,24 @@ public class MyPhoneNumberPanel extends JPanel {
                 setLayout(new FlowLayout(FlowLayout.CENTER, 1, 0));
                 setBackground(backColor);  
                 if (rowType == RowType.first) {          	                           
-                    keys = new KeyLable[]{new KeyLable("1", SoftKeyBoardPanel.this),
-					                	  new KeyLable("2", SoftKeyBoardPanel.this),
-					                	  new KeyLable("3", SoftKeyBoardPanel.this),
-					                	  new KeyLable("4", SoftKeyBoardPanel.this),
-                    					  new KeyLable("5", SoftKeyBoardPanel.this)};
+                    keys = new KeyLable[]{new KeyLable("1", "1", SoftKeyBoardPanel.this),
+					                	  new KeyLable("2", "2", SoftKeyBoardPanel.this),
+					                	  new KeyLable("3", "3", SoftKeyBoardPanel.this)};
                 } else if (rowType == RowType.second) {  
-                	keys = new KeyLable[]{new KeyLable("6", SoftKeyBoardPanel.this),
-					                	  new KeyLable("7", SoftKeyBoardPanel.this),
-					                	  new KeyLable("8", SoftKeyBoardPanel.this),
-					                	  new KeyLable("9", SoftKeyBoardPanel.this),
-					                	  new KeyLable("0", SoftKeyBoardPanel.this)};
-                } else if (rowType == RowType.third) {
-                	KeyLable backspaceKey = new KeyLable("   BackSpace", true, SoftKeyBoardPanel.this); 
+                	keys = new KeyLable[]{ new KeyLable("4", "4", SoftKeyBoardPanel.this),
+      					  				   new KeyLable("5", "5", SoftKeyBoardPanel.this),
+      					  				   new KeyLable("6", "6", SoftKeyBoardPanel.this)};
+                } else if (rowType == RowType.third) {  
+                	keys = new KeyLable[]{new KeyLable("7", "7", SoftKeyBoardPanel.this),
+		                	  			   new KeyLable("8", "8", SoftKeyBoardPanel.this),
+		                	  			   new KeyLable("9", "9", SoftKeyBoardPanel.this)};		                	  
+                }else if (rowType == RowType.fourth) {
+                	KeyLable backspaceKey = new KeyLable("BackSpace", "\u5220\u9664", true, SoftKeyBoardPanel.this); 
                     backspaceKey.setPreferredSize(new Dimension(_backspace_key_width_, _backspace_key_height_));
-                    
-                    KeyLable enterkey = new KeyLable("    Enter", true, SoftKeyBoardPanel.this); 
+                                                            
+                    KeyLable enterkey = new KeyLable("Enter", "\u786E\u8BA4",  true, SoftKeyBoardPanel.this); 
                     enterkey.setPreferredSize(new Dimension(_backspace_key_width_, _backspace_key_height_));
-                	keys = new KeyLable[]{backspaceKey, enterkey};                	 
+                	keys = new KeyLable[]{backspaceKey, new KeyLable("0", "0", SoftKeyBoardPanel.this), enterkey};                	 
                 }
                 
                 for (KeyLable key : keys){
@@ -332,6 +321,7 @@ public class MyPhoneNumberPanel extends JPanel {
     public static class KeyLable extends JLabel {   
 		private static final long serialVersionUID = 1L;
 		String centerKey;  
+		String displayName;
         String lowerLeftKey;  
         boolean isBackSpace;  
         boolean isCapsLock;  
@@ -339,7 +329,7 @@ public class MyPhoneNumberPanel extends JPanel {
         boolean isPressed;  
         boolean isEnter = false;
         KeyStatus status = KeyStatus.normal;  
-        Dimension size = new Dimension(_key_size_, _key_size_);
+        Dimension size = new Dimension(_key_size_width_, _key_size_height_);
         Color keyBorderColor = new Color(54, 112, 184);  
         Color keyBorderFocusColor = new Color(64, 194, 241);  
         Color keyBackColor = new Color(253, 255, 255);  
@@ -349,20 +339,21 @@ public class MyPhoneNumberPanel extends JPanel {
         Font plainFont = new Font("Microsoft JhengHei Light", Font.PLAIN, _font_size_);  
         Color plainColor = new Color(156, 157, 197);  
   
-        public KeyLable(String centerKey, ActionListener action) {  
-            this(centerKey, null, action);  
+        public KeyLable(String centerKey, String displayName, ActionListener action) {  
+            this(centerKey, displayName, null, action);  
         }  
   
-        public KeyLable(String centerKey, String lowerLeftKey, ActionListener action) {  
-            this(centerKey, lowerLeftKey, false, action);  
+        public KeyLable(String centerKey, String displayName, String lowerLeftKey, ActionListener action) {  
+            this(centerKey, displayName, lowerLeftKey, false, action);  
         }  
   
-        public KeyLable(String centerKey, boolean isFunctionKey, ActionListener action) {  
-            this(centerKey, null, isFunctionKey, action);  
+        public KeyLable(String centerKey, String displayName, boolean isFunctionKey, ActionListener action) {  
+            this(centerKey, displayName, null, isFunctionKey, action);  
         }  
   
-        public KeyLable(String centerKey, String lowerLeftKey, boolean isFunctionKey, final ActionListener action) {  
-            this.centerKey = centerKey;  
+        public KeyLable(String centerKey, String displayName, String lowerLeftKey, boolean isFunctionKey, final ActionListener action) {  
+            this.centerKey = centerKey;
+            this.displayName = displayName;
             this.lowerLeftKey = lowerLeftKey;  
             if (isFunctionKey) { 
                 if (centerKey.indexOf("Shift") >= 0) {  
@@ -418,13 +409,18 @@ public class MyPhoneNumberPanel extends JPanel {
                     g2d.setFont(boldFont);  
                     g2d.setPaint(boldColor);  
                     // g2d.drawString(centerKey, isCommKey() ? 8 : 4, 17);  
-                    SwingUtilities2.drawStringUnderlineCharAt(this, g2d, centerKey, -1, isCommKey() ? 30 : 4, 55);  
-  
+                    if ((false == this.isBackSpace) 
+                    		&& (false == this.isEnter)){
+                    	SwingUtilities2.drawStringUnderlineCharAt(this, g2d, displayName, -1,47, 78);
+                    }
+                    else {
+                    	SwingUtilities2.drawStringUnderlineCharAt(this, g2d, displayName, -1, 15, 75);
+                    }                    
                 } else {  
                     g2d.setFont(plainFont);  
                     g2d.setPaint(plainColor);  
                     // g2d.drawString(centerKey, 12, 15);  
-                    SwingUtilities2.drawStringUnderlineCharAt(this, g2d, centerKey, -1, 25, 20);  
+                    SwingUtilities2.drawStringUnderlineCharAt(this, g2d, displayName, -1, 25, 20);  
   
                     g2d.setFont(boldFont);  
                     g2d.setPaint(boldColor);  
@@ -465,26 +461,9 @@ public class MyPhoneNumberPanel extends JPanel {
         public boolean isPressed() {  
             return isPressed;  
         }  
-  
-        public boolean isCommKey() {  
-            return !isBackSpace && !isCapsLock && !isShift;  
-        }  
-    
-        public void reset() {  
-            this.isPressed = false;  
-            if (isShift || isCapsLock) {  
-                KeyLable.this.setBackground(keyBackColor);  
-            } else if (isCommKey()) {  
-                if (lowerLeftKey == null) {  
-                    centerKey = centerKey.toLowerCase();  
-                }  
-            }  
-            status = KeyStatus.normal;  
-            repaint();  
-        }  
    
         public void setStatus(KeyStatus status) {  
-            if (isCommKey() && this.status != status) {  
+            if (this.status != status) {  
                 if (status == KeyStatus.normal) {  
                     if (lowerLeftKey == null) {  
                         centerKey = centerKey.toLowerCase();  
@@ -497,7 +476,7 @@ public class MyPhoneNumberPanel extends JPanel {
     }  
   
     public static enum RowType {  
-        first, second, third  
+        first, second, third, fourth
     }  
   
     public static enum KeyStatus {  

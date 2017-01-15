@@ -16,12 +16,14 @@ import javax.swing.JFrame;
 class CircleButton extends JButton {
 	private static final long serialVersionUID = 1L;
 	private Shape shape;
-	private Color normalColor;
-	private Color clickedColor;
-	public CircleButton(String label, Color normalColor, Color clickedColor, Dimension size) {
+	private Color normalColor = Color.BLACK;
+	private Color clickedColor = Color.BLACK;
+	private Color disabledColor = Color.BLACK;
+	public CircleButton(String label, Color normalColor, Color clickedColor, Color disabledColor, Dimension size) {
 		super(label);
 		this.normalColor = normalColor;
 		this.clickedColor = clickedColor;
+		this.disabledColor = disabledColor;
 		
 		size.width = size.height = Math.max(size.width, size.height);
 		setPreferredSize(size);
@@ -32,12 +34,18 @@ class CircleButton extends JButton {
 	}
 
 	protected void paintComponent(Graphics g) {
-		if (getModel().isArmed()) {
-			g.setColor(clickedColor);
+		if (false == this.isEnabled()) {
+			g.setColor(disabledColor);
 		}
 		else {
-			g.setColor(normalColor);
+			if (getModel().isArmed()) {
+				g.setColor(clickedColor);
+			}
+			else {
+				g.setColor(normalColor);
+			}
 		}
+		
 		g.fillOval(0, 0, getSize().width - 1, getSize().height - 1);
 		super.paintComponent(g);
 	}
@@ -59,16 +67,13 @@ class CircleButton extends JButton {
 
 
 	public static void main(String[] args) {
-		JButton button = new CircleButton("Jackpot", Color.BLUE, Color.GRAY, new Dimension(150, 150));
-		ImageIcon ic = new ImageIcon("E://clientForMssql//Icons//item_group.gif");
-		JButton button2 = new JButton(ic);
-		button.setBackground(Color.BLUE);
+		JButton button = new CircleButton("Jackpot", Color.BLUE, Color.GRAY, Color.LIGHT_GRAY, new Dimension(150, 150));
 
+		button.setEnabled(false);
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//frame.getContentPane().setBackground(Color.GRAY);
 		frame.getContentPane().add(button);
-		frame.getContentPane().add(button2);
 		frame.getContentPane().setLayout(new FlowLayout());
 		frame.setSize(200, 200);
 		frame.setVisible(true);

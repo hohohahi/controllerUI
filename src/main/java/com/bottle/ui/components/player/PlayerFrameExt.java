@@ -64,8 +64,8 @@ public class PlayerFrameExt extends JFrame implements IMessageListener{
 	
 	final FontButton startCommandButton = new FontButton("\u5F00\u59CB\u6295\u74F6");
 	
-	final CircleButton returnProfitButton = new CircleButton("\u8FD4\u5229", Color.BLUE, Color.GRAY, new Dimension(200, 200));
-	final CircleButton donationButton = new CircleButton("\u6350\u8D60", new Color(80, 240, 60), Color.GRAY, new Dimension(200, 200));
+	final CircleButton returnProfitButton = new CircleButton("\u8FD4\u5229", Color.BLUE, Color.GRAY, Color.LIGHT_GRAY, new Dimension(200, 200));
+	final CircleButton donationButton = new CircleButton("\u6350\u8D60", new Color(80, 240, 60), Color.GRAY, Color.LIGHT_GRAY, new Dimension(200, 200));
 	@PostConstruct
 	public void initialize() {
 		messageManager.addListener(this);
@@ -118,21 +118,6 @@ public class PlayerFrameExt extends JFrame implements IMessageListener{
 		getContentPane().add(startCommandButton);
 		
 		showStartAndStopButtons();
-		returnProfitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				PhoneNumberInputDlg dlg = new PhoneNumberInputDlg();				
-				dlg.setVisible(true);
-				
-				String phoneNumberStr = dlg.getPhoneNumber();
-				if (StringUtils.isNotEmpty(phoneNumberStr)) {
-					System.out.println(phoneNumberStr);
-					returnMoneyService.pay(phoneNumberStr);
-				}
-				else {
-					System.out.println("empty");
-				}
-			}
-		});
 		
 		returnProfitButton.setBounds(445, 1300, 250, 250);
 		getContentPane().add(returnProfitButton);
@@ -142,49 +127,11 @@ public class PlayerFrameExt extends JFrame implements IMessageListener{
 
 	@Override
 	public void process(MessageVO vo) {
-		if (null == vo) {
-			throw new NullPointerException("vo is null.");
-		}
 		
-		final ICommonConstants.MessageSourceEnum messageSource =vo.getMessageSource();
-		if (false == messageSource.equals(getMessageType())) {
-			return;
-		}
-		
-		final ICommonConstants.SubMessageTypeEnum subMessageType = vo.getSubMessageType();
-		if (true == ICommonConstants.SubMessageTypeEnum._SubMessageType_PlayerPanel_StartCommandButton_.equals(subMessageType)) {
-			startCommandButton.setEnabled(true);
-			isStarted = vo.getIsBooleanParam3();
-			showStartAndStopButtons();
-			if (false == isStarted) {
-				//super.sendSystemInfo("error in start command.");
-			}
-		}
-		else if (true == ICommonConstants.SubMessageTypeEnum._SubMessageType_PlayerPanel_StopCommandButton_.equals(subMessageType)) {
-			isStarted = !vo.getIsBooleanParam3();
-			showStartAndStopButtons();
-			if (true == isStarted) {
-				//super.sendSystemInfo("error in stop command.");
-			}
-		}
-		else if (true == ICommonConstants.SubMessageTypeEnum._SubMessageType_PlayerPanel_RealProductionInfoPanel_.equals(subMessageType)) {
-			updateRealCheckResultTable();
-			updateStatisticData();
-		}
 	}
 
 	public void updateRealCheckResultTable() {
-		realCheckResultTableWrapper.clear();
-		realCheckResultTable.invalidate();
-
-		//existedTemplateTableWrapper.setTableModel(new ModelListTableModel());
 		
-		final List<ProductionDataVO> historyList = productionDataManager.getHistoryRealtimeStasticData();
-		long index = 0;
-		for (final ProductionDataVO vo : historyList) {
-			index++;
-			realCheckResultTableWrapper.add(new RealCheckResultTableCandidate(index, vo.getTemplateName(), vo.getErrorCode(), vo.getPrice()));
-		}
 	}
 
 	public void updateStatisticData() {

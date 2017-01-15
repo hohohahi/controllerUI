@@ -2,8 +2,6 @@ package com.bottle.app;
 
 import java.awt.EventQueue;
 
-import javax.swing.UIManager;
-
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -38,8 +36,9 @@ public class BottleUIApp extends AbstractBaseBean implements IBottleUIApp {
 				try {
 					BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.osLookAndFeelDecorated;
 					org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
-					UIManager.put("RootPane.setupButtonVisible", false);
+				
 					final ApplicationContext ac = new ClassPathXmlApplicationContext("/applicationContext.xml");
+					
 					
 					final IBottleUIApp app = ac.getBean(IBottleUIApp.class);
 					final MainFrame frame = app.getMainframe();

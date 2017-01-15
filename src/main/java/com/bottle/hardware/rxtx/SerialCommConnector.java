@@ -293,7 +293,7 @@ public class SerialCommConnector extends AbstractBaseBean implements ISerialComm
                         	sender.onReceive(responseVO);
                         }                        
                         else {
-                        	//return money
+                        	//return money, or other status command.
                         }
                         ByteArrayParseResultVO parseResultVO = responseVO.getByteParseResultVO();
                         super.validateObject(parseResultVO);

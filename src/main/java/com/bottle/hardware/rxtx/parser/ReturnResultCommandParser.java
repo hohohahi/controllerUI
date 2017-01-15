@@ -39,20 +39,27 @@ public class ReturnResultCommandParser extends AbstractBaseCommandParser {
 		byte firstElement = dataArea[0];
 		vo.setErrorCode((long)firstElement);
 		
-		ProductionDataVO productionDataVO = new ProductionDataVO();
-		productionDataVO.setTimestampStr(super.dateConverter.getCurrentTimestampInNineteenBitsInGMT());
+		final MessageVO message = new MessageVO();
 		
 		if (ICommonConstants._Zero_Byte_ == firstElement) {
 			if (length == 1) {
 				throw new RuntimeException("Command:ReturnResult: length of dataArea is 1, when first element is 0.");
 			}
 			else {
+				ProductionDataVO productionDataVO = new ProductionDataVO();
+				
 				String barCode = super.dataTypeHelper.convert_byte_String(dataArea);
 				vo.setResponse(barCode);
 								
+				productionDataVO.setTimestampStr(super.dateConverter.getCurrentTimestampInNineteenBitsInGMT());
 				productionDataVO.setBarCode(barCode);
 				productionDataVO.setIsSuccessful(true);
-				productionDataManager.fullfilTemplateInfo_ToProductionVO(productionDataVO);				
+				productionDataManager.fullfilTemplateInfo_ToProductionVO(productionDataVO);		
+				productionDataManager.push(productionDataVO);
+					
+				
+				message.setMessageSource(MessageSourceEnum._MessageSource_PlayerPanel_);
+				message.setSubMessageType(SubMessageTypeEnum._SubMessageType_PlayerPanel_RealProductionInfoPanel_);
 			}
 		}
 		else {
@@ -60,22 +67,14 @@ public class ReturnResultCommandParser extends AbstractBaseCommandParser {
 				throw new RuntimeException("Command:ReturnResult: length of dataArea is greater than 1, when first element is not 0.");
 			}
 			
-			productionDataVO.setErrorCode(firstElement);
-			productionDataVO.setIsSuccessful(false);
+		
+			message.setMessageSource(MessageSourceEnum._MessageSource_PlayerPanel_);
+			message.setSubMessageType(SubMessageTypeEnum._SubMessageType_PlayerPanel_RealProductionInfoPanel_);
+			
+			//firstElement;
 		}
 		
-		productionDataManager.push(productionDataVO);
-		updateRealtimeUI();
-		
+		messageManager.push(message);
 		return vo;
-	}
-	
-	public void updateRealtimeUI() {
-		final MessageVO vo = new MessageVO();
-		
-		vo.setMessageSource(MessageSourceEnum._MessageSource_PlayerPanel_);
-		vo.setSubMessageType(SubMessageTypeEnum._SubMessageType_PlayerPanel_RealProductionInfoPanel_);
-		
-		messageManager.push(vo);
 	}
 }

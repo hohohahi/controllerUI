@@ -317,71 +317,6 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		for (final ProductionDataVO vo : historyList) {
 			realCheckResultTableWrapper.add(new RealCheckResultTableCandidate(vo.getTemplateName(), vo.getPrice()));
 		}
-		
-		int scrollBarWidth = UIManager.getInt("ScrollBar.width");
-		System.out.println(scrollBarWidth);
-		
-		 realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTableWrapper.add(new RealCheckResultTableCandidate("Test", 1.0d));
-		    realCheckResultTable.invalidate();
 	}
 
 	public void clearInvalidBottleWarningDlg() {
@@ -395,13 +330,14 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		validNumLabel.validate();
 		moneyLabel.setText(data.getTotalMoney() + "");
 		moneyLabel.validate();
-		
-		
+				
 		if (true == basicDataTypeHelper.isGreaterThanZero(data.getTotalMoney())) {
 			donationButton.setEnabled(true);
 			donationButton.repaint();
 			returnProfitButton.setEnabled(true);
 			returnProfitButton.repaint();
+			
+			this.cancelExpireTimer();
 		}
 		else {
 			donationButton.setEnabled(false);

@@ -220,7 +220,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		donationButton.setEnabled(false);
 		add(donationButton);
 		
-		expireTimeLabel.setBounds(5, 0, 400, 40);
+		expireTimeLabel.setBounds(5, 1600, 400, 40);
 		
 		add(expireTimeLabel);
 		
@@ -488,6 +488,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	}
 	
 	public void updateExpireLabel(int leftTimeInSeconds) {
+		expireTimeLabel.setVisible(true);
 		expireTimeLabel.setText("  " + leftTimeInSeconds + "\u79D2\u540E\u8FD4\u56DE\u6B22\u8FCE\u754C\u9762!");
 		expireTimeLabel.repaint();
 		expireTimeLabel.invalidate();

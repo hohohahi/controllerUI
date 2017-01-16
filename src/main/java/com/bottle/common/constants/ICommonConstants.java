@@ -42,7 +42,8 @@ public interface ICommonConstants {
 	int _PingService_Period_ = 30;
 	int _SecretTriggerExpireTime_InMillisecond = 20;
 	int _exitWarningTime_InSeconds_ = 5;
-	int _playerPanelIdelTime_InSeconds_ = 60;
+	int _playerPanelIdelTime_InSeconds_ = 10;
+	int _playerPanelErrorBottleIdelTime_InSeconds_ = 20;
 	
 	byte _Zero_Byte_ = (byte)0x00;
 	
@@ -175,6 +176,7 @@ public interface ICommonConstants {
 		_SubMessageType_PlayerPanel_StartCommandButton_,
 		_SubMessageType_PlayerPanel_StopCommandButton_,
 		_SubMessageType_PlayerPanel_RealProductionInfoPanel_,
+		_SubMessageType_PlayerPanel_InvalidBottle_,
 		_SubMessageType_PlayerPanel_ThrowBottleActionDetected_,
 		_SubMessageType_PlayerPanel_InvalidBottleTakenAwayDetected_,
 		_SubMessageType_AdminPanel_Tab_DebugCommandPanel_OpenDoorButton_,

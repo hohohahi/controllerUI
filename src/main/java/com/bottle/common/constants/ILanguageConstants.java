@@ -1,5 +1,8 @@
 package com.bottle.common.constants;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public interface ILanguageConstants {
 	String _ConnectionStatus_Connected_ = "\u8FDE\u63A5\u6210\u529F";
 	String _ConnectionStatus_Disconnected_ = "\u672A\u8FDE\u63A5";
@@ -17,8 +20,8 @@ public interface ILanguageConstants {
 	String _CheckErrorMessage_ReadBarCode_ = "\u8BFB\u4E8C\u7EF4\u7801\u9519\u8BEF";
 	String _CheckErrorMessage_Overweight_ = "\u8D85\u91CD";
 	String _CheckErrorMessage_ImageMatch_ = "\u56FE\u50CF\u5339\u914D\u9519\u8BEF";
-	
-	String _CheckErrorMessage_UnknowTemplate_ = "\u672A\u77E5\u4E8C\u7EF4\u7801";
+	String _CheckErrorMessage_MaterialMath_ = "\u6750\u8D28\u5339\u914D\u9519\u8BEF";
+	String _CheckErrorMessage_UnknowTemplate_ = "\u6570\u636E\u5E93\u4E2D\u65E0\u6B64\u74F6\u4F53\u6863\u6848";
 	String _CheckErrorMessage_Unknown_ = "\u672A\u77E5\u9519\u8BEF";
 	
 	String _TemplateManagementPanel_DownloadTemplate_Success_ = "\u4E0B\u8F7D\u6A21\u7248\u5230\u4E3B\u63A7\u6210\u529F";
@@ -26,4 +29,14 @@ public interface ILanguageConstants {
 	String _TemplateManagementPanel_DeleteTemplate_Success_ = "\u5220\u9664\u4E3B\u63A7\u4E0A\u6307\u5B9A\u6A21\u7248\u6210\u529F";
 	String _TemplateManagementPanel_DeleteTemplate_Failed_ = "\u5220\u9664\u4E3B\u63A7\u4E0A\u6307\u5B9A\u6A21\u7248\u5931\u8D25";
 	
+	@SuppressWarnings("serial")
+	Map<Long, String> errorCodeAndErroMessageMap = new HashMap<Long, String>(){
+	{
+		put(1L, _CheckErrorMessage_ReadBarCode_);
+		put(2L, _CheckErrorMessage_Overweight_);
+		put(3L, _CheckErrorMessage_ImageMatch_);
+		put(4L, _CheckErrorMessage_MaterialMath_);
+		put(5L, _CheckErrorMessage_UnknowTemplate_);
+		put(6L, _CheckErrorMessage_Unknown_);
+	}};
 }

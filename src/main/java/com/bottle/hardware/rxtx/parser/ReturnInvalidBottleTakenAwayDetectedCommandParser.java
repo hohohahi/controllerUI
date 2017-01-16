@@ -10,11 +10,15 @@ import com.bottle.common.constants.ICommonConstants.MachineCommandEnum;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 import com.bottle.common.constants.ICommonConstants.SubMessageTypeEnum;
 import com.bottle.hardware.rxtx.vo.RxTxResponseVO;
+import com.bottle.ui.components.player.PlayerPanel;
 
 @Service
 public class ReturnInvalidBottleTakenAwayDetectedCommandParser extends AbstractBaseCommandParser {
 	@Autowired
 	private IMessageQueueManager messageManager;
+	
+	@Autowired
+	private PlayerPanel playerPanel;
 	
 	@Override
 	public ICommonConstants.MachineCommandEnum getCommandType() {
@@ -26,12 +30,7 @@ public class ReturnInvalidBottleTakenAwayDetectedCommandParser extends AbstractB
 		super.validateObject(dataArea);
 		RxTxResponseVO vo = super.run(aid, dataArea);
 		
-		final MessageVO message = new MessageVO();
-		
-		message.setMessageSource(MessageSourceEnum._MessageSource_PlayerPanel_);
-		message.setSubMessageType(SubMessageTypeEnum._SubMessageType_PlayerPanel_InvalidBottleTakenAwayDetected_);
-		
-		messageManager.push(message);
+		playerPanel.detectInvalidBottleTakenAwayAction();
 		
 		return vo;
 	}

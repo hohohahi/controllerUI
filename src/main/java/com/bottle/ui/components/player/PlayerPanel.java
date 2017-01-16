@@ -35,6 +35,7 @@ import com.bottle.business.money.IReturnMoneyService;
 import com.bottle.common.IBasicDataTypeHelper;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
+import com.bottle.common.constants.ICommonConstants.SubMessageTypeEnum;
 import com.bottle.common.constants.ILanguageConstants;
 import com.bottle.hardware.rxtx.command.ICommandSelector;
 import com.bottle.hardware.rxtx.command.IMachineCommandSender;
@@ -73,6 +74,9 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	@Autowired
 	private PhoneNumberInputDlg phoneNumberInputDlg;
 	
+	@Autowired
+	private InvalidBottleWarningDlg invalidBottleWarningDlg;
+	
 	JLabel ValidNumTitleLabel = new FontLabel("\u6295\u74F6\u6570", 72);
 	JLabel validNumLabel = new FontLabel("b", 72);
 	JLabel MoneyTitleLabel = new FontLabel("\u91D1\u989D", 72);
@@ -87,6 +91,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	private PlayerPictureBannerPanel bannerPanel = new PlayerPictureBannerPanel(625, 1000);
 	private int expiredTime_InSecond = 0;
 	private Timer expireTimer = new Timer();
+	
 	@PostConstruct
 	public void initialize() {
 		messageManager.addListener(this);
@@ -215,19 +220,24 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		donationButton.setEnabled(false);
 		add(donationButton);
 		
-		expireTimeLabel.setBounds(5, 1600, 400, 40);
+		expireTimeLabel.setBounds(5, 0, 400, 40);
 		
 		add(expireTimeLabel);
 		
 		bannerPanel.setBounds(5, 395, 625, 1000);	
 		add(bannerPanel);
 		
-		JButton btnNewButton = new JButton("\u79D2\u540E\u8FD4\u56DE\u6B22\u8FCE\u754C\u9762!");
+		JButton btnNewButton = new JButton("\u6570\u636E\u5E93\u4E2D\u65E0\u6B64\u74F6\u4F53\u6863\u6848");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			
-				expiredTime_InSecond = 0;
-				returnProfitButton.setEnabled(true);
-				returnProfitButton.repaint();
+				//expiredTime_InSecond = 0;
+				//returnProfitButton.setEnabled(true);
+				//returnProfitButton.repaint();
+				final MessageVO message = new MessageVO();
+				message.setMessageSource(MessageSourceEnum._MessageSource_PlayerPanel_);
+				message.setSubMessageType(SubMessageTypeEnum._SubMessageType_PlayerPanel_InvalidBottle_);
+				message.setParam1((long)5);  //error code
+				messageManager.push(message);
 			}
 		});
 		btnNewButton.setBounds(339, 12, 98, 28);
@@ -270,10 +280,33 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 			expiredTime_InSecond = 0;
 		}
 		else if (true == ICommonConstants.SubMessageTypeEnum._SubMessageType_PlayerPanel_InvalidBottleTakenAwayDetected_.equals(subMessageType)) {
-			//expiredTime_InSecond = 0;
+			//but the message is not working when modelness dlg is shown
+			detectInvalidBottleTakenAwayAction();
+		}
+		else if (true == ICommonConstants.SubMessageTypeEnum._SubMessageType_PlayerPanel_InvalidBottle_.equals(subMessageType)) {
+			expiredTime_InSecond = 0;
+			final long errorCode = vo.getParam1();
+			if (errorCode >= 0) {
+				final String errorMessage = ILanguageConstants.errorCodeAndErroMessageMap.get(errorCode);
+				invalidBottleWarningDlg.setErrorCode(errorCode);
+				invalidBottleWarningDlg.setErrorMessage(errorMessage);
+				invalidBottleWarningDlg.updateUI();				
+			}
+			
+			int playerPanelErrorBottleIdelTime_InSeconds = configurationManager.getConfigurationVO().getPlayerPanelErrorBottleIdelTime_InSeconds();
+			initExpireTimer(playerPanelErrorBottleIdelTime_InSeconds);
+			invalidBottleWarningDlg.setVisible(true);
+
 		}
 	}
-
+	
+	public void detectInvalidBottleTakenAwayAction() {
+		invalidBottleWarningDlg.setVisible(false);
+		invalidBottleWarningDlg.setThoughtToBeShown(false);
+		
+		cancelExpireTimer();
+	}
+	
 	public void updateRealCheckResultTable() {
 		realCheckResultTableWrapper.clear();
 		realCheckResultTable.invalidate();
@@ -351,6 +384,11 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		    realCheckResultTable.invalidate();
 	}
 
+	public void clearInvalidBottleWarningDlg() {
+		invalidBottleWarningDlg.setVisible(false);
+		invalidBottleWarningDlg.setThoughtToBeShown(false);
+	}
+	
 	public void updateStatisticData() {
 		RealtimeStasticDataVO data = productionDataManager.getRealtimeStasticDataVO();
 		validNumLabel.setText(data.getTotalValidNum() + "");
@@ -386,18 +424,28 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	}
 	
 	public void active() {
-		initExpireTimer();
 		bannerPanel.initChangeBannerPictureTimeThread();
 		
 		if (true == productionDataManager.getIsSerialPortInitialized()) {
 			final IMachineCommandSender sender = machineCommandSelector.select(ICommonConstants.MachineCommandEnum._MachineCommand_Start_);
 			sender.send();
 		}		
+		
+		if (true == invalidBottleWarningDlg.isThoughtToBeShown()) {
+			final MessageVO message = new MessageVO();
+			message.setMessageSource(MessageSourceEnum._MessageSource_PlayerPanel_);
+			message.setSubMessageType(SubMessageTypeEnum._SubMessageType_PlayerPanel_InvalidBottle_);
+			message.setParam1(-1L);			
+			messageManager.push(message);
+		}
+		else {
+			int playerPanelIdelTime_InSeconds = configurationManager.getConfigurationVO().getPlayerPanelIdelTime_InSeconds();
+			initExpireTimer(playerPanelIdelTime_InSeconds);
+		}
 	}
 	
 	public void deactive() {
-		expireTimer.cancel();
-		expiredTime_InSecond = 0;
+		cancelExpireTimer();
 		bannerPanel.resetTimer();
 		
 		if (true == productionDataManager.getIsSerialPortInitialized()) {
@@ -406,8 +454,14 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		}		
 	}
 	
-	public void initExpireTimer() {
-		int playerPanelIdelTime_InSeconds = configurationManager.getConfigurationVO().getPlayerPanelIdelTime_InSeconds();
+	public void cancelExpireTimer() {
+		expireTimer.cancel();
+		expiredTime_InSecond = 0;
+		expireTimeLabel.setVisible(false);
+	}
+	
+	public void initExpireTimer(final int playerPanelIdelTime_InSeconds) {
+		expireTimer.cancel();
 		expireTimer = new Timer();  
 		expireTimer.schedule(new TimerTask() {  
             public void run() {              	            	
@@ -423,6 +477,11 @@ public class PlayerPanel extends JPanel implements IMessageListener{
     				messageManager.push(vo);
     			
     				expireTimer.cancel();
+    				
+    				if (true == invalidBottleWarningDlg.isVisible()) {
+    					invalidBottleWarningDlg.setVisible(false);
+    					invalidBottleWarningDlg.setThoughtToBeShown(true);
+    				}
             	}
             }  
         }, 0, 1000); 

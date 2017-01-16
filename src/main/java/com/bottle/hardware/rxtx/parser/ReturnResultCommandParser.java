@@ -69,9 +69,8 @@ public class ReturnResultCommandParser extends AbstractBaseCommandParser {
 			
 		
 			message.setMessageSource(MessageSourceEnum._MessageSource_PlayerPanel_);
-			message.setSubMessageType(SubMessageTypeEnum._SubMessageType_PlayerPanel_RealProductionInfoPanel_);
-			
-			//firstElement;
+			message.setSubMessageType(SubMessageTypeEnum._SubMessageType_PlayerPanel_InvalidBottle_);
+			message.setParam1((long)firstElement);  //error code
 		}
 		
 		messageManager.push(message);

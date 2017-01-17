@@ -42,8 +42,8 @@ public interface ICommonConstants {
 	int _PingService_Period_ = 30;
 	int _SecretTriggerExpireTime_InMillisecond = 20;
 	int _exitWarningTime_InSeconds_ = 5;
-	int _playerPanelIdelTime_InSeconds_ = 10;
-	int _playerPanelErrorBottleIdelTime_InSeconds_ = 20;
+	int _playerPanelIdelTime_InSeconds_ = 60;
+	int _playerPanelErrorBottleIdelTime_InSeconds_ = 300;
 	
 	byte _Zero_Byte_ = (byte)0x00;
 	

@@ -59,6 +59,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	List<TemplateVO> machineTemplateList = new ArrayList<TemplateVO>();
 	private int currentSel_InMachineTemplateTable = -1; 
 	
+	private JPanel learnTemplateOperation_ParentPanel = new JPanel();
 	private JLabel barCodeLabel = new FontLabel("", 14);
 	private JLabel isMetalLabel = new FontLabel("", 14);
 	private JLabel weightLabel = new FontLabel("", 14);
@@ -71,7 +72,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	private FontButton downloadToMachineButton = new FontButton("\u4E0B\u8F7D\u5230\u4E3B\u63A7");
 	private FontButton viewLearnTemplateImageButton = new FontButton("\u6D4B\u8BD5\u4E0A\u4F20\u6A21\u7248");
 	private FontButton queryMachineTemplateListButton = new FontButton("\u66F4\u65B0");
-
+	
 	public TemplateManagementPanel() {
 		setLayout(null);
 		
@@ -92,38 +93,37 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 		learnTemplateButton.setBounds(560, 43, 188, 33);
 		panel.add(learnTemplateButton);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(null, "Content", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_1.setBounds(10, 23, 491, 129);
-		panel.add(panel_1);
-		panel_1.setLayout(null);
+		learnTemplateOperation_ParentPanel.setBorder(new TitledBorder(null, "Content", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		learnTemplateOperation_ParentPanel.setBounds(10, 13, 491, 129);
+		panel.add(learnTemplateOperation_ParentPanel);
+		learnTemplateOperation_ParentPanel.setLayout(null);
 		
 		JLabel lblNewLabel_1 = new FontLabel("\u4E8C\u7EF4\u7801", 14);
 		lblNewLabel_1.setBounds(6, 16, 79, 37);
-		panel_1.add(lblNewLabel_1);
+		learnTemplateOperation_ParentPanel.add(lblNewLabel_1);
 		
 		barCodeLabel.setBounds(90, 20, 121, 33);
-		panel_1.add(barCodeLabel);
+		learnTemplateOperation_ParentPanel.add(barCodeLabel);
 		
 		JLabel label_1 = new FontLabel("\u662F\u5426\u91D1\u5C5E", 14);
 		label_1.setBounds(200, 16, 79, 37);
-		panel_1.add(label_1);
+		learnTemplateOperation_ParentPanel.add(label_1);
 		isMetalLabel.setBounds(289, 16, 39, 33);
-		panel_1.add(isMetalLabel);
+		learnTemplateOperation_ParentPanel.add(isMetalLabel);
 		
 		JLabel label_3 = new FontLabel("\u91CD\u91CF", 14);
 		label_3.setBounds(335, 16, 79, 37);
-		panel_1.add(label_3);
+		learnTemplateOperation_ParentPanel.add(label_3);
 		
 		weightLabel.setBounds(406, 20, 46, 33);
-		panel_1.add(weightLabel);
+		learnTemplateOperation_ParentPanel.add(weightLabel);
 		
 		JLabel label_5 = new FontLabel("\u56FE\u5F62\u7279\u5F81\u7801", 14);
 		label_5.setBounds(6, 64, 79, 14);
-		panel_1.add(label_5);
+		learnTemplateOperation_ParentPanel.add(label_5);
 		
 		imageLabel.setBounds(115, 64, 473, 56);
-		panel_1.add(imageLabel);
+		learnTemplateOperation_ParentPanel.add(imageLabel);
 		
 		
 		uploadTemplateButton.addActionListener(new ActionListener() {

@@ -29,7 +29,7 @@ public class WelcomePanel extends JPanel{
 	public void initialize() {
 		List<String> imageNameList = new ArrayList<String>();
 		//imageNameList.add("SystemInfo1.png");
-		imageNameList.add("SystemInfo.png");
+		imageNameList.add("cover1.png");
 		imageNameList.add("t1.JPG");	
 		
 		bannerPicturePanel.setBounds(0, 0, IUIConstants._Total_Width_, IUIConstants._Total_Height_);

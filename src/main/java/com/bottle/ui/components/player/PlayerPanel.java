@@ -226,22 +226,6 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		
 		bannerPanel.setBounds(5, 395, 625, 1000);	
 		add(bannerPanel);
-		
-		JButton btnNewButton = new JButton("\u6570\u636E\u5E93\u4E2D\u65E0\u6B64\u74F6\u4F53\u6863\u6848");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {			
-				//expiredTime_InSecond = 0;
-				//returnProfitButton.setEnabled(true);
-				//returnProfitButton.repaint();
-				final MessageVO message = new MessageVO();
-				message.setMessageSource(MessageSourceEnum._MessageSource_PlayerPanel_);
-				message.setSubMessageType(SubMessageTypeEnum._SubMessageType_PlayerPanel_InvalidBottle_);
-				message.setParam1((long)5);  //error code
-				messageManager.push(message);
-			}
-		});
-		btnNewButton.setBounds(339, 12, 98, 28);
-		add(btnNewButton);
 	}
 
 	@Override

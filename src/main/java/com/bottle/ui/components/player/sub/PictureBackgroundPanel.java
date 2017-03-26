@@ -139,6 +139,9 @@ public class PictureBackgroundPanel extends JPanel {
             
             final Image title = loadImage("title.png");        	                  
             g.drawImage(title, 150, 60, 750, 100, null);
+            
+            final Image foot = loadImage("foot.png");        	                  
+            g.drawImage(foot, 0, 1400, 1050, 100, null);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

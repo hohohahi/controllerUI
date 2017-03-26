@@ -28,7 +28,13 @@ public interface ILanguageConstants {
 	String _TemplateManagementPanel_DownloadTemplate_Failed_ = "\u4E0B\u8F7D\u6A21\u7248\u5230\u4E3B\u63A7\u5931\u8D25";
 	String _TemplateManagementPanel_DeleteTemplate_Success_ = "\u5220\u9664\u4E3B\u63A7\u4E0A\u6307\u5B9A\u6A21\u7248\u6210\u529F";
 	String _TemplateManagementPanel_DeleteTemplate_Failed_ = "\u5220\u9664\u4E3B\u63A7\u4E0A\u6307\u5B9A\u6A21\u7248\u5931\u8D25";
-	
+		
+	String _TemplateManagementPanel_TemplateListTitle_Name_ = "\u540D\u79F0";
+	String _TemplateManagementPanel_TemplateListTitle_BarCode_ = "\u4E8C\u7EF4\u7801";
+	String _TemplateManagementPanel_TemplateListTitle_IsMetal_ = "\u662F\u5426\u91D1\u5C5E";
+	String _TemplateManagementPanel_TemplateListTitle_Weight_ = "\u91CD\u91CF";
+	String _TemplateManagementPanel_TemplateListTitle_Price_ = "\u4EF7\u683C(\u5143)";
+		
 	@SuppressWarnings("serial")
 	Map<Long, String> errorCodeAndErroMessageMap = new HashMap<Long, String>(){
 	{

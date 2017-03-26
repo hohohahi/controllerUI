@@ -28,6 +28,7 @@ import com.bottle.business.template.service.ITemplateService;
 import com.bottle.business.template.vo.TemplateVO;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
+import com.bottle.common.constants.ILanguageConstants;
 import com.bottle.hardware.rxtx.command.ICommandSelector;
 import com.bottle.hardware.rxtx.command.IMachineCommandSender;
 import com.bottle.ui.components.common.AbstractBasePanel;
@@ -439,7 +440,12 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	
 	@SuppressWarnings("serial")
 	public MyTableWrapper createWrapper() {
-		return new MyTableWrapper(new ArrayList<String>(){{add("ID"); add("名称"); add("二维码"); add("金属"); add("重量"); add("价格");}}, 
+		return new MyTableWrapper(new ArrayList<String>(){{add("ID"); 
+									add(ILanguageConstants._TemplateManagementPanel_TemplateListTitle_Name_); 
+									add(ILanguageConstants._TemplateManagementPanel_TemplateListTitle_BarCode_); 
+									add(ILanguageConstants._TemplateManagementPanel_TemplateListTitle_IsMetal_); 
+									add(ILanguageConstants._TemplateManagementPanel_TemplateListTitle_Weight_); 
+									add(ILanguageConstants._TemplateManagementPanel_TemplateListTitle_Price_);}}, 
 	              new ArrayList<Integer>(){{add(30); add(210); add(150); add(50); add(50);add(70);}}, new ModelListTableModel());
 	}
 	

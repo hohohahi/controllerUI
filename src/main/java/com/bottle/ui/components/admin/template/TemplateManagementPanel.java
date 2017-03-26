@@ -439,7 +439,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	
 	@SuppressWarnings("serial")
 	public MyTableWrapper createWrapper() {
-		return new MyTableWrapper(new ArrayList<String>(){{add("ID"); add("Name"); add("Bar Code"); add("IsMetal"); add("Weight"); add("Price");}}, 
+		return new MyTableWrapper(new ArrayList<String>(){{add("ID"); add("名称"); add("二维码"); add("金属"); add("重量"); add("价格");}}, 
 	              new ArrayList<Integer>(){{add(30); add(210); add(150); add(50); add(50);add(70);}}, new ModelListTableModel());
 	}
 	

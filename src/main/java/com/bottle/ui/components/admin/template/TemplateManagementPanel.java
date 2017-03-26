@@ -79,7 +79,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "\u6A21\u677F\u5B66\u4E60\u533A\u57DF", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(10, 1500, 761, 174);
+		panel.setBounds(10, 1476, 761, 182);
 		add(panel);
 		panel.setLayout(null);
 		

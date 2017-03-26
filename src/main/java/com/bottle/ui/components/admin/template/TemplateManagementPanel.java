@@ -234,7 +234,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	    );
 	    
 	    JScrollPane scrollPane_server=new JScrollPane(existedTemplateTable);
-	    scrollPane_server.setSize(562, 551);
+	    scrollPane_server.setSize(572, 551);
 	    scrollPane_server.setLocation(10, 51);
 	    this.add(scrollPane_server);
 	    
@@ -282,7 +282,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	    );
 	    
 	    JScrollPane scrollPane_machine=new JScrollPane(machineTemplateTable);
-	    scrollPane_machine.setSize(562, 800);
+	    scrollPane_machine.setSize(572, 800);
 	    scrollPane_machine.setLocation(10, 655);
 	    this.add(scrollPane_machine);
 	    
@@ -304,7 +304,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 				sender.send();
 	    	}
 	    });
-	    queryMachineTemplateListButton.setBounds(570, 728, 188, 32);
+	    queryMachineTemplateListButton.setBounds(592, 728, 188, 32);
 
 	    add(queryMachineTemplateListButton);
 	    
@@ -325,7 +325,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	    	}
 	    });
 	    
-	    downloadToMachineButton.setBounds(582, 266, 188, 32);
+	    downloadToMachineButton.setBounds(591, 273, 188, 32);
 	    add(downloadToMachineButton);
 	    
 	    deleteTemplateFromMachineButton.addActionListener(new ActionListener() {
@@ -343,7 +343,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 				}
 	    	}
 	    });
-	    deleteTemplateFromMachineButton.setBounds(585, 774, 188, 32);
+	    deleteTemplateFromMachineButton.setBounds(592, 774, 188, 32);
 	    add(deleteTemplateFromMachineButton);
 	    
 	    
@@ -356,7 +356,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	    	}
 	    });
 
-	    deleteTemplateFromServerButton.setBounds(582, 320, 188, 32);
+	    deleteTemplateFromServerButton.setBounds(591, 320, 188, 32);
 	    add(deleteTemplateFromServerButton);
 	    
 	    
@@ -366,7 +366,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 	    	}
 	    });
 
-	    flushServerTemplateButton.setBounds(582, 220, 188, 32);
+	    flushServerTemplateButton.setBounds(591, 220, 188, 32);
 	    add(flushServerTemplateButton);
 	}
 	
@@ -446,7 +446,7 @@ public class TemplateManagementPanel extends AbstractBasePanel {
 									add(ILanguageConstants._TemplateManagementPanel_TemplateListTitle_IsMetal_); 
 									add(ILanguageConstants._TemplateManagementPanel_TemplateListTitle_Weight_); 
 									add(ILanguageConstants._TemplateManagementPanel_TemplateListTitle_Price_);}}, 
-	              new ArrayList<Integer>(){{add(30); add(210); add(150); add(50); add(50);add(70);}}, new ModelListTableModel());
+	              new ArrayList<Integer>(){{add(30); add(200); add(130); add(90); add(50);add(70);}}, new ModelListTableModel());
 	}
 	
 	@PostConstruct

@@ -80,6 +80,15 @@ public class PlayerTemplateDisplayPanel extends JPanel {
         }
     }
     
+    public void updatePictureByBarCode(final String barCode) {
+    	final String filename = barCodeAndfilenameMap.get(barCode);
+    	if (null == filename) {
+    		throw new NullPointerException("filename is null.");
+    	}
+    	
+    	curFilename = filename;
+    	validatePicture();
+    }
     
     public void setImageFileNameList(List<String> imageNameList) {
     	this.filenameList = imageNameList;

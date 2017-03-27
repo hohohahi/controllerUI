@@ -30,6 +30,7 @@ import com.bottle.business.data.service.IProductionDataManager;
 import com.bottle.business.data.vo.ProductionDataVO;
 import com.bottle.business.data.vo.RealtimeStasticDataVO;
 import com.bottle.business.money.IReturnMoneyService;
+import com.bottle.business.template.vo.TemplateVO;
 import com.bottle.common.IBasicDataTypeHelper;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
@@ -82,7 +83,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	JLabel moneyLabel = new FontLabel("d", 72);
 	FontLabel expireTimeLabel = new FontLabel(36);
 	
-	private MyTableWrapper realCheckResultTableWrapper;
+	private MyTableWrapper realCheckResultTableWrapper; 
 	private JTable realCheckResultTable;;
 	
 	final CircleButton returnProfitButton = new CircleButton("\u8FD4\u5229", Color.BLUE, Color.GRAY, Color.LIGHT_GRAY, new Dimension(200, 200));
@@ -101,10 +102,20 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		validNumLabel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				/*
 				MessageVO vo = new MessageVO();
 				vo.setMessageSource(ICommonConstants.MessageSourceEnum._MessageSource_MainFrame_);
 				vo.setSubMessageType(ICommonConstants.SubMessageTypeEnum._SubMessageType_MainFrame_VerifyDialog_);
 				messageManager.push(vo);
+				*/
+				
+				ProductionDataVO productionDataVO = new ProductionDataVO();												
+				productionDataVO.setTimestampStr("123456");
+				productionDataVO.setBarCode("6921168509256");
+				productionDataVO.setIsSuccessful(true);		
+				productionDataManager.push(productionDataVO);
+				
+				updateRealCheckResultTable();
 			}
 
 			@Override
@@ -229,6 +240,40 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		
 		templateDisplayPanel.setBounds(639, 850, 400, 500);
 		add(templateDisplayPanel);
+		
+		realCheckResultTable.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				final String barCode = getBarCodeFromProductionData_BySelection(realCheckResultTable.getSelectedRow());
+				templateDisplayPanel.updatePictureByBarCode(barCode);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+	    }
+	    );
 	}
 
 	@Override
@@ -302,10 +347,32 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		
 		final List<ProductionDataVO> historyList = productionDataManager.getHistoryRealtimeStasticData();
 		for (final ProductionDataVO vo : historyList) {
-			realCheckResultTableWrapper.add(new RealCheckResultTableCandidate(vo.getTemplateName(), vo.getPrice()));
+			realCheckResultTableWrapper.add(new RealCheckResultTableCandidate(vo.getTemplateName(), vo.getBarCode(), vo.getPrice()));
 		}
 	}
 
+	public String getBarCodeFromProductionData_BySelection(int sel) {
+		String barCode = "";
+		final List<ProductionDataVO> historyList = productionDataManager.getHistoryRealtimeStasticData();
+		if (historyList != null) {
+			final int size = historyList.size();
+			
+			if (sel >= size) {
+				throw new RuntimeException("pos is bigger than history size. pos:" + sel + "--size:" + size);
+			}
+			else {
+				final ProductionDataVO vo = historyList.get(sel);
+				if (null == vo) {
+					throw new NullPointerException("vo is null.");
+				}
+			
+				barCode = vo.getBarCode();
+			}
+		}
+		
+		return barCode;
+	}
+	
 	public void clearInvalidBottleWarningDlg() {
 		invalidBottleWarningDlg.setVisible(false);
 		invalidBottleWarningDlg.setThoughtToBeShown(false);

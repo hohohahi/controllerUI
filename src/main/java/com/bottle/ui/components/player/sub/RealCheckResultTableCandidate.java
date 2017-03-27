@@ -6,10 +6,12 @@ public class RealCheckResultTableCandidate extends BaseTableCandidate
 {
 	private String name = "";
 	private double price = 0.0d;
+	private String barCode = "";
 	
-	public RealCheckResultTableCandidate(final String name, final double price) {
+	public RealCheckResultTableCandidate(final String name, final String barCode, final double price) {
 		this.name = name;
 		this.price = price;
+		this.barCode = barCode;
 	}
 
 	public double getPrice() {
@@ -26,6 +28,14 @@ public class RealCheckResultTableCandidate extends BaseTableCandidate
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getBarCode() {
+		return barCode;
+	}
+
+	public void setBarCode(String barCode) {
+		this.barCode = barCode;
 	}
 
 	@Override

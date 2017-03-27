@@ -12,13 +12,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.annotation.PostConstruct;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 
 import org.apache.maven.surefire.shade.org.apache.maven.shared.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +42,7 @@ import com.bottle.ui.components.common.MyTableWrapper;
 import com.bottle.ui.components.player.component.CBScrollBarUI;
 import com.bottle.ui.components.player.sub.PhoneNumberInputDlg;
 import com.bottle.ui.components.player.sub.PlayerPictureBannerPanel;
+import com.bottle.ui.components.player.sub.PlayerTemplateDisplayPanel;
 import com.bottle.ui.components.player.sub.RealCheckResultListTableModel;
 import com.bottle.ui.components.player.sub.RealCheckResultTableCandidate;
 import com.bottle.ui.constants.IUIConstants;
@@ -89,6 +88,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	final CircleButton returnProfitButton = new CircleButton("\u8FD4\u5229", Color.BLUE, Color.GRAY, Color.LIGHT_GRAY, new Dimension(200, 200));
 	final CircleButton donationButton = new CircleButton("\u6350\u8D60", new Color(80, 240, 60), Color.GRAY, Color.LIGHT_GRAY, new Dimension(200, 200));
 	private PlayerPictureBannerPanel bannerPanel = new PlayerPictureBannerPanel(625, 1000);
+	private PlayerTemplateDisplayPanel templateDisplayPanel = new PlayerTemplateDisplayPanel(400, 500);
 	private int expiredTime_InSecond = 0;
 	private Timer expireTimer = new Timer();
 	
@@ -226,6 +226,9 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		
 		bannerPanel.setBounds(5, 395, 625, 1000);	
 		add(bannerPanel);
+		
+		templateDisplayPanel.setBounds(639, 850, 400, 500);
+		add(templateDisplayPanel);
 	}
 
 	@Override

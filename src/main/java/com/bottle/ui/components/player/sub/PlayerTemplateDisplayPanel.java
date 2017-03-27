@@ -35,6 +35,8 @@ public class PlayerTemplateDisplayPanel extends JPanel {
 		imageNameList.add("greenword625x1000.png");
 		
 		barCodeAndfilenameMap.put("6921168509256", "nongfushanquan550ml.jpg");
+		barCodeAndfilenameMap.put("6954767415772", "kekoukele600ml.jpg");
+		
 		setImageFileNameList(imageNameList);
 		
 		curFilename = "default.jpg";

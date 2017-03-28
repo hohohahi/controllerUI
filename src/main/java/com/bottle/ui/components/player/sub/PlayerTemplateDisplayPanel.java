@@ -96,8 +96,10 @@ public class PlayerTemplateDisplayPanel extends JPanel {
     	if (null == filename) {
     		curFilename = "unknown.jpg";
     	}
-    	
-    	curFilename = filename;
+    	else {
+    		curFilename = filename;
+    	}
+    
     	validatePicture();
     }
     

@@ -21,9 +21,10 @@ public class PlayerTemplateDisplayPanel extends JPanel {
 	private List<String> filenameList = new ArrayList<String>();
 	private Map<String, String> barCodeAndfilenameMap = new HashMap<String, String>();
 	private String curFilename = "";
-
+	
 	private int height = 0;
 	private int weight = 0;
+	
 	public PlayerTemplateDisplayPanel(int width, int height) {
 		setLayout(null);
 		
@@ -93,7 +94,7 @@ public class PlayerTemplateDisplayPanel extends JPanel {
     public void updatePictureByBarCode(final String barCode) {
     	final String filename = barCodeAndfilenameMap.get(barCode);
     	if (null == filename) {
-    		throw new NullPointerException("filename is null.");
+    		curFilename = "unknown.jpg";
     	}
     	
     	curFilename = filename;

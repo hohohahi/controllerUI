@@ -93,6 +93,41 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	private int expiredTime_InSecond = 0;
 	private Timer expireTimer = new Timer();
 	
+	private List<ProductionDataVO> testProductionList = new ArrayList<ProductionDataVO>();
+	
+	public void initProductionList() {
+		ProductionDataVO productionDataVO = new ProductionDataVO();												
+		productionDataVO.setTimestampStr("123456");
+		productionDataVO.setBarCode("6921168509256");
+		productionDataVO.setTemplateName("nongfushanquan550ml");
+		productionDataVO.setIsSuccessful(true);	
+		
+		testProductionList.add(productionDataVO);		
+		
+		productionDataVO = new ProductionDataVO();												
+		productionDataVO.setTimestampStr("123456");
+		productionDataVO.setBarCode("6954767415772");
+		productionDataVO.setTemplateName("kekoukele600ml");
+		productionDataVO.setIsSuccessful(true);	
+		
+		testProductionList.add(productionDataVO);
+		
+		productionDataVO = new ProductionDataVO();												
+		productionDataVO.setTimestampStr("123456");
+		productionDataVO.setBarCode("6940159410043");
+		productionDataVO.setTemplateName("baishikele2L");
+		productionDataVO.setIsSuccessful(true);	
+		
+		testProductionList.add(productionDataVO);
+		
+		productionDataVO = new ProductionDataVO();												
+		productionDataVO.setTimestampStr("123456");
+		productionDataVO.setBarCode("6954767410173");
+		productionDataVO.setTemplateName("kekoukele300ml");
+		productionDataVO.setIsSuccessful(true);	
+		
+		testProductionList.add(productionDataVO);
+	}
 	@PostConstruct
 	public void initialize() {
 		messageManager.addListener(this);
@@ -109,27 +144,9 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 				messageManager.push(vo);
 				*/
 				
-				ProductionDataVO productionDataVO = new ProductionDataVO();												
-				productionDataVO.setTimestampStr("123456");
-				productionDataVO.setBarCode("6921168509256");
-				productionDataVO.setTemplateName("nongfushanquan550ml");
-				productionDataVO.setIsSuccessful(true);		
-				productionDataManager.push(productionDataVO);
-				
-				productionDataVO = new ProductionDataVO();												
-				productionDataVO.setTimestampStr("123456");
-				productionDataVO.setBarCode("6954767415772");
-				productionDataVO.setTemplateName("kekoukele600ml");
-				productionDataVO.setIsSuccessful(true);		
-				productionDataManager.push(productionDataVO);
-				
-				productionDataVO = new ProductionDataVO();												
-				productionDataVO.setTimestampStr("123456");
-				productionDataVO.setBarCode("6940159410043");
-				productionDataVO.setTemplateName("baishikele2L");
-				productionDataVO.setIsSuccessful(true);		
-				productionDataManager.push(productionDataVO);
-								
+				final ProductionDataVO data = testProductionList.get(testProductionList.size()-1);
+				productionDataManager.push(data);
+				testProductionList.remove(data);
 				updateRealCheckResultTable();
 			}
 
@@ -364,6 +381,10 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		for (final ProductionDataVO vo : historyList) {
 			realCheckResultTableWrapper.add(new RealCheckResultTableCandidate(vo.getTemplateName(), vo.getBarCode(), vo.getPrice()));
 		}
+		
+		if (historyList.size() > 0) {
+			realCheckResultTable.setRowSelectionInterval(0, 0);
+		}		
 	}
 
 	public String getBarCodeFromProductionData_BySelection(int sel) {

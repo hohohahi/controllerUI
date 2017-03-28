@@ -408,7 +408,8 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 				throw new RuntimeException("pos is bigger than history size. pos:" + sel + "--size:" + size);
 			}
 			else {
-				final ProductionDataVO vo = historyList.get(sel);
+				final int showPos = size - sel -1;
+				final ProductionDataVO vo = historyList.get(showPos);
 				if (null == vo) {
 					throw new NullPointerException("vo is null.");
 				}

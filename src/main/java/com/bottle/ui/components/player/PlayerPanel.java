@@ -393,6 +393,8 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		
 		if (historyList.size() > 0) {
 			realCheckResultTable.setRowSelectionInterval(0, 0);
+			final String barCode = getBarCodeFromProductionData_BySelection(realCheckResultTable.getSelectedRow());
+			templateDisplayPanel.updatePictureByBarCode(barCode);
 		}		
 	}
 

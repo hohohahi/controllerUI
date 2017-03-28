@@ -38,6 +38,7 @@ public class PlayerTemplateDisplayPanel extends JPanel {
 		barCodeAndfilenameMap.put("6954767415772", "kekoukele600ml.jpg");
 		barCodeAndfilenameMap.put("6940159410043", "baishikele2L.jpg");
 		barCodeAndfilenameMap.put("6954767410173", "kekoukele300ml.jpg");
+		barCodeAndfilenameMap.put("6921168520015", "nongfushanquan1.5L.jpg");
 						
 		setImageFileNameList(imageNameList);
 		

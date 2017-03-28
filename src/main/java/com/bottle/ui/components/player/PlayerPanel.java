@@ -138,6 +138,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	}
 	@PostConstruct
 	public void initialize() {
+		initProductionList();
 		messageManager.addListener(this);
 		updateStatisticData();
 		updateRealCheckResultTable();

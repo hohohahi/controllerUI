@@ -159,6 +159,14 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		productionDataVO.setIsSuccessful(true);	
 		
 		testProductionList.add(productionDataVO);
+		
+		productionDataVO = new ProductionDataVO();												
+		productionDataVO.setTimestampStr("123456");
+		productionDataVO.setBarCode("6902538004045");
+		productionDataVO.setTemplateName("maidong600ml");
+		productionDataVO.setIsSuccessful(true);	
+		
+		testProductionList.add(productionDataVO);
 	}
 	
 	@PostConstruct

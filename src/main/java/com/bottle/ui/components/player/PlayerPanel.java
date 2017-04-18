@@ -187,7 +187,6 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 				messageManager.push(vo);
 				
 				
-				
 				/*
 				final ProductionDataVO data = testProductionList.get(testProductionList.size()-1);
 				productionDataManager.push(data);

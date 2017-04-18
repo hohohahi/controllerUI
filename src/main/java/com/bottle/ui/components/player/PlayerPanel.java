@@ -478,8 +478,8 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 			this.cancelExpireTimer();
 		}
 		else {
-			donationButton.setEnabled(false);
-			returnProfitButton.setEnabled(false);
+			donationButton.setEnabled(true);
+			returnProfitButton.setEnabled(true);
 			donationButton.repaint();
 			returnProfitButton.repaint();
 		}

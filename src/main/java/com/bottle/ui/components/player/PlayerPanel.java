@@ -180,17 +180,19 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 		validNumLabel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				/*
+				
 				MessageVO vo = new MessageVO();
 				vo.setMessageSource(ICommonConstants.MessageSourceEnum._MessageSource_MainFrame_);
 				vo.setSubMessageType(ICommonConstants.SubMessageTypeEnum._SubMessageType_MainFrame_VerifyDialog_);
 				messageManager.push(vo);
-				*/
 				
+				
+				/*
 				final ProductionDataVO data = testProductionList.get(testProductionList.size()-1);
 				productionDataManager.push(data);
 				testProductionList.remove(data);
 				updateRealCheckResultTable();
+				*/
 			}
 
 			@Override

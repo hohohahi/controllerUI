@@ -29,9 +29,7 @@ public class WelcomePanel extends JPanel{
 	public void initialize() {
 		List<String> imageNameList = new ArrayList<String>();
 		//imageNameList.add("SystemInfo1.png");
-		imageNameList.add("cover1.png");
-		imageNameList.add("cover2.jpg");
-		imageNameList.add("cover3.jpg");
+		imageNameList.add("cover4.png");
 		
 		bannerPicturePanel.setBounds(0, 0, IUIConstants._Total_Width_, IUIConstants._Total_Height_);
 		bannerPicturePanel.setImageFileNameList(imageNameList);

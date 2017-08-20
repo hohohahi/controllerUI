@@ -1,5 +1,8 @@
 package com.bottle.business.money;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +12,8 @@ import com.bottle.business.common.service.IMessageQueueManager;
 import com.bottle.business.common.vo.MessageVO;
 import com.bottle.business.data.service.IConfigurationManager;
 import com.bottle.business.data.service.IProductionDataManager;
+import com.bottle.business.data.vo.CheckRecordVO;
+import com.bottle.business.data.vo.ProductionDataVO;
 import com.bottle.business.data.vo.RealtimeStasticDataVO;
 import com.bottle.common.AbstractBaseBean;
 import com.bottle.common.constants.ICommonConstants;
@@ -40,6 +45,7 @@ public class ReturnMoneyService extends AbstractBaseBean implements IReturnMoney
     	JSONObject json = new JSONObject();
     	json.put(ICommonConstants._UI_PhoneNumber_Key_, phoneNumberStr);
     	json.put(ICommonConstants._UI_Amount_Key_, amount);
+    	json.put(ICommonConstants._UI_CheckResultList_Key_, getCheckRecordVOListFromRealtimeData(realVO));
     	
     	try {
     		JSONObject rtnJSON = httpHelper.postJSON(url, json);
@@ -60,6 +66,27 @@ public class ReturnMoneyService extends AbstractBaseBean implements IReturnMoney
     	 
 	}
 	
+	public List<CheckRecordVO> getCheckRecordVOListFromRealtimeData(final RealtimeStasticDataVO realVO) {
+		List<CheckRecordVO> rtnList = new ArrayList<CheckRecordVO>();
+		
+		final List<ProductionDataVO> productionVOList = realVO.getDataList();
+		
+		final int size = productionVOList.size();
+		for (int index=0; index<size; index++) {
+			final ProductionDataVO subVO = productionVOList.get(index);
+			final CheckRecordVO recordVO = new CheckRecordVO();
+			recordVO.setOrderIndex(index+1);
+			recordVO.setPrice(subVO.getPrice());
+			recordVO.setResultId(0L);
+			recordVO.setTemplateId(subVO.getTemplateId());
+			recordVO.setTemplateName(subVO.getTemplateName());
+			
+			rtnList.add(recordVO);
+		}
+		
+		return rtnList;
+	}
+	
 	public String getReturnMoney() {
 		final StringBuilder buf = new StringBuilder();
 		
@@ -75,4 +102,36 @@ public class ReturnMoneyService extends AbstractBaseBean implements IReturnMoney
 		return buf.toString();
 	}
 	
+	
+	public static void main(String [] args) {
+		final RealtimeStasticDataVO realVO = new RealtimeStasticDataVO();
+		final List<ProductionDataVO> dataList = new ArrayList<ProductionDataVO>();
+		final ProductionDataVO element1 = new ProductionDataVO();
+		element1.setBarCode("abcdefghijk123456");
+		element1.setErrorCode(0L);
+		element1.setPrice(1.1d);
+		element1.setIsSuccessful(true);
+		element1.setTemplateId(55L);
+		element1.setTemplateName("formal 1");
+		dataList.add(element1);
+		
+		final ProductionDataVO element2 = new ProductionDataVO();
+		element2.setBarCode("123456abcdefghijk");
+		element2.setErrorCode(0L);
+		element2.setPrice(2.1d);
+		element2.setIsSuccessful(true);
+		element2.setTemplateId(66L);
+		element2.setTemplateName("formal 2");
+		dataList.add(element2);
+		
+		realVO.setDataList(dataList);
+		
+		JSONObject json = new JSONObject();
+    	json.put(ICommonConstants._UI_PhoneNumber_Key_, "18975811415");
+    	json.put(ICommonConstants._UI_Amount_Key_, 1.2d);
+    	
+    	final ReturnMoneyService service = new ReturnMoneyService();
+    	json.put(ICommonConstants._UI_CheckResultList_Key_, service.getCheckRecordVOListFromRealtimeData(realVO));
+    	System.out.println(json);
+	}
 }

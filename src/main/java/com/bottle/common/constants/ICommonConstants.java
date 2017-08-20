@@ -32,6 +32,7 @@ public interface ICommonConstants {
 	
 	
 	String _UI_Identifier_Key_ = "identifier";
+	String _UI_CheckResultList_Key_ = "checkRecordList";
 	String _UI_PhoneNumber_Key_ = "phoneNumber";
 	String _UI_Amount_Key_ = "amount";
 	String _UI_Name_Key_ = "name";

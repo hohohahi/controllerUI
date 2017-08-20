@@ -99,6 +99,7 @@ public class ProductionDataManager extends AbstractBaseBean implements IProducti
 		
 		super.validateObject(templateVO);
 		
+		productionDataVO.setTemplateId(templateVO.getId());
 		productionDataVO.setBarCode(templateVO.getBarCode());
 		productionDataVO.setTemplateName(templateVO.getName());
 		productionDataVO.setPrice(templateVO.getPrice());
@@ -135,6 +136,7 @@ public class ProductionDataManager extends AbstractBaseBean implements IProducti
 			realtimeStasticDataVO.setTotalValidNum(totalValidNum);
 			realtimeStasticDataVO.setTotalInvalidNum(totalInvalidNum);
 			realtimeStasticDataVO.setTotalMoney(totalMoney);
+			realtimeStasticDataVO.setDataList(dataList);
 		}
 	}
 

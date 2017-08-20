@@ -1,10 +1,14 @@
 package com.bottle.business.data.vo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RealtimeStasticDataVO {
 	long totalNum = 0;
 	long totalValidNum = 0;
 	long totalInvalidNum = 0;
 	double totalMoney = 0.0d;
+	private List<ProductionDataVO> dataList = new ArrayList<ProductionDataVO>();
 	
 	public long getTotalNum() {
 		return totalNum;
@@ -29,6 +33,13 @@ public class RealtimeStasticDataVO {
 	}
 	public void setTotalMoney(double totalMoney) {
 		this.totalMoney = totalMoney;
+	}
+	
+	public List<ProductionDataVO> getDataList() {
+		return dataList;
+	}
+	public void setDataList(List<ProductionDataVO> dataList) {
+		this.dataList = dataList;
 	}
 	
 	public void reset() {

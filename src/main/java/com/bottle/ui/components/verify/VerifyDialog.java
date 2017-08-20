@@ -59,6 +59,7 @@ public class VerifyDialog extends JDialog implements WindowListener{
 		
 		this.addWindowListener(this);
 		this.setIconImage(null);
+		this.setTitle(ICommonConstants._version_);
 	}
 	
 	@PostConstruct

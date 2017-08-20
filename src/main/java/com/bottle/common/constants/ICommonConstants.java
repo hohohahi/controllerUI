@@ -1,6 +1,7 @@
 package com.bottle.common.constants;
 
 public interface ICommonConstants {
+	String _version_ = "1.0.201708201755";
 	String _identifier = "40ec2351-af21-4d1c-9a92-85629f43a0bc";
 	String _Bottle_Identifier_ = "abcdefg";
 	String _Server_IP_ = "109.205.93.209";

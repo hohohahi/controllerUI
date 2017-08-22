@@ -96,4 +96,9 @@ public final class MinaClient extends AbstractBaseBean implements IMinaClient {
 		}
 		System.out.println(ret);
 	}
+
+	@Override
+	public void exit() {
+		session.closeOnFlush();
+	}
 }

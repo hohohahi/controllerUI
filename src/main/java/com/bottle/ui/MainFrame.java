@@ -18,6 +18,7 @@ import com.bottle.common.IResourceLoader;
 import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 import com.bottle.hardware.rxtx.ISerialCommConnector;
+import com.bottle.mina.service.IMinaClient;
 import com.bottle.ui.components.admin.AdminPanel;
 import com.bottle.ui.components.exit.ExitDialog;
 import com.bottle.ui.components.player.PlayerPanel;
@@ -56,6 +57,9 @@ public class MainFrame extends JFrame implements IMessageListener, InitializingB
 	
 	@Autowired
 	private VerifyDialog verifyDialog;
+	
+	@Autowired
+	private IMinaClient minaClient;
 	
 	@PostConstruct
 	public void initialize() {
@@ -178,6 +182,7 @@ public class MainFrame extends JFrame implements IMessageListener, InitializingB
 			}	
 			case _SubMessageType_MainFrame_ExitDlg_:
 			{
+				minaClient.exit();
 				ExitDialog dlg = new ExitDialog(configurationManager.getConfigurationVO());
 				dlg.setVisible(true);
 				System.exit(0);

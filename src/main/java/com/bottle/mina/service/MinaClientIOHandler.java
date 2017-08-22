@@ -55,12 +55,14 @@ public class MinaClientIOHandler extends AbstractBaseBean implements IoHandler
 				+ "--ip address:" +session.getRemoteAddress();
     	super.warnLog(warnMessage);
     	System.out.println(warnMessage);
+    	/*
     	final MessageVO vo = new MessageVO();
     	vo.setMessageSource(MessageSourceEnum._MessageSource_MainFrame_);
 		vo.setSubMessageType(SubMessageTypeEnum._SubMessageType_MainFrame_ServerStatus_);
 		vo.setParam1(ICommonConstants._ConnectionStatus_Offline_); 
     	
     	messageManager.push(vo);
+    	*/
     }
     
 	@Override

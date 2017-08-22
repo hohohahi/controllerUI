@@ -42,7 +42,7 @@ public class ConfigurationVO implements Cloneable {
 	private int playerPanelIdelTime_InSeconds = 0;
 	private int playerPanelErrorBottleIdelTime_InSeconds = 0;
 	public ConfigurationVO() {
-		identifier = ICommonConstants._Bottle_Identifier_;
+		identifier = ICommonConstants._identifier;
 		serialCommandTimeout_InMilliSecond = 1000*30;
 		checkSerialTimeoutPeriod_InMilliSecond = 1000;
 		serialPortName = ICommonConstants._SerialPort_Name_;

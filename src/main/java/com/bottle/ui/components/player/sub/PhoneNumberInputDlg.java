@@ -29,6 +29,12 @@ public class PhoneNumberInputDlg extends JDialog{
 		}
 	}
 
+	public void setPhoneNumber(long phoneNumber) {
+		textField.setText(String.valueOf(phoneNumber));
+		textField.invalidate();
+		textField.repaint();
+	}
+	
 	public void reset() {
 		textField.setText("");
 	}

@@ -15,13 +15,18 @@ import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ICommonConstants.MessageSourceEnum;
 import com.bottle.common.constants.ICommonConstants.SubMessageTypeEnum;
 import com.bottle.mina.constants.MinaConstants;
+import com.bottle.mina.vo.ServerMessageVO;
 import com.bottle.mina.vo.SubscriptionVO;
+import com.bottle.ui.components.player.sub.PhoneNumberInputDlg;
 
 @Service
 public class MinaClientIOHandler extends AbstractBaseBean implements IoHandler
 {   
 	@Autowired
 	private IMessageQueueManager messageManager;
+	
+	@Autowired
+	private PhoneNumberInputDlg phoneNumberInputDlg;
 	
 	@Override
     public void exceptionCaught( IoSession session, Throwable cause ) throws Exception
@@ -84,6 +89,16 @@ public class MinaClientIOHandler extends AbstractBaseBean implements IoHandler
 				}
 				
 				session.setAttribute(MinaConstants._sessionKey_Identifier_, subscriptionVO.getIdentifier());
+			}
+			else if (MinaConstants.MinaMessageType._MinaMessage_Type_FromServer.getId() == responseType) {
+				final ServerMessageVO serverMessageVO = JSONObject.toJavaObject(jsonObj, ServerMessageVO.class);
+				final long subMessageType = serverMessageVO.getSubMessageType();
+				if (subMessageType == MinaConstants.MinaMessageType._MinaMessage_Type_FromServer_LoginMachine.getId()) {
+					final long phoneNumber = serverMessageVO.getPhoneNumber();
+					final String identifier = serverMessageVO.getIdentifier();
+					
+					phoneNumberInputDlg.setPhoneNumber(phoneNumber);
+				}								
 			}
 			
 			final String identifier = (String)session.getAttribute("identifier", "default");

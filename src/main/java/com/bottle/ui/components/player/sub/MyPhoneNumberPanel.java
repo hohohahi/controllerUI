@@ -43,7 +43,7 @@ public class MyPhoneNumberPanel extends JPanel {
     private static int _backspace_key_height_ = 120;
     private static int _keyboard_width_ = 500;
     private static int _keyboard_height_ = 500;
-    private static JDialog fatherDlg;
+    private static PhoneNumberInputDlg fatherDlg;
     
     public static void main(String[] args) {  
     	final MyPhoneNumberPanel keyPopup = new MyPhoneNumberPanel();
@@ -101,7 +101,7 @@ public class MyPhoneNumberPanel extends JPanel {
         setOpaque(false); 
     }  
     
-    public void setFatherDlg(JDialog fatherDlg) {
+    public void setFatherDlg(PhoneNumberInputDlg fatherDlg) {
 		this.fatherDlg = fatherDlg;
 	}
 
@@ -229,10 +229,12 @@ public class MyPhoneNumberPanel extends JPanel {
         	final String content = textField.getText();
         	if (true == StringUtils.isEmpty(content)) {
         		System.out.println("clickEnter: content is empty. content:" + content);
+        		fatherDlg.showAlertDialog("请输入有效的手机号码!");
         	}
         	else {
         		if (content.length() != 11) {
         			System.out.println("clickEnter: content length is invalid. length:" + content.length());
+        			fatherDlg.showAlertDialog("请输入有效的手机号码!");
         		}
         		else {
         			fatherDlg.setVisible(false);

@@ -12,7 +12,7 @@ import javax.swing.border.EmptyBorder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PhoneNumberInputDlg extends JDialog{
+public class PhoneNumberInputDlg extends MyBaseDialog{
 	private static final long serialVersionUID = 1L;
 	private MyPhoneNumberPanel keyPopup = new MyPhoneNumberPanel();
 	private BarCodePicturePanel machineBarCodePicturePanel = new BarCodePicturePanel("machineBarCode250.jpg", 250, 250);
@@ -47,6 +47,12 @@ public class PhoneNumberInputDlg extends JDialog{
 		textField.setText("");
 		this.setVisible(false);
     } 
+	
+	public void showAlertDialog(final String warnMessage) {
+		AlertDialog dlg = new AlertDialog(warnMessage);
+		dlg.setModal(true);
+		dlg.setVisible(true);
+	}
 	
 	public PhoneNumberInputDlg() {
 		this.setModal(true);

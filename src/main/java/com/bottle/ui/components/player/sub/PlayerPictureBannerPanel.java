@@ -27,9 +27,13 @@ public class PlayerPictureBannerPanel extends JPanel {
 		setLayout(null);
 		
 		List<String> imageNameList = new ArrayList<String>();
-		imageNameList.add("playerbanner.png");
-		imageNameList.add("greenearth625x1000.png");
-		imageNameList.add("greenword625x1000.png");
+		//imageNameList.add("playerbanner.png");
+		imageNameList.add("design01.png");
+		imageNameList.add("design02.png");
+		imageNameList.add("design03.png");
+		imageNameList.add("design04.png");
+		//imageNameList.add("greenearth625x1000.png");
+		//imageNameList.add("greenword625x1000.png");
 		setImageFileNameList(imageNameList);
 		
 		curFilename = imageNameList.get(0);

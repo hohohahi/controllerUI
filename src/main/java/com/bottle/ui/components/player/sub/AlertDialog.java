@@ -11,6 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.bottle.common.constants.ILanguageConstants;
 import com.bottle.ui.components.common.FontLabel;
 
 public class AlertDialog extends JDialog {
@@ -19,7 +20,7 @@ public class AlertDialog extends JDialog {
 	
 	public static void main(String[] args) {
 		try {
-			AlertDialog dialog = new AlertDialog("请输入有效的手机号码!");
+			AlertDialog dialog = new AlertDialog(ILanguageConstants._ErrorMessage_PleaseEnterValidPhoneNumber_);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 			System.out.println("t123");
@@ -55,7 +56,7 @@ public class AlertDialog extends JDialog {
 			contentPanel.add(lblNewLabel);
 		}
 				
-		JButton okButton = new JButton("确  定");
+		JButton okButton = new JButton(ILanguageConstants._UI_Confirm_);
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				thisHandle.setVisible(false);

@@ -32,6 +32,8 @@ import javax.swing.border.EmptyBorder;
 
 import org.springframework.util.StringUtils;
 
+import com.bottle.common.constants.ILanguageConstants;
+
 import sun.swing.SwingUtilities2;  
    
 public class MyPhoneNumberPanel extends JPanel {  
@@ -229,12 +231,12 @@ public class MyPhoneNumberPanel extends JPanel {
         	final String content = textField.getText();
         	if (true == StringUtils.isEmpty(content)) {
         		System.out.println("clickEnter: content is empty. content:" + content);
-        		fatherDlg.showAlertDialog("请输入有效的手机号码!");
+        		fatherDlg.showAlertDialog(ILanguageConstants._ErrorMessage_PleaseEnterValidPhoneNumber_);
         	}
         	else {
         		if (content.length() != 11) {
         			System.out.println("clickEnter: content length is invalid. length:" + content.length());
-        			fatherDlg.showAlertDialog("请输入有效的手机号码!");
+        			fatherDlg.showAlertDialog(ILanguageConstants._ErrorMessage_PleaseEnterValidPhoneNumber_);
         		}
         		else {
         			fatherDlg.setVisible(false);

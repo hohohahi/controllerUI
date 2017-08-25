@@ -301,7 +301,7 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 			}
 		});
 		
-		returnProfitButton.setBounds(445, 1410, 250, 250);
+		returnProfitButton.setBounds(445, 410, 250, 250);
 		returnProfitButton.setEnabled(false);
 		add(returnProfitButton);
 		donationButton.setBounds(759, 1410, 250, 250);

@@ -34,6 +34,11 @@ public interface ILanguageConstants {
 	String _TemplateManagementPanel_TemplateListTitle_IsMetal_ = "\u662F\u5426\u91D1\u5C5E";
 	String _TemplateManagementPanel_TemplateListTitle_Weight_ = "\u91CD\u91CF";
 	String _TemplateManagementPanel_TemplateListTitle_Price_ = "\u4EF7\u683C(\u5143)";
+	
+	String _ErrorMessage_PleaseEnterValidPhoneNumber_ = "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u624b\u673a\u53f7\u7801\u0021";   //请输入有效的手机号码!
+	
+	String _UI_Confirm_ = "\u786e\u0020\u0020\u5b9a"; //确定
+	
 		
 	@SuppressWarnings("serial")
 	Map<Long, String> errorCodeAndErroMessageMap = new HashMap<Long, String>(){

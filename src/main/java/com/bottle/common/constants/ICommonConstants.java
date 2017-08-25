@@ -1,7 +1,7 @@
 package com.bottle.common.constants;
 
 public interface ICommonConstants {
-	String _version_ = "1.0.201708201755";
+	String _version_ = "1.0.201708251620";
 	String _identifier = "40ec2351-af21-4d1c-9a92-85629f43a0bc";
 	
 	String _donatePhoneNumber_ = "18888888888";

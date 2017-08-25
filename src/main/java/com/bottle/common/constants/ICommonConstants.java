@@ -3,7 +3,10 @@ package com.bottle.common.constants;
 public interface ICommonConstants {
 	String _version_ = "1.0.201708201755";
 	String _identifier = "40ec2351-af21-4d1c-9a92-85629f43a0bc";
-
+	
+	String _donatePhoneNumber_ = "18888888888";
+	String _invalidPhoneNumber_ = "19999999999";
+	
 	String _Server_IP_ = "109.205.93.209";
 	String _Server_Domain_ = "core-om-dev.everymatrix.com";
 	//String _Server_IP_ = "10.0.5.42";
@@ -33,6 +36,8 @@ public interface ICommonConstants {
 	
 	
 	String _UI_Identifier_Key_ = "identifier";
+	String _UI_MachineIdentifier_Key_ = "machineIdentifier";
+	String _UI_CashMode_Key_ = "cashMode";
 	String _UI_CheckResultList_Key_ = "checkRecordList";
 	String _UI_PhoneNumber_Key_ = "phoneNumber";
 	String _UI_Amount_Key_ = "amount";
@@ -218,6 +223,36 @@ public interface ICommonConstants {
 		}
 		public String getName() {
 			return name;
+		}
+	}
+	
+	enum CashModeEnum{
+		_CacheMode_ReturnMoney_(0),
+		_CacheMode_Donate_(1);
+		
+		long id = 0;
+		
+		CashModeEnum(long id) {
+			this.id = id;
+		}
+
+		public long getId() {
+			return id;
+		}
+	}
+	
+	enum DialogReturnValueEnum{
+		_DialogReturn_Confirm_(0),
+		_DialogReturn_Cancel_(1);
+		
+		long id = 0;
+		
+		DialogReturnValueEnum(long id) {
+			this.id = id;
+		}
+
+		public long getId() {
+			return id;
 		}
 	}
 }

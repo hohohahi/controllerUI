@@ -286,14 +286,15 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 	    this.add(scrollPane_server);
 	    
 		returnProfitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {	
+			public void actionPerformed(ActionEvent e) {					
+				phoneNumberInputDlg.setCashMode(ICommonConstants.CashModeEnum._CacheMode_ReturnMoney_);
 				phoneNumberInputDlg.reset();
 				phoneNumberInputDlg.setVisible(true);
 				
 				String phoneNumberStr = phoneNumberInputDlg.getPhoneNumber();
 				if (StringUtils.isNotEmpty(phoneNumberStr)) {
 					System.out.println(phoneNumberStr);
-					returnMoneyService.pay(phoneNumberStr);
+					returnMoneyService.pay(phoneNumberStr, ICommonConstants.CashModeEnum._CacheMode_ReturnMoney_);
 				}
 				else {
 					System.out.println("empty");
@@ -301,9 +302,27 @@ public class PlayerPanel extends JPanel implements IMessageListener{
 			}
 		});
 		
-		returnProfitButton.setBounds(445, 410, 250, 250);
+		returnProfitButton.setBounds(445, 1410, 250, 250);
 		returnProfitButton.setEnabled(false);
 		add(returnProfitButton);
+		
+		donationButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {					
+				phoneNumberInputDlg.setCashMode(ICommonConstants.CashModeEnum._CacheMode_Donate_);
+				phoneNumberInputDlg.reset();
+				phoneNumberInputDlg.setVisible(true);
+				
+				String phoneNumberStr = phoneNumberInputDlg.getPhoneNumber();
+				if (StringUtils.isNotEmpty(phoneNumberStr)) {
+					System.out.println(phoneNumberStr);
+					returnMoneyService.pay(phoneNumberStr, ICommonConstants.CashModeEnum._CacheMode_ReturnMoney_);
+				}
+				else {
+					System.out.println("empty");
+				}
+			}
+		});
+		
 		donationButton.setBounds(759, 1410, 250, 250);
 		donationButton.setEnabled(false);
 		add(donationButton);

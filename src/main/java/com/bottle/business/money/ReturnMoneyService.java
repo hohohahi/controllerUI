@@ -35,7 +35,7 @@ public class ReturnMoneyService extends AbstractBaseBean implements IReturnMoney
 	private IConfigurationManager configurationManager;
 	
 	@Override
-	public void pay(final String phoneNumberStr) {
+	public void pay(final String playerPhoneNumberStr, final ICommonConstants.CashModeEnum cachModeEnum) {
 		final RealtimeStasticDataVO realVO = productionDataManager.getRealtimeStasticDataVO();
 		super.validateObject(realVO);
 		
@@ -43,8 +43,10 @@ public class ReturnMoneyService extends AbstractBaseBean implements IReturnMoney
 		
 		final String url = getReturnMoney();
     	JSONObject json = new JSONObject();
-    	json.put(ICommonConstants._UI_PhoneNumber_Key_, phoneNumberStr);
+    	json.put(ICommonConstants._UI_PhoneNumber_Key_, playerPhoneNumberStr);
     	json.put(ICommonConstants._UI_Amount_Key_, amount);
+    	json.put(ICommonConstants._UI_MachineIdentifier_Key_, ICommonConstants._identifier);
+    	json.put(ICommonConstants._UI_CashMode_Key_, cachModeEnum.getId());
     	json.put(ICommonConstants._UI_CheckResultList_Key_, getCheckRecordVOListFromRealtimeData(realVO));
     	
     	try {

@@ -36,10 +36,17 @@ public interface ILanguageConstants {
 	String _TemplateManagementPanel_TemplateListTitle_Price_ = "\u4EF7\u683C(\u5143)";
 	
 	String _ErrorMessage_PleaseEnterValidPhoneNumber_ = "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u624b\u673a\u53f7\u7801\u0021";   //请输入有效的手机号码!
+	String _ErrorMessage_InvalidPhoneNumberConfirm_ = "\u60a8\u8f93\u5165\u7684\u624b\u673a\u53f7\u7801\u4e0d\u5408\u6cd5\u002c\u0020\u60a8\u662f\u5426\u533f\u540d\u6350\u8d60\u003f";   //您输入的手机号码不合法, 您是否匿名捐赠?
 	
 	String _UI_Confirm_ = "\u786e\u0020\u0020\u5b9a"; //确定
+	String _UI_Cancel_ = "\u53d6\u0020\u0020\u6d88"; //取消
 	
-		
+	String _UI_RealProductionInfoPanel_PleaseInputValidPhoneNumber_ = "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u624b\u673a\u53f7\u7801";  //请输入有效的手机号码
+	
+	//请输入有效的手机号码，手机号码非法时会让您选择是否匿名捐赠
+	String _UI_RealProductionInfoPanel_PleaseInputValidPhoneNumber_And_Choose_ = "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u624b\u673a\u53f7\u7801\uff0c\u624b\u673a\u53f7\u7801\u975e\u6cd5\u65f6\u4f1a\u8ba9\u60a8\u9009\u62e9\u662f\u5426\u533f\u540d\u6350\u8d60";
+	String _UI_RealProductionInfoPanel_InvalidParameter_ = "\u975e\u6cd5\u53c2\u6570";  //非法参数
+	
 	@SuppressWarnings("serial")
 	Map<Long, String> errorCodeAndErroMessageMap = new HashMap<Long, String>(){
 	{

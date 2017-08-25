@@ -32,6 +32,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.springframework.util.StringUtils;
 
+import com.bottle.common.constants.ICommonConstants;
 import com.bottle.common.constants.ILanguageConstants;
 
 import sun.swing.SwingUtilities2;  
@@ -229,19 +230,28 @@ public class MyPhoneNumberPanel extends JPanel {
         
         public void clickEnter() {
         	final String content = textField.getText();
+        	
+        	String message = "";
+        	if (true == ICommonConstants.CashModeEnum._CacheMode_ReturnMoney_.equals(fatherDlg.getCashMode())){
+        		message = ILanguageConstants._ErrorMessage_PleaseEnterValidPhoneNumber_;
+        	}
+        	else if (true == ICommonConstants.CashModeEnum._CacheMode_Donate_.equals(fatherDlg.getCashMode())) {
+        		message = ILanguageConstants._ErrorMessage_InvalidPhoneNumberConfirm_;
+        	}
+        	
         	if (true == StringUtils.isEmpty(content)) {
         		System.out.println("clickEnter: content is empty. content:" + content);
-        		fatherDlg.showAlertDialog(ILanguageConstants._ErrorMessage_PleaseEnterValidPhoneNumber_);
+        		fatherDlg.showAlertDialog(fatherDlg.getCashMode(), message);
         	}
         	else {
         		if (content.length() != 11) {
         			System.out.println("clickEnter: content length is invalid. length:" + content.length());
-        			fatherDlg.showAlertDialog(ILanguageConstants._ErrorMessage_PleaseEnterValidPhoneNumber_);
+        			fatherDlg.showAlertDialog(fatherDlg.getCashMode(), message);
         		}
         		else {
         			fatherDlg.setVisible(false);
         		}
-        	}        	
+        	}  
         }  
    
         public void clickCommKey(String key) {  

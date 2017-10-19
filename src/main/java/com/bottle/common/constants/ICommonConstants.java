@@ -7,7 +7,7 @@ public interface ICommonConstants {
 	String _donatePhoneNumber_ = "18888888888";
 	String _invalidPhoneNumber_ = "19999999999";
 	
-	String _Server_IP_ = "109.205.93.209";
+	String _Server_IP_ = "120.78.139.232";
 	String _Server_Domain_ = "core-om-dev.everymatrix.com";
 	//String _Server_IP_ = "10.0.5.42";
 	long _Server_Port_ = 8585;

@@ -287,7 +287,14 @@ public class SerialCommConnector extends AbstractBaseBean implements ISerialComm
                             throw new RuntimeException("no available data.");
                         }
                         
-                        final RxTxResponseVO responseVO = byteParser.parse(data);                        
+                        RxTxResponseVO responseVO = new RxTxResponseVO();
+						try {
+							responseVO = byteParser.parse(data);
+						} catch (Exception e) {
+							super.logErrorAndStack(e, "exception happens. continue. message:" + e.getMessage());
+							return;
+						}         
+						
                         final IMachineCommandSender sender = senderManager.getCommandListenerAndRemoveIt(responseVO.getCommandType());
                         if (null != sender) {
                         	sender.onReceive(responseVO);

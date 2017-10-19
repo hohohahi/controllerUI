@@ -182,7 +182,11 @@ public class MainFrame extends JFrame implements IMessageListener, InitializingB
 			}	
 			case _SubMessageType_MainFrame_ExitDlg_:
 			{
-				minaClient.exit();
+				try {
+					minaClient.exit();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				ExitDialog dlg = new ExitDialog(configurationManager.getConfigurationVO());
 				dlg.setVisible(true);
 				System.exit(0);

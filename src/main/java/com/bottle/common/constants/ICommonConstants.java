@@ -10,10 +10,11 @@ public interface ICommonConstants {
 	String _Server_IP_ = "120.78.139.232";
 	String _Server_Domain_ = "core-om-dev.everymatrix.com";
 	//String _Server_IP_ = "10.0.5.42";
-	long _Server_Port_ = 8585;
+	
+	long _Server_Port_ = 8080;
 	int _Server_Socket_Port = 8585;
 	//long _Server_Port_ = 8080;
-	String _Server_Name_ = "Bottle_CloudServer";
+	String _Server_Name_ = "Bottle";
 
 	//Serial Port
 	String _SerialPort_Name_ = "COM9";

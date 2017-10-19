@@ -98,7 +98,7 @@ public class TemplateService extends AbstractBaseBean implements ITemplateServic
 		final StringBuilder buf = new StringBuilder();
 		
 		buf.append("http://")
-		   .append(configurationManager.getConfigurationVO().getServerIP())
+		   .append(configurationManager.getConfigurationVO().getIPAndPortAsAdress())
 		   .append(":")
 		   .append(configurationManager.getConfigurationVO().getServerPort())
 		   .append(ICommonConstants._URL_Seperator_)

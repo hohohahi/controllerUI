@@ -93,7 +93,7 @@ public class ReturnMoneyService extends AbstractBaseBean implements IReturnMoney
 		final StringBuilder buf = new StringBuilder();
 		
 		buf.append("http://")
-		   .append(configurationManager.getConfigurationVO().getServerDomain())
+		   .append(configurationManager.getConfigurationVO().getIPAndPortAsAdress())
 		   .append(ICommonConstants._URL_Seperator_)
 		   .append(ICommonConstants._Server_Name_)
 		   .append(ICommonConstants._URL_Seperator_)

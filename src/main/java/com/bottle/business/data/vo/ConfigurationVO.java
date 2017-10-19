@@ -186,6 +186,10 @@ public class ConfigurationVO implements Cloneable {
 	public String getServerDomain() {
 		return serverDomain;
 	}
+	
+	public String getIPAndPortAsAdress() {
+		return serverIP + ":" + serverPort;
+	}
 
 	public void setServerDomain(String serverDomain) {
 		this.serverDomain = serverDomain;
